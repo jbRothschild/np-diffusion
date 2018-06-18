@@ -58,7 +58,7 @@ def tiff_load(filename):
     Returns:
         The array
     """
-    
+
     return io.imread(filename)
 
 def concentration_time(time):
@@ -73,25 +73,25 @@ def concentration_time(time):
     #return 1.0
     return 0.7521*np.exp(-1.877*time) + 0.2479*np.exp(-0.1353*time)
 
-def main(action='load', size=301, hole_radius=1, vessel_radius=10, cwd = cwd, fileN='none', fileD='none', file_domain='none'):
+def main(action='load', size=301, hole_radius=1, vessel_radius=10, cwd = cwd, file_vessel='none', file_source='none', file_domain='none'):
     #====================Grid constuction=====================
     if action == 'load':
-        bc_D = tiff_load(fileD).astype(float)
-        bc_N = 1 - tiff_load(fileN).astype(float) + bc_D
-        uref_D = tiff_load(file_domain).astype(float)
+        source = tiff_load(fileD).astype(float)
+        diffusion_coeff = 1 - tiff_load(fileN).astype(float) + source
+        whole_domain = tiff_load(file_domain).astype(float)
 
     else:
-        bc_N = neumann(size, hole_radius, vessel_radius)
-        bc_D = dirichlet(size, hole_radius, vessel_radius)
+        diffusion_coeff = neumann(size, hole_radius, vessel_radius)
+        source = dirichlet(size, hole_radius, vessel_radius)
         #Location of Internal and Boundary Dirichlets conditions
-        uref_D = np.zeros((size,size,size)) + 1
-        uref_D[0,:,:] = 0.0;  uref_D[:,0,:] = 0.0; uref_D[:,:,0] = 0.0
-        uref_D[-1,:,:] = 0.0; uref_D[:,-1,:] = 0.0; uref_D[:,:,-1] = 0.0
+        diffusion_coeff = np.zeros((size,size,size)) + 1
+        diffusion_coeff[0,:,:] = 0.0;  diffusion_coeff[:,0,:] = 0.0; diffusion_coeff[:,:,0] = 0.0
+        diffusion_coeff[-1,:,:] = 0.0; diffusion_coeff[:,-1,:] = 0.0; diffusion_coeff[:,:,-1] = 0.0
 
     #Main Arrays
-    np.save(cwd + "/Neumann", bc_N)
-    np.save(cwd + "/Domain", uref_D-bc_D)
-    np.save(cwd + "/Dirichlet", bc_D)
+    np.save(cwd + "/Diff_coeff", diffusion_coeff)
+    np.save(cwd + "/Domain", whole_domain-source)
+    np.save(cwd + "/Dirichlet", source)
 
 
 #main('load', size=301, hole_radius=1, vessel_radius=10, cwd=cwd, fileN=os.getcwd() + '/ChanLab/' + 'UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif', fileD= os.getcwd() + '/ChanLab/' + 'UT16-T-stack3-Sept10_iso_gaps-cropped.tif', file_domain= os.getcwd() + '/ChanLab/' + 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif')

@@ -1,6 +1,9 @@
-#ignore tif, pdf and npy files
+#ignore tif, pdf, npy and other files
 *.tif
 *.npy
 *.pdf
-#ignore folder ChanLab
+*.pgf
+*.png
+#ignore folder ChanLab and others
 ChanLab/
+Sim*/
