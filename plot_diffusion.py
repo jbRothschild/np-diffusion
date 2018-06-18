@@ -117,7 +117,7 @@ def main(sim, time = ''):
         plt.plot([0, 300], [140, 140], 'r', lw=1)
     """
     else:
-        Vessel = np.load(cwd + '/Neumann.npy')
+        Vessel = np.load(cwd + '/Diff_Coeff.npy')
         x,y = np.argwhere(Vessel[np.int(np.shape(Vessel)[1]/2),:,:] == 1).T
         plt.scatter(x,y,c='r',marker='.')
     """
@@ -132,4 +132,4 @@ def main(sim, time = ''):
 if __name__ == "__main__":
     #main(os.getcwd() + "/SimD0.01", time = 240)
     #main(os.getcwd() + "/SimFull", time = 240)
-    main(os.getcwd() + "/ChanLab", time = 240)
+    main(os.getcwd() + "/Sim_Syed0.01", time = 240)

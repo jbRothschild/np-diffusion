@@ -76,13 +76,14 @@ def concentration_time(time):
 def main(action='load', size=301, hole_radius=1, vessel_radius=10, cwd = cwd, file_vessel='none', file_source='none', file_domain='none'):
     #====================Grid constuction=====================
     if action == 'load':
-        source = tiff_load(fileD).astype(float)
-        diffusion_coeff = 1 - tiff_load(fileN).astype(float) + source
+        source = tiff_load(file_vessel).astype(float)
+        diffusion_coeff = 1 - 0.9*tiff_load(file_vessel).astype(float)
         whole_domain = tiff_load(file_domain).astype(float)
 
     else:
         diffusion_coeff = neumann(size, hole_radius, vessel_radius)
         source = dirichlet(size, hole_radius, vessel_radius)
+        whole_domain = np.zeros((size,size,size)) + 1
         #Location of Internal and Boundary Dirichlets conditions
         diffusion_coeff = np.zeros((size,size,size)) + 1
         diffusion_coeff[0,:,:] = 0.0;  diffusion_coeff[:,0,:] = 0.0; diffusion_coeff[:,:,0] = 0.0

@@ -76,13 +76,13 @@ def main(sim, load, D):
 
         u = u*domain + bd.concentration_time(i*dt/3600)*dirichlet
 
-        if i in range(0,time,6):
+        if i in range(0,time,60):
             np.save(cwd + "/diff_"+str(i*dt/60)+"min", u)
             np.save(cwd + "/" + count, np.asarray(i*dt))
             print np.load(cwd + count)
             #io.imsave(cwd + "/diff_"+str(i*dt/60)+"min.tif", u)
 
-        print np.sum(u)
+        #print np.sum(u)
 
 if __name__ == "__main__":
     main(sim='Syed', load=False, D=0.01)

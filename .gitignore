@@ -4,6 +4,7 @@
 *.pdf
 *.pgf
 *.png
+*.pyc
 #ignore folder ChanLab and others
 ChanLab/
 Sim*/
