@@ -92,7 +92,3 @@ def main(action='load', size=301, hole_radius=1, vessel_radius=10, cwd = cwd, fi
     np.save(cwd + "/Diff_coeff", diffusion_coeff)
     np.save(cwd + "/Domain", whole_domain-source)
     np.save(cwd + "/Dirichlet", source)
-
-
-#main('load', size=301, hole_radius=1, vessel_radius=10, cwd=cwd, fileN=os.getcwd() + '/ChanLab/' + 'UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif', fileD= os.getcwd() + '/ChanLab/' + 'UT16-T-stack3-Sept10_iso_gaps-cropped.tif', file_domain= os.getcwd() + '/ChanLab/' + 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif')
-#main('create', size=301, hole_radius=1, vessel_radius=10, cwd=cwd)

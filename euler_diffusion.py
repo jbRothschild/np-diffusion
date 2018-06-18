@@ -68,7 +68,7 @@ def main(sim, load, D):
         print i
         u[:,:,:] = un[:,:,:]
 
-        u[ijk,:,:] += diffusion_coeff[ijk,:,:]*( vis*dt*diffusion_coeff[ijk+1,:,:]*( un[ijk+1,:,:]-un[ijk,:,:] ) + vis*dt*diffusion_coeff[ijk-1,:,:]*( un[ijk-1,:,:]-un[ijk,:,:] ))/(dx**2) +
+        u[ijk,:,:] += diffusion_coeff[ijk,:,:]*( vis*dt*diffusion_coeff[ijk+1,:,:]*( un[ijk+1,:,:]-un[ijk,:,:] ) + vis*dt*diffusion_coeff[ijk-1,:,:]*( un[ijk-1,:,:]-un[ijk,:,:] ))/(dx**2)
 
         u[:,ijk,:] += diffusion_coeff[:,ijk,:]*( vis*dt*diffusion_coeff[:,ijk+1,:]*( un[:,ijk+1,:]-un[:,ijk,:] ) + vis*dt*diffusion_coeff[:,ijk-1,:]*( un[:,ijk-1,:]-un[:,ijk,:] ))/(dy**2)
 
@@ -85,4 +85,4 @@ def main(sim, load, D):
         print np.sum(u)
 
 if __name__ == "__main__":
-    main(sim='Syed', load=True, D=0.01)
+    main(sim='Syed', load=False, D=0.01)
