@@ -1,0 +1,3 @@
+#ignore tif and npy files
+*.tif
+*.npy
