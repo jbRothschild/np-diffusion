@@ -1,4 +1,6 @@
 import numpy as np
+import sys
+import os
 import matplotlib as mpl
 mpl.use('pgf')
 
@@ -48,13 +50,10 @@ def savefig(filename):
 ###########################################################################
 ########################### PLOTTING STARTS HERE
 ###########################################################################
-import sys
-import os
 
-import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 from matplotlib.ticker import LogLocator
-import numpy as np
+from skimage import io
 
 def main(sim, time = ''):
     simulation = '1'
@@ -104,10 +103,15 @@ def main(sim, time = ''):
 
     fig, ax  = newfig(0.6)
     nanoP = np.load(cwd + '/diff_' + str(time) + 'min.npy')
+    #Only for ChanLab data
+    #nanoParticles = io.imread(cwd + '/UT16-T-stack3-Sept10_iso_particles-cropped.tif')
+    #nanoP = nanoParticles.astype(float)/np.max(nanoParticles.astype(float))
 
-    nanoP[nanoP < 10**(-9)] = 10**(-9)
-    cax = ax.contourf(range(0,np.shape(nanoP)[0],1), range(0,np.shape(nanoP)[2],1), nanoP[np.int(np.shape(nanoP)[1]/2),:,:], levels=np.logspace(-9, 0, 100), locator=mpl.ticker.LogLocator(50), cmap=plt.cm.inferno,)
-    cbar = fig.colorbar(cax, ticks=[10**0, 10**(-3), 10**(-6), 10**(-9)])
+    nanoP[nanoP < 10**(-3)] = 10**(-3)
+    cax = ax.contourf(range(0,np.shape(nanoP)[0],1), range(0,np.shape(nanoP)[2],1), nanoP[np.int(np.shape(nanoP)[1]/2),:,:], levels=np.logspace(-3, 0, 100), locator=mpl.ticker.LogLocator(50), cmap=plt.cm.inferno)
+    #cbar = fig.colorbar(cax, ticks=[10**0, 10**(-3), 10**(-6), 10**(-9)])
+    cbar = fig.colorbar(cax, ticks=[10**0, 10**(-1), 10**(-2), 10**(-3)])
+
     #cbar.ax.set_ylabel(r'$Concentration$')
     for c in ax.collections:
         c.set_edgecolor("face")
@@ -125,11 +129,12 @@ def main(sim, time = ''):
     ax.set_xlabel(r"$z$-direction ($\mu m$)")
     ax.set_ylabel(r"$y$-direction ($\mu m$)")
     ax.minorticks_off()
-    savefig(cwd + "/nanoP_" + str(time))
+    savefig(cwd + "/nanoP_log_" + str(time))
     plt.close(fig)
 
 
 if __name__ == "__main__":
-    #main(os.getcwd() + "/SimD0.01", time = 240)
-    #main(os.getcwd() + "/SimFull", time = 240)
-    main(os.getcwd() + "/Sim_Syed0.01", time = 240)
+    #main(os.getcwd() + "/SimD0.01", time = 240)01
+    main(os.getcwd() + "/Sim_rate0.20.01", time = 150)
+    #main(os.getcwd() + "/SimFullT", time = 240)
+    #main(os.getcwd() + "/ChanLab", time = 240)
