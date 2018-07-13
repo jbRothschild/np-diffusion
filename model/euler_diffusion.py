@@ -11,8 +11,10 @@ def main(sim_name, load):
         import data_model as mod
     else:
         import custom_model as mod
+    if not os.path.exists('../data/'):
+        os.makedirs('../data/')
     #Set directory where the data will be saved. Also set the loading directory (../ChanLan/)
-    data_dir = "../data/sim_" + sim #remote use
+    data_dir = "../data/sim_" + sim_name #remote use
     load_dir = '../ChanLab/'
     #data_dir = $HOME #on Scinet
     if not os.path.exists(data_dir):
@@ -57,4 +59,4 @@ def main(sim_name, load):
             wd.save_run(i*dt, u, data_dir):
 
 if __name__ == "__main__":
-    main(sim='Syed', load=True)
+    main(sim_name='Syed', load=True)
