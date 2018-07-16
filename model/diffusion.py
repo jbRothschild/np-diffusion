@@ -1,23 +1,3 @@
-def concentration_time(time):
-    """
-    Function that calculates the change in concentration in the blood vessel as a function of time (according to Syed et co. observations)
-
-    Args:
-        time(float): time in hours
-    Returns:
-        The concentration
-    """
-    #return 1.0
-    return 0.7521*np.exp(-1.877*time) + 0.2479*np.exp(-0.1353*time)
-
-def neumann_flow(un, flow_location, i, dt, nu):
-    #contribution due to neumann flow_location.
-    return flow_location*nu
-
-def set_dirichlet(source, source_location, i, dt):
-    #contribution
-    return bd.concentration_time(i*dt/3600.)*source*source_location
-
 def diffusion(u, un, ijk, diffusion_location, vis, dt, dx, dy, dz):
      """
      Function that calculates the diffusion from solution un to solution u in the diffusion_location. Time in between is dt, with diffusion coeffecient vis. This iteration of this diffusion function assumes that anywhere that is not a diffusion location has a reflective boundary (hence the *diffusion_locationf[:,ijk+-1,:]=0 for non diffusion spots.)
@@ -71,4 +51,4 @@ def neumann_source_term(u, un, flow_location, i, dt, nu, dx):
     Returns:
         None
     """
-    #u += dm.neumann_flow(un, flow_location, i, dt, nu)
+    #u += mod.neumann_flow(un, flow_location, i, dt, nu)
