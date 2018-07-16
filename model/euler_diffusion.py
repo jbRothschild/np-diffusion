@@ -1,5 +1,6 @@
 import write_data as wd
 import diffusion as dif
+import time
 
 import sys, os
 import numpy as np
@@ -16,6 +17,7 @@ def main(sim_name, load):
     #Set directory where the data will be saved. Also set the loading directory (../ChanLan/)
     data_dir = "../data/sim_" + sim_name #remote use
     load_dir = '../ChanLab/'
+    count = '/lastTime_seconds.npy'
     #data_dir = $HOME #on Scinet
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
@@ -26,8 +28,8 @@ def main(sim_name, load):
         #Creates models and parameters for models
         #Writes these to a file in the data folder. Be sure to add a comment on the model so we can understand what it is in the future.
         mod.model(load_dir, data_dir)
-        vis, size, dx, dy, dz, time, dt, nu, comment = mod.params()
-        wd.write_params_file(data_dir, dx, dy, dz, time, dt, vis, nu, comment)
+    vis, size, dx, dy, dz, total_time, dt, nu, comment = mod.params()
+    wd.write_params_file(data_dir, dx, dy, dz, total_time, dt, vis, nu, comment)
 
     #===============Load======================================
     #We load up models
@@ -38,7 +40,7 @@ def main(sim_name, load):
     #===============Initialization=============================
     if not os.path.exists(data_dir + count):
         np.save(data_dir + count, np.asarray(0))
-        np.save(data_dir + "/diff_0sec.npy", source_location*bd.concentration_time(0))
+        np.save(data_dir + "/diff_0sec.npy", source_location*mod.concentration_time(0))
 
     ijk = (np.linspace(1, diffusion_location.shape[0]-2, diffusion_location.shape[0]-2)).astype(int) #part of domain
 
@@ -47,16 +49,24 @@ def main(sim_name, load):
     u = np.load(data_dir + "/diff_" + str(initial) + "sec.npy")
 
     #================Euleur's method============================
-    for i in range(int(initial/dt)+1,time/dt+1): #run simulation from time
-        print i
+    tic = time.time()
+    for i in range(int(initial/dt)+1,total_time/dt+1): #run simulation from time
+        tic1 = time.time()
         un = u[:,:,:]
 
-        dif.diffusion(u, un, ijk, diffusion_location, vis, dt, dx, dy, dz, load) #diffusion of particles within the diffusion_location
-        dif.dirichlet_source_term(u, source_location, i, dt, load) #fixed source locations, dirichlet conditions
-        dif.neumann_source_term(u, un, flow, i, dt, nu, dx, load) #locations where there are neumann boundary conditions
+        dif.diffusion(u, un, ijk, diffusion_location, vis, dt, dx, dy, dz, mod) #diffusion of particles within the diffusion_location
+        dif.dirichlet_source_term(u, source_location, i, dt, mod) #fixed source locations, dirichlet conditions
+        dif.neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod) #locations where there are neumann boundary conditions
 
-        if i in range(0,time,(time/4)):
-            wd.save_run(i*dt, u, data_dir)
+        if i*dt in range(0,total_time+1,(total_time/4)):
+            print i, "th generation done..."
+            wd.save_run(i*dt, u, data_dir, count)
+        toc1 = time.time()
+        if i == 1:
+            print toc1-tic1, "sec for roughly one time step..."
+
+    toc = time.time()
+    print toc-tic, "sec for Euler diffusion !"
 
 if __name__ == "__main__":
-    main(sim_name='Syed', load=True)
+    main(sim_name='flow', load=True)

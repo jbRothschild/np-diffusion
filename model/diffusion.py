@@ -1,4 +1,4 @@
-def diffusion(u, un, ijk, diffusion_location, vis, dt, dx, dy, dz):
+def diffusion(u, un, ijk, diffusion_location, vis, dt, dx, dy, dz, mod):
      """
      Function that calculates the diffusion from solution un to solution u in the diffusion_location. Time in between is dt, with diffusion coeffecient vis. This iteration of this diffusion function assumes that anywhere that is not a diffusion location has a reflective boundary (hence the *diffusion_locationf[:,ijk+-1,:]=0 for non diffusion spots.)
 
@@ -12,13 +12,13 @@ def diffusion(u, un, ijk, diffusion_location, vis, dt, dx, dy, dz):
      Returns:
          None
      """
-     u[ijk,:,:] += diffusion_location[ijk,:,:]*( vis*dt*diffusion_locationf[ijk+1,:,:]*( un[ijk+1,:,:]-un[ijk,:,:] ) + vis*dt*diffusion_locationf[ijk-1,:,:]*( un[ijk-1,:,:]-un[ijk,:,:] ))/(dx**2)
+     u[ijk,:,:] += diffusion_location[ijk,:,:]*( vis*dt*diffusion_location[ijk+1,:,:]*( un[ijk+1,:,:]-un[ijk,:,:] ) + vis*dt*diffusion_location[ijk-1,:,:]*( un[ijk-1,:,:]-un[ijk,:,:] ))/(dx**2)
 
-     u[:,ijk,:] += diffusion_locationf[:,ijk,:]*( vis*dt*diffusion_locationf[:,ijk+1,:]*( un[:,ijk+1,:]-un[:,ijk,:] ) + vis*dt*diffusion_locationf[:,ijk-1,:]*( un[:,ijk-1,:]-un[:,ijk,:] ))/(dy**2)
+     u[:,ijk,:] += diffusion_location[:,ijk,:]*( vis*dt*diffusion_location[:,ijk+1,:]*( un[:,ijk+1,:]-un[:,ijk,:] ) + vis*dt*diffusion_location[:,ijk-1,:]*( un[:,ijk-1,:]-un[:,ijk,:] ))/(dy**2)
 
-     u[:,:,ijk] += diffusion_locationf[:,:,ijk]*( vis*dt*diffusion_locationf[:,:,ijk+1]*( un[:,:,ijk+1]-un[:,:,ijk] ) + vis*dt*diffusion_locationf[:,:,ijk-1]*( un[:,:,ijk-1]-un[:,:,ijk] ))/(dz**2)
+     u[:,:,ijk] += diffusion_location[:,:,ijk]*( vis*dt*diffusion_location[:,:,ijk+1]*( un[:,:,ijk+1]-un[:,:,ijk] ) + vis*dt*diffusion_location[:,:,ijk-1]*( un[:,:,ijk-1]-un[:,:,ijk] ))/(dz**2)
 
-def dirichlet_source_term(u, source, source_location, i, dt, load):
+def dirichlet_source_term(u, source_location, i, dt, mod):
     """
     Function that fixes the source terms(after diffusion has happened)
 
@@ -35,9 +35,9 @@ def dirichlet_source_term(u, source, source_location, i, dt, load):
     else:
         import dustom_model as mod
     """
-    u += -u*source_location + mod.set_dirichlet(source, source_location, i, dt)
+    u += -u*source_location + mod.set_dirichlet(source_location, i, dt)
 
-def neumann_source_term(u, un, flow_location, i, dt, nu, dx):
+def neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod):
     """
     Function that fixes the source terms(after diffusion has happened)
 

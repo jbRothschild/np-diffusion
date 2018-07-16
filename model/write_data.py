@@ -1,3 +1,4 @@
+import numpy as np
 def write_params_file(data_dir, dx, dy, dz, time, dt, vis, nu, comment):
     #A parameters file where we can check what parameters where being used
     file = open(data_dir + "/params.txt","w")
@@ -10,7 +11,7 @@ def write_params_file(data_dir, dx, dy, dz, time, dt, vis, nu, comment):
     file.write("Comments: "+comment)
     file.close()
 
-def save_run(t, u, data_dir):
+def save_run(t, u, data_dir, count):
     #save data of diffusion u at time t
-    np.save(data_dir + "/diff_"+str(i*dt)+"sec", u)
-    np.save(data_dir + "/" + count, np.asarray(i*dt))
+    np.save(data_dir + "/diff_"+str(t)+"sec", u)
+    np.save(data_dir + "/" + count, np.asarray(t))
