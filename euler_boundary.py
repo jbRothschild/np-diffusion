@@ -77,7 +77,7 @@ def main(action='load', size=301, hole_radius=1, vessel_radius=10, cwd = cwd, fi
     #====================Grid constuction=====================
     if action == 'load':
         source = tiff_load(file_vessel).astype(float)
-        diffusion_coeff = 1 - 0.9*tiff_load(file_vessel).astype(float)
+        #diffusion_coeff = 1 - 0.9*tiff_load(file_vessel).astype(float)
         whole_domain = tiff_load(file_domain).astype(float)
 
     else:
