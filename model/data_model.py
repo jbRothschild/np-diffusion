@@ -1,4 +1,5 @@
 import numpy as np
+import skimage.io as io
 
 def params():
     #parameters for the diffusion
@@ -17,19 +18,63 @@ def params():
     return vis, size, dx, dy, dz, time, dt, nu, comment
 
 def create_source_location(load_dir, data_dir, filename, other = None):
-    source_location = np.load(load_dir + filename)
+    #File which loads the file with dirichlet conditions
+    source_location = io.imread(load_dir + filename).astype(float)
 
-    np.save(data_dir + "/source_location", source_location)
+    np.save(data_dir + "/source_location", source_location[:300,:300,:300])
 
 def create_flow_location(load_dir, data_dir, filename, other = None):
-    flow_location = np.load(load_dir + file)
-    for
-    np.save(data_dir + "/flow_location", flow_location)
+    """
+    Function that creates the location of flow. +1 for each place which is beside a vessel. can have -1 for certain otehr things I guess!
+
+    Args:
+        load_dir(string): directory with all the data files
+        data_dir(string): directory where all the manipulated arrays are stored after creation
+        filename(string): name of file which has vasculature.
+        other(): Nothing for now.
+    Returns:
+        None
+    """
+    vessel_location = io.imread(load_dir + filename).astype(float)
+    flow_location = np.zeros((vessel_location.shape[0], vessel_location.shape[1], vessel_location.shape[2]))
+    for i in range(1,vessel_location.shape[0]-1):
+        for j in range(1,vessel_location.shape[1]-1):
+            for k in range(1,vessel_location.shape[2]-1):
+                if vessel_location[i,j,k] == 1.0:
+                    if vessel_location[i-1,j,k] == 0.0:
+                        flow_location[i-1,j,k] += 1.0
+
+                    if vessel_location[i+1,j,k] == 0.0:
+                        flow_location[i+1,j,k] += 1.0
+
+                    if vessel_location[i,j-1,k] == 0.0:
+                        flow_location[i,j-1,k] += 1.0
+
+                    if vessel_location[i,j+1,k] == 0.0:
+                        flow_location[i,j+1,k] += 1.0
+
+                    if vessel_location[i,j,k-1] == 0.0:
+                        flow_location[i,j,k-1] += 1.0
+
+                    if vessel_location[i,j,k+1] == 0.0:
+                        flow_location[i,j,k+1] += 1.0
+    np.save(data_dir + "/flow_location", flow_location[:300,:300,:300])
 
 def create_diffusion_location(load_dir, data_dir, filename, other = None):
-    diffusion_location = np.load(load_dir + file)
-    
-    np.save(data_dir + "/diffusion_location", diffusion_location)
+    """
+    Function that creates the location of diffusion. For now that's anything that's not
+
+    Args:
+        load_dir(string): directory with all the data files
+        data_dir(string): directory where all the manipulated arrays are stored after creation
+        filename(string): name of file which has the tumor domain.
+        other(): Nothing for now.
+    Returns:
+        None
+    """
+    diffusion_location = io.imread(load_dir + filename).astype(float)
+    vessel_location = io.imread(load_dir + other).astype(float)
+    np.save(data_dir + "/diffusion_location", diffusion_location[:300,:300,:300]-vessel_location[:300,:300,:300]) #got to take out vasculature but add source if there are any.
 
 def model(load_dir, data_dir):
     """
@@ -43,7 +88,7 @@ def model(load_dir, data_dir):
     """
     SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_gaps-cropped.tif')
     FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif')
-    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif', other = SL)
+    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif', other = 'UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif')
 
 def concentration_time(time):
     """

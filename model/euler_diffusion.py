@@ -56,7 +56,7 @@ def main(sim_name, load):
         dif.neumann_source_term(u, un, flow, i, dt, nu, dx, load) #locations where there are neumann boundary conditions
 
         if i in range(0,time,(time/4)):
-            wd.save_run(i*dt, u, data_dir):
+            wd.save_run(i*dt, u, data_dir)
 
 if __name__ == "__main__":
     main(sim_name='Syed', load=True)
