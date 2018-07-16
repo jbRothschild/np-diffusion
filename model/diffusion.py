@@ -35,7 +35,7 @@ def dirichlet_source_term(u, source_location, i, dt, mod):
     else:
         import dustom_model as mod
     """
-    u += -u*source_location + mod.set_dirichlet(source_location, i, dt)
+    #u += -u*source_location + mod.set_dirichlet(source_location, i, dt)
 
 def neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod):
     """
@@ -51,4 +51,4 @@ def neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod):
     Returns:
         None
     """
-    #u += mod.neumann_flow(un, flow_location, i, dt, nu)
+    u += mod.neumann_flow(un, flow_location, i, dt, nu, dx)*dt

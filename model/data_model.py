@@ -22,7 +22,8 @@ def create_source_location(load_dir, data_dir, filename, other = None):
     #File which loads the file with dirichlet conditions
     source_location = io.imread(load_dir + filename).astype(float)
 
-    np.save(data_dir + "/source_location", source_location[150:-150,150:-150,150:-150])
+    np.save(data_dir + "/source_location", source_location)
+    #np.save(data_dir + "/source_location", source_location[150:-150,150:-150,150:-150])
 
 def create_flow_location(load_dir, data_dir, filename, other = None):
     """
@@ -60,7 +61,8 @@ def create_flow_location(load_dir, data_dir, filename, other = None):
 
                     if vessel_location[i,j,k+1] == 0.0:
                         flow_location[i,j,k+1] += 1.0
-    np.save(data_dir + "/flow_location", flow_location[150:-150,150:-150,150:-150])
+    np.save(data_dir + "/flow_location", flow_location)
+    #np.save(data_dir + "/flow_location", flow_location[150:-150,150:-150,150:-150])
     toc1 = time.time()
     print toc1-tic1, "sec elapsed creating flow..."
 
@@ -79,7 +81,8 @@ def create_diffusion_location(load_dir, data_dir, filename, other = None):
     diffusion_location = io.imread(load_dir + filename).astype(float)
     vessel_location = io.imread(load_dir + other[0]).astype(float)
     source_location = io.imread(load_dir + other[1]).astype(float)
-    np.save(data_dir + "/diffusion_location", diffusion_location[150:-150,150:-150,150:-150]-vessel_location[150:-150,150:-150,150:-150] + source_location[150:-150,150:-150,150:-150])#got to take out vasculature but add source if there are any.
+    p.save(data_dir + "/diffusion_location", diffusion_location - vessel_location)
+    #np.save(data_dir + "/diffusion_location", diffusion_location[150:-150,150:-150,150:-150]-vessel_location[150:-150,150:-150,150:-150] + source_location[150:-150,150:-150,150:-150])#got to take out vasculature but add source if there are any.
 
 def model(load_dir, data_dir):
     """
@@ -110,9 +113,9 @@ def concentration_time(time_point):
     #return 1.0
     return 0.7521*np.exp(-1.877*time_point) + 0.2479*np.exp(-0.1353*time_point)
 
-def neumann_flow(un, flow_location, i, dt, nu):
+def neumann_flow(un, flow_location, i, dt, nu, dx):
     #contribution due to neumann flow_location.
-    return flow_location*nu
+    return concentration_time(i*dt/3600.)*flow_location*nu*2*dx
 
 def set_dirichlet(source_location, i, dt):
     #contribution due to dirichlet source terms
