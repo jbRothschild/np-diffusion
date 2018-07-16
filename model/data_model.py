@@ -81,7 +81,7 @@ def create_diffusion_location(load_dir, data_dir, filename, other = None):
     diffusion_location = io.imread(load_dir + filename).astype(float)
     vessel_location = io.imread(load_dir + other[0]).astype(float)
     source_location = io.imread(load_dir + other[1]).astype(float)
-    p.save(data_dir + "/diffusion_location", diffusion_location - vessel_location)
+    np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location)
     #np.save(data_dir + "/diffusion_location", diffusion_location[150:-150,150:-150,150:-150]-vessel_location[150:-150,150:-150,150:-150] + source_location[150:-150,150:-150,150:-150])#got to take out vasculature but add source if there are any.
 
 def model(load_dir, data_dir):
