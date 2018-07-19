@@ -2,7 +2,7 @@ Loaded boundary conditions
 dx = 2; dy = 2; dz = 2 #1 micrometer
 time = 14400
 dt = 60 #Time steps of seconds
-nu = 0.002 #nu*dudx = du/dt
+nu = 0.2 #nu*dudx = du/dt
 vis = 0.01 #Diffusion coefficient
 
 Comments: First try

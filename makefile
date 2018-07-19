@@ -1,4 +1,4 @@
-CODE_DIR = mte figures
+CODE_DIR = model figures
 current_dir = $(notdir $(shell pwd))
 parent_dir = $(notdir ${current_dir}/..)
 .PHONY : clean zip
@@ -10,13 +10,13 @@ parent_dir = $(notdir ${current_dir}/..)
 all :
 	$(MAKE) -C $(CODE_DIR)
 
-## shiftStoch : runs the numerical calculations only for shift in mte
-shift :
-	$(MAKE) -C mte $@
+## custom : runs the diffusion with a custom model, not the loaded data
+custom :
+	$(MAKE) -C model $@
 
-## gillespie : runs the numerical calculations only for gillespie algo in mte
-gillespie :
-	$(MAKE) -C mte $@
+## load : runs the diffusion with data model
+load :
+	$(MAKE) -C model $@
 
 ## Figs : runs all figures in figures
 Figs :
