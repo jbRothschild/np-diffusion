@@ -69,4 +69,4 @@ def main(sim_name, load):
     print toc-tic, "sec for Euler diffusion !"
 
 if __name__ == "__main__":
-    main(sim_name='flow', load=True)
+    main(sim_name='holes_diffusion20_', load=True)

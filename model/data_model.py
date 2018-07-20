@@ -5,7 +5,8 @@ import time
 def params():
     #parameters for the diffusion
 
-    vis = 0.01 #DIffusion coefficient um^2/s
+    #vis = 0.01 #DIffusion coefficient um^2/s
+    vis = 20 #Diffusion coefficient in um^2/s
     count = '/lastTime_seconds.npy'
     size = 301
     dx = 2; dy = 2; dz = 2 #1 micrometer
@@ -81,7 +82,7 @@ def create_diffusion_location(load_dir, data_dir, filename, other = None):
     diffusion_location = io.imread(load_dir + filename).astype(float)
     vessel_location = io.imread(load_dir + other[0]).astype(float)
     source_location = io.imread(load_dir + other[1]).astype(float)
-    np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location)
+    np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location + source_location)
     #np.save(data_dir + "/diffusion_location", diffusion_location[150:-150,150:-150,150:-150]-vessel_location[150:-150,150:-150,150:-150] + source_location[150:-150,150:-150,150:-150])#got to take out vasculature but add source if there are any.
 
 def model(load_dir, data_dir):
@@ -115,7 +116,7 @@ def concentration_time(time_point):
 
 def neumann_flow(un, flow_location, i, dt, nu, dx):
     #contribution due to neumann flow_location.
-    return concentration_time(i*dt/3600.)*flow_location*nu*2*dx
+    #return concentration_time(i*dt/3600.)*flow_location*nu*2*dx
 
 def set_dirichlet(source_location, i, dt):
     #contribution due to dirichlet source terms
