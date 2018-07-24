@@ -6,7 +6,15 @@ import sys, os
 import numpy as np
 from skimage import io
 
-def main(sim_name, load):
+#Argument is the diffusion coefficient for now
+import argparse
+
+parser = argparse.ArgumentParser(description='Submitting different diffusion parameters')
+parser.add_argument('-D', metavar='D', type=float, nargs=1, default=20, required=False, help='Diffusion Coefficient')
+#Namespace with the arguments
+args = parser.parse_args()
+
+def main(sim_name, load, D_coeff):
     #===============Model selection==================================
     if load == True:
         import data_model as mod
@@ -15,7 +23,7 @@ def main(sim_name, load):
     if not os.path.exists('../data/'):
         os.makedirs('../data/')
     #Set directory where the data will be saved. Also set the loading directory (../ChanLan/)
-    data_dir = "../data/sim_" + sim_name #remote use
+    data_dir = "../data/sim_" + sim_name + str(D_coeff) #remote use
     load_dir = '../ChanLab/'
     count = '/lastTime_seconds.npy'
     #data_dir = $HOME #on Scinet
@@ -28,7 +36,7 @@ def main(sim_name, load):
         #Creates models and parameters for models
         #Writes these to a file in the data folder. Be sure to add a comment on the model so we can understand what it is in the future.
         mod.model(load_dir, data_dir)
-    vis, size, dx, dy, dz, total_time, dt, nu, comment = mod.params()
+    vis, size, dx, dy, dz, total_time, dt, nu, comment = mod.params(D_coeff)
     wd.write_params_file(data_dir, dx, dy, dz, total_time, dt, vis, nu, comment)
 
     #===============Load======================================
@@ -58,7 +66,8 @@ def main(sim_name, load):
         dif.dirichlet_source_term(u, source_location, i, dt, mod) #fixed source locations, dirichlet conditions
         dif.neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod) #locations where there are neumann boundary conditions
 
-        if i*dt in range(0,total_time+1,(total_time/4)):
+        save_time = 900 #numbe rof seconds to elapse when saving
+        if i*dt in range(0,total_time+1,save_time):
             print i, "th generation done..."
             wd.save_run(i*dt, u, data_dir, count)
         toc1 = time.time()
@@ -69,4 +78,4 @@ def main(sim_name, load):
     print toc-tic, "sec for Euler diffusion !"
 
 if __name__ == "__main__":
-    main(sim_name='holes_diffusion20_', load=True)
+    main(sim_name='holes_diffusion_', load=True, D_coeff=vars(args)['D'])

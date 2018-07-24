@@ -2,20 +2,20 @@ import numpy as np
 import skimage.io as io
 import time
 
-def params():
+def params(v=20):
     #parameters for the diffusion
 
     #vis = 0.01 #DIffusion coefficient um^2/s
-    vis = 20 #Diffusion coefficient in um^2/s
+    vis = v #Diffusion coefficient in um^2/s
     count = '/lastTime_seconds.npy'
     size = 301
     dx = 2; dy = 2; dz = 2 #1 micrometer
     total_time = 3600*4
-    dt = 60 #Time steps of 30 seconds dt < dx^2/2D
+    dt = 30 #Time steps of 30 seconds dt < dx^2/2D
     nu = 0.002 # nu = dudx
 
     #IMPORTANT: ADD A COMMENT FOR EACH RUN
-    comment = 'First try'
+    comment = 'Diffusion with the proper diffusion coefficient'
 
     return vis, size, dx, dy, dz, total_time, dt, nu, comment
 
@@ -117,6 +117,7 @@ def concentration_time(time_point):
 def neumann_flow(un, flow_location, i, dt, nu, dx):
     #contribution due to neumann flow_location.
     #return concentration_time(i*dt/3600.)*flow_location*nu*2*dx
+    return 0
 
 def set_dirichlet(source_location, i, dt):
     #contribution due to dirichlet source terms

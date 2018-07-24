@@ -1,7 +1,7 @@
 CODE_DIR = model figures
 current_dir = $(notdir $(shell pwd))
 parent_dir = $(notdir ${current_dir}/..)
-.PHONY : clean zip
+.PHONY : clean zip custom data Figs fig%
 # setting up suffix rules
 
 ##<<Different commands for makefile>>
@@ -14,9 +14,9 @@ all :
 custom :
 	$(MAKE) -C model $@
 
-## load : runs the diffusion with data model
-load :
-	$(MAKE) -C model $@
+## data : runs the diffusion with data model
+data :
+	$(MAKE) -C model $@ ARGS=${DC}
 
 ## Figs : runs all figures in figures
 Figs :

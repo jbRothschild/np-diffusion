@@ -2,7 +2,7 @@ CXX = g++
 C11 = ${CXX} -std=c++11
 current_dir = $(notdir $(shell pwd))
 parent_dir = $(notdir ${current_dir}/..)
-.PHONY : clean
+.PHONY : clean data custom
 # setting up suffix rules
 .SUFFIXES : .cc .h .o
 # for creating object files
@@ -12,14 +12,14 @@ parent_dir = $(notdir ${current_dir}/..)
 ##<<Different commands for makefile>>
 
 ## all : runs main code
-all : load custom
+all : data custom
 
-## load : runs the diffusion according to the loaded data from ChanLab
-load : euler_diffusion.py
-	python euler_diffusion.py
+## data : runs the diffusion according to the loaded data from ChanLab
+data :
+	python euler_diffusion.py -D $(ARGS)
 
 ## custom : runs diffusion of our own custom model
-custom : euler_diffusion.py
+custom :
 	python euler_diffusion.py
 
 ## clean : remove auto-generated files
