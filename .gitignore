@@ -6,5 +6,5 @@
 *.png
 *.pyc
 #ignore folder ChanLab and others
-ChanLab/
-Sim*/
+ChanLab*/
+data/sim*
