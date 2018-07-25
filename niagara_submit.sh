@@ -12,7 +12,7 @@ cd $SLURM_SUBMIT_DIR
 # load modules (must match modules used for compilation)
 module load cmake
 module load intel/2018.2
-module load python/2.7.14
+module load anaconda2/5.1.0
 
 # Turn off implicit threading in Python, R
 export OMP_NUM_THREADS=1
