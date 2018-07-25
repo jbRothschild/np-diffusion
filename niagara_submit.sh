@@ -10,7 +10,7 @@
 cd $SLURM_SUBMIT_DIR
 
 # load modules (must match modules used for compilation)
-module load make
+module load cmake
 module load intel/2018.2
 module load python/2.7.14
 
