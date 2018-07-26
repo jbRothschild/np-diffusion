@@ -1,0 +1,14 @@
+Loaded boundary conditions
+<<<<<<< HEAD
+dx = 2; dy = 2; dz = 2 #1 micrometer
+time = 14400
+dt = 30 #Time steps of seconds
+=======
+dx = 2.0; dy = 2.0; dz = 2.0 #1 micrometer
+time = 14400.0
+dt = 0.1 #Time steps of seconds
+>>>>>>> eb83467b36105bd66472e35c7851049cfd1e9fc1
+nu = 0.002 #nu*dudx = du/dt
+vis = 20.0 #Diffusion coefficient
+
+Comments: Diffusion with the proper diffusion coefficient
