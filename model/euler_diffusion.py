@@ -55,10 +55,10 @@ def main(sim_name, load, D_coeff):
     #Basically checks at what step we're at
     initial = np.load(data_dir + count)
     u = np.load(data_dir + "/diff_" + str(initial) + "sec.npy")
-    
+
     #================Euleur's method============================
     tic = time.time()
-    for i in range(int(initial/dt)+1,total_time/dt+1): #run simulation from time
+    for i in np.arange(initial/dt+1,total_time/dt+1): #run simulation from time
         tic1 = time.time()
         un = u[:,:,:]
 
@@ -66,14 +66,13 @@ def main(sim_name, load, D_coeff):
         dif.dirichlet_source_term(u, source_location, i, dt, mod) #fixed source locations, dirichlet conditions
         dif.neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod) #locations where there are neumann boundary conditions
 
-        save_time = 900 #numbe rof seconds to elapse when saving
-        if i*dt in range(0,total_time+1,save_time):
+        save_time = 300. #numbe rof seconds to elapse when saving
+        if i*dt in np.range(0.,total_time+1.,save_time):
             print i, "th generation done..."
             wd.save_run(i*dt, u, data_dir, count)
 
         toc1 = time.time()
-        if i == 1:
-            print toc1-tic1, "sec for roughly one time step..."
+        print toc1-tic1, "sec for roughly one time step..."
 
     toc = time.time()
     print toc-tic, "sec for Euler diffusion !"
