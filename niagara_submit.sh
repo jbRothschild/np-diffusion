@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=40
-#SBATCH --time=2:00:00
+#SBATCH --time=6:00:00
 #SBATCH --job-name np_diffusion
 
 #run this code using jbroths:~$ sbatch *script_name.sh*
