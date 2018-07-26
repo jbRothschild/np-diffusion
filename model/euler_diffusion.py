@@ -55,7 +55,7 @@ def main(sim_name, load, D_coeff):
     #Basically checks at what step we're at
     initial = np.load(data_dir + count)
     u = np.load(data_dir + "/diff_" + str(initial) + "sec.npy")
-
+    
     #================Euleur's method============================
     tic = time.time()
     for i in range(int(initial/dt)+1,total_time/dt+1): #run simulation from time
@@ -70,6 +70,7 @@ def main(sim_name, load, D_coeff):
         if i*dt in range(0,total_time+1,save_time):
             print i, "th generation done..."
             wd.save_run(i*dt, u, data_dir, count)
+
         toc1 = time.time()
         if i == 1:
             print toc1-tic1, "sec for roughly one time step..."

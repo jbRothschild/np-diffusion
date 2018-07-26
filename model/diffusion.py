@@ -12,7 +12,6 @@ def diffusion(u, un, ijk, diffusion_location, vis, dt, dx, dy, dz, mod):
      Returns:
          None
      """
-     print vis
      u[ijk,:,:] += diffusion_location[ijk,:,:]*( vis*dt*diffusion_location[ijk+1,:,:]*( un[ijk+1,:,:]-un[ijk,:,:] ) + vis*dt*diffusion_location[ijk-1,:,:]*( un[ijk-1,:,:]-un[ijk,:,:] ))/(dx**2)
 
      u[:,ijk,:] += diffusion_location[:,ijk,:]*( vis*dt*diffusion_location[:,ijk+1,:]*( un[:,ijk+1,:]-un[:,ijk,:] ) + vis*dt*diffusion_location[:,ijk-1,:]*( un[:,ijk-1,:]-un[:,ijk,:] ))/(dy**2)

@@ -7,5 +7,4 @@
 *.pyc
 #ignore folder ChanLab and others
 ChanLab*/
-data/sim*
 data_old/
