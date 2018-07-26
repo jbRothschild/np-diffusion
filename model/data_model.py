@@ -2,7 +2,7 @@ import numpy as np
 import skimage.io as io
 import time
 
-def params(v=20.):
+def params(v=1.5):
     #parameters for the diffusion
 
     #vis = 0.01 #DIffusion coefficient um^2/s
@@ -10,8 +10,8 @@ def params(v=20.):
     count = '/lastTime_seconds.npy'
     size = 301
     dx = 2.; dy = 2.; dz = 2. #1 micrometer
-    total_time = 3600.*4
-    dt = dx*dx/(2.*vis) #Time steps of 30 seconds dt < dx^2/2*D
+    total_time = 3600.
+    dt = 1.0 #dx*dx/(2.*vis) #Time steps of seconds dt < dx^2/2*D
     nu = 0.002 # nu = dudx
 
     #IMPORTANT: ADD A COMMENT FOR EACH RUN

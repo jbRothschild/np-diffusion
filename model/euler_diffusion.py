@@ -66,7 +66,7 @@ def main(sim_name, load, D_coeff):
         dif.dirichlet_source_term(u, source_location, i, dt, mod) #fixed source locations, dirichlet conditions
         dif.neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod) #locations where there are neumann boundary conditions
 
-        save_time = 300. #numbe rof seconds to elapse when saving
+        save_time = 60. #numbe rof seconds to elapse when saving
         if i*dt in np.range(0.,total_time+1.,save_time):
             print i, "th generation done..."
             wd.save_run(i*dt, u, data_dir, count)
