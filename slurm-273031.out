@@ -1,0 +1,49 @@
+make -C model data ARGS=1.5
+make[1]: Entering directory `/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model'
+python euler_diffusion.py -D 1.5
+186.635070086 sec elapsed creating flow...
+194.80783391 sec elapsed creating model...
+Traceback (most recent call last):
+  File "euler_diffusion.py", line 81, in <module>
+    main(sim_name='holes_diffusion_', load=True, D_coeff=vars(args)['D'])
+  File "euler_diffusion.py", line 70, in main
+    if i*dt in np.range(0,total_time+1,save_time):
+AttributeError: 'module' object has no attribute 'range'
+make[1]: *** [data] Error 1
+make[1]: Leaving directory `/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model'
+make: *** [data] Error 2
+
+scontrol show jobid 273031
+JobId=273031 JobName=np_diffusion
+   UserId=jbroths(3061232) GroupId=zilmana(6002070) MCS_label=N/A
+   Priority=313151 Nice=0 Account=rrg-zilmana QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=2:0
+   RunTime=00:04:30 TimeLimit=06:00:00 TimeMin=N/A
+   SubmitTime=2018-07-26T16:33:52 EligibleTime=2018-07-26T16:33:52
+   StartTime=2018-07-26T16:34:20 EndTime=2018-07-26T16:38:50 Deadline=N/A
+   PreemptTime=None SuspendTime=None SecsPreSuspend=0
+   LastSchedEval=2018-07-26T16:34:20
+   Partition=compute AllocNode:Sid=nia-login05:244613
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=nia1274
+   BatchHost=nia1274
+   NumNodes=1 NumCPUs=80 NumTasks=40 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   TRES=cpu=80,node=1,billing=40
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=0 MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   Gres=(null) Reservation=(null)
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/niagara_submit.sh
+   WorkDir=/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion
+   StdErr=/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/slurm-273031.out
+   StdIn=/dev/null
+   StdOut=/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/slurm-273031.out
+   Power=
+
+sacct -j 273031
+       JobID    JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+273031       np_diffus+ rrg-zilma+   00:04:30                        00:20.158  03:41.616      2:0 
+273031.batch      batch rrg-zilma+   00:04:30  17000020K  14741152K  00:20.158  03:41.616      2:0 
