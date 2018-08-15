@@ -10,7 +10,7 @@ from skimage import io
 import argparse
 
 parser = argparse.ArgumentParser(description='Submitting different diffusion parameters')
-parser.add_argument('-D', metavar='D', type=float, action='store', default=20, required=False, help='Diffusion Coefficient')
+parser.add_argument('-D', metavar='D', type=float, action='store', default=20., required=False, help='Diffusion Coefficient')
 #Namespace with the arguments
 args = parser.parse_args()
 
