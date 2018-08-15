@@ -2,7 +2,7 @@ import numpy as np
 import skimage.io as io
 import time
 
-def params(v=1.5):
+def params(v):
     #parameters for the diffusion
 
     #vis = 0.01 #DIffusion coefficient um^2/s

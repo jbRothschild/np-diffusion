@@ -10,7 +10,7 @@ from skimage import io
 import argparse
 
 parser = argparse.ArgumentParser(description='Submitting different diffusion parameters')
-parser.add_argument('-D', metavar='D', type=float, action='store', default=20., required=False, help='Diffusion Coefficient')
+parser.add_argument('-D', metavar='D', type=float, action='store', default=1.5, required=False, help='Diffusion Coefficient')
 #Namespace with the arguments
 args = parser.parse_args()
 
@@ -37,7 +37,8 @@ def main(sim_name, load, D_coeff):
         #Writes these to a file in the data folder. Be sure to add a comment on the model so we can understand what it is in the future.
         mod.model(load_dir, data_dir)
     vis, size, dx, dy, dz, total_time, dt, nu, comment = mod.params(D_coeff)
-    wd.write_params_file(data_dir, dx, dy, dz, total_time, dt, vis, nu, comment)
+    if not os.path.exists(data_dir + "/params.txt"):
+        wd.write_params_file(data_dir, dx, dy, dz, total_time, dt, vis, nu, comment)
 
     #===============Load======================================
     #We load up models

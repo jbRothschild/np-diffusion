@@ -18,4 +18,4 @@ module load anaconda2/5.1.0
 export OMP_NUM_THREADS=40
 
 # Commands to be run now
-make data DC=1.5 && echo "Diffusion at D coefficient 20 finished"
+make data DC=1.5 && echo "Diffusion at D coefficient 1.5 finished"
