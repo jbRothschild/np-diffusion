@@ -15,7 +15,7 @@ def params(v):
     nu = 0.002 # nu = dudx
 
     #IMPORTANT: ADD A COMMENT FOR EACH RUN
-    comment = 'Diffusion with the proper diffusion coefficient'
+    comment = 'Diffusion with the proper diffusion coefficient, 5000 holes.'
 
     return vis, size, dx, dy, dz, total_time, dt, nu, comment
 
@@ -96,9 +96,9 @@ def model(load_dir, data_dir):
         None
     """
     tic = time.time()
-    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_gaps-cropped.tif')
+    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_5000gaps.tif')
     FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif')
-    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif', other = ['UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif','UT16-T-stack3-Sept10_iso_gaps-cropped.tif'])
+    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif', other = ['UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif','UT16-T-stack3-Sept10_iso_5000gaps.tif'])
     toc = time.time()
     print toc-tic, "sec elapsed creating model..."
 
