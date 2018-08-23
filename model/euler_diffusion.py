@@ -72,7 +72,6 @@ def main(sim_name, load, D_coeff):
         #--------------------Saving Data-------------------
         save_time_2D = 60. #number of seconds to elapse when saving 2D images
         if i*dt in np.arange(0,total_time+1,save_time_2D):
-            print i*dt, " seconds done..."
             wd.save_run_2D(i*dt, u[u.shape[0]/2,:,:], data_dir) #u.shape[0]/2 means it's in the middle
 
         save_time = 300. #number of seconds to elapse when saving 3D images

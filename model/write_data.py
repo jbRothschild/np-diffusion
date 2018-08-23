@@ -13,6 +13,7 @@ def write_params_file(data_dir, dx, dy, dz, time, dt, vis, nu, comment):
 
 def save_run(t, u, data_dir, count):
     #save data of diffusion u at time t
+    print t, " seconds run saved"
     np.save(data_dir + "/diff3D_"+str(t)+"sec", u)
     np.save(data_dir + "/" + count, np.asarray(t))
 
