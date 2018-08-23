@@ -80,7 +80,7 @@ def main(sim_name, load, D_coeff):
             wd.save_run(i*dt, u, data_dir, count)
 
         #saving
-        if timeSum[0,timeSum.shape[0]-1] < i*dt:
+        if timeSum[0,timeSum.shape[1]-1] < i*dt:
             timeSum = np.append(timeSum,[[i*dt],[np.sum(u)]], axis=1)
             np.save(data_dir + "/time_sum.npy", timeSum)
         #-------------------------------------------

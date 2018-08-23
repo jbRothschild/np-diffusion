@@ -51,4 +51,4 @@ def neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod):
     Returns:
         None
     """
-    #u += mod.neumann_flow(un, flow_location, i, dt, nu, dx)*dt
+    u += mod.neumann_flow(un, flow_location, i, dt, nu, dx)*dt
