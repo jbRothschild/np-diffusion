@@ -1,0 +1,23 @@
+make -C model data ARGS=1.5
+make[1]: Entering directory `/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model'
+python euler_diffusion.py -D 1.5
+/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model/diffusion.py:17: RuntimeWarning: overflow encountered in multiply
+  u[:,ijk,:] += diffusion_location[:,ijk,:]*( vis*dt*diffusion_location[:,ijk+1,:]*( un[:,ijk+1,:]-un[:,ijk,:] ) + vis*dt*diffusion_location[:,ijk-1,:]*( un[:,ijk-1,:]-un[:,ijk,:] ))/(dy**2)
+/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model/diffusion.py:17: RuntimeWarning: invalid value encountered in multiply
+  u[:,ijk,:] += diffusion_location[:,ijk,:]*( vis*dt*diffusion_location[:,ijk+1,:]*( un[:,ijk+1,:]-un[:,ijk,:] ) + vis*dt*diffusion_location[:,ijk-1,:]*( un[:,ijk-1,:]-un[:,ijk,:] ))/(dy**2)
+/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model/diffusion.py:19: RuntimeWarning: invalid value encountered in multiply
+  u[:,:,ijk] += diffusion_location[:,:,ijk]*( vis*dt*diffusion_location[:,:,ijk+1]*( un[:,:,ijk+1]-un[:,:,ijk] ) + vis*dt*diffusion_location[:,:,ijk-1]*( un[:,:,ijk-1]-un[:,:,ijk] ))/(dz**2)
+/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model/diffusion.py:19: RuntimeWarning: invalid value encountered in add
+  u[:,:,ijk] += diffusion_location[:,:,ijk]*( vis*dt*diffusion_location[:,:,ijk+1]*( un[:,:,ijk+1]-un[:,:,ijk] ) + vis*dt*diffusion_location[:,:,ijk-1]*( un[:,:,ijk-1]-un[:,:,ijk] ))/(dz**2)
+/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model/diffusion.py:38: RuntimeWarning: invalid value encountered in multiply
+  u += -u*source_location + mod.set_dirichlet(source_location, i, dt)
+/scinet/niagara/software/2018a/opt/base/anaconda2/5.1.0/lib/python2.7/site-packages/numpy/core/_methods.py:32: RuntimeWarning: overflow encountered in reduce
+  return umr_sum(a, axis, dtype, out, keepdims)
+/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model/diffusion.py:15: RuntimeWarning: overflow encountered in multiply
+  u[ijk,:,:] += diffusion_location[ijk,:,:]*( vis*dt*diffusion_location[ijk+1,:,:]*( un[ijk+1,:,:]-un[ijk,:,:] ) + vis*dt*diffusion_location[ijk-1,:,:]*( un[ijk-1,:,:]-un[ijk,:,:] ))/(dx**2)
+/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model/diffusion.py:17: RuntimeWarning: invalid value encountered in add
+  u[:,ijk,:] += diffusion_location[:,ijk,:]*( vis*dt*diffusion_location[:,ijk+1,:]*( un[:,ijk+1,:]-un[:,ijk,:] ) + vis*dt*diffusion_location[:,ijk-1,:]*( un[:,ijk-1,:]-un[:,ijk,:] ))/(dy**2)
+/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model/diffusion.py:19: RuntimeWarning: overflow encountered in multiply
+  u[:,:,ijk] += diffusion_location[:,:,ijk]*( vis*dt*diffusion_location[:,:,ijk+1]*( un[:,:,ijk+1]-un[:,:,ijk] ) + vis*dt*diffusion_location[:,:,ijk-1]*( un[:,:,ijk-1]-un[:,:,ijk] ))/(dz**2)
+/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model/diffusion.py:38: RuntimeWarning: invalid value encountered in add
+  u += -u*source_location + mod.set_dirichlet(source_location, i, dt)
