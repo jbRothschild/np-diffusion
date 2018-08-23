@@ -8,7 +8,6 @@ def params(v):
     #vis = 0.01 #DIffusion coefficient um^2/s
     vis = v #Diffusion coefficient in um^2/s
     count = '/lastTime_seconds.npy'
-    size = 301
     dx = 2.; dy = 2.; dz = 2. #1 micrometer
     total_time = 3600.
     dt = 1.0 #dx*dx/(2.*vis) #Time steps of seconds dt < dx^2/2*D
