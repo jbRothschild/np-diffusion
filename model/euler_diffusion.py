@@ -50,12 +50,14 @@ def main(sim_name, load, D_coeff):
     if not os.path.exists(data_dir + count):
         np.save(data_dir + count, np.asarray(0))
         np.save(data_dir + "/diff_0sec.npy", source_location*mod.concentration_time(0))
+        np.save(data_dir + "/time_sum.npy", np.array([[0.0],[0.0]]))
 
     ijk = (np.linspace(1, diffusion_location.shape[0]-2, diffusion_location.shape[0]-2)).astype(int) #part of domain
 
     #Basically checks at what step we're at
     initial = np.load(data_dir + count)
     u = np.load(data_dir + "/diff_" + str(initial) + "sec.npy")
+    timeSum = np.load(data_dir + "/time_sum.npy")
 
     #================Euleur's method============================
     tic = time.time()
@@ -67,10 +69,21 @@ def main(sim_name, load, D_coeff):
         dif.dirichlet_source_term(u, source_location, i, dt, mod) #fixed source locations, dirichlet conditions
         dif.neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod) #locations where there are neumann boundary conditions
 
-        save_time = 60. #number of seconds to elapse when saving
+        #--------------------Saving Data-------------------
+        save_time_2D = 60. #number of seconds to elapse when saving 2D images
+        if i*dt in np.arange(0,total_time+1,save_time_2D):
+            print i*dt, " seconds done..."
+            wd.save_run2D(i*dt, u[u.shape[0]/2,:,:], data_dir) #u.shape[0]/2 means it's in the middle
+
+        save_time = 300. #number of seconds to elapse when saving 3D images
         if i*dt in np.arange(0,total_time+1,save_time):
-            print i, "th generation done..."
             wd.save_run(i*dt, u, data_dir, count)
+
+        #saving
+        if timeSum[0,timeSum.shape[0]-1] < i*dt:
+            timeSum = np.append(timeSum,[[i*dt],[np.sum(u)]], axis=1)
+            np.save(data_dir + "/time_sum.npy", timeSum)
+        #-------------------------------------------
 
         toc1 = time.time()
         print toc1-tic1, "sec for roughly one time step..."
