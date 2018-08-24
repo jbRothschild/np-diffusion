@@ -22,6 +22,7 @@ def params(v):
 def create_source_location(load_dir, data_dir, filename, other = None):
     #File which loads the file with dirichlet conditions
     source_location = io.imread(load_dir + filename).astype(float)
+    source_location /= np.max(source_location)
 
     np.save(data_dir + "/source_location", source_location)
     #np.save(data_dir + "/source_location", source_location[150:-150,150:-150,150:-150])
@@ -40,6 +41,7 @@ def create_flow_location(load_dir, data_dir, filename, other = None):
     """
     tic1 = time.time()
     vessel_location = io.imread(load_dir + filename).astype(float)
+    vessel_location /= np.max(vessel_location)
     flow_location = np.zeros((vessel_location.shape[0], vessel_location.shape[1], vessel_location.shape[2]))
     for i in range(1,vessel_location.shape[0]-1):
         for j in range(1,vessel_location.shape[1]-1):
@@ -80,8 +82,12 @@ def create_diffusion_location(load_dir, data_dir, filename, other = None):
         None
     """
     diffusion_location = io.imread(load_dir + filename).astype(float)
+    diffusion_location /= np.max(diffusion_location)
     vessel_location = io.imread(load_dir + other[0]).astype(float)
+    vessel_location /= np.max(vessel_location)
     source_location = io.imread(load_dir + other[1]).astype(float)
+    source_location /= np.max(source_location)
+
     np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location + source_location)
     #np.save(data_dir + "/diffusion_location", diffusion_location[150:-150,150:-150,150:-150]-vessel_location[150:-150,150:-150,150:-150] + source_location[150:-150,150:-150,150:-150])#got to take out vasculature but add source if there are any.
 
