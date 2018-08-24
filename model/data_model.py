@@ -116,10 +116,10 @@ def concentration_time(time_point):
 
 def neumann_flow(un, flow_location, i, dt, nu, dx):
     #contribution due to neumann flow_location.
-    return concentration_time(i*dt/3600.)*flow_location*nu*2*dx
-    #return 0 #set when flow location is 0
+    #return concentration_time(i*dt/3600.)*flow_location*nu*2*dx
+    return 0 #set when flow location is 0
 
 def set_dirichlet(source_location, i, dt):
     #contribution due to dirichlet source terms
-    #return concentration_time(i*dt/3600.)*source_location
-    return 0 #set when there are no source locations
+    return concentration_time(i*dt/3600.)*source_location
+    #return 0 #set when there are no source locations
