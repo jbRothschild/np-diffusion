@@ -94,7 +94,7 @@ def create_diffusion_location(load_dir, data_dir, filename, other = None):
         None
     """
     tumor_location = io.imread(load_dir + filename).astype(float)
-    diffusio_location = np.ones( np.asarray(tumor_location).shape )
+    diffusion_location = np.ones( np.asarray(tumor_location).shape )
     diffusion_location /= np.max(diffusion_location)
     vessel_location = io.imread(load_dir + other[0]).astype(float)
     vessel_location /= np.max(vessel_location)
