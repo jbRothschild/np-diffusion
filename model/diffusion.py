@@ -18,6 +18,19 @@ def diffusion(u, un, ijk, diffusion_location, vis, dt, dx, dy, dz, mod):
 
      u[:,:,ijk] += diffusion_location[:,:,ijk]*( vis*dt*diffusion_location[:,:,ijk+1]*( un[:,:,ijk+1]-un[:,:,ijk] ) + vis*dt*diffusion_location[:,:,ijk-1]*( un[:,:,ijk-1]-un[:,:,ijk] ))/(dz**2)
 
+     #Periodic Boundary Conditions
+     u[0,:,:] += diffusion_location[0,:,:]*( vis*dt*diffusion_location[1,:,:]*( un[1,:,:]-un[0,:,:] ) + vis*dt*diffusion_location[-1,::-1,::-1]*( un[-1,::-1,::-1]-un[0,:,:] ))/(dx**2)
+
+     u[:,0,:] += diffusion_location[:,0,:]*( vis*dt*diffusion_location[:,1,:]*( un[:,1,:]-un[:,0,:] ) + vis*dt*diffusion_location[::-1,-1,::-1]*( un[::-1,-1,::-1]-un[:,0,:] ))/(dy**2)
+
+     u[:,:,0] += diffusion_location[:,:,0]*( vis*dt*diffusion_location[:,:,1]*( un[:,:,1]-un[:,:,0] ) + vis*dt*diffusion_location[::-1,::-1,-1]*( un[::-1,::-1,-1]-un[:,:,0] ))/(dz**2)
+
+     u[-1,:,:] += diffusion_location[-1,:,:]*( vis*dt*diffusion_location[-2,:,:]*( un[-2,:,:]-un[-1,:,:] ) + vis*dt*diffusion_location[0,::-1,::-1]*( un[0,::-1,::-1]-un[-1,:,:] ))/(dx**2)
+
+     u[:,-1,:] += diffusion_location[:,-1,:]*( vis*dt*diffusion_location[:,-2,:]*( un[:,-2,:]-un[:,-1,:] ) + vis*dt*diffusion_location[::-1,0,::-1]*( un[::-1,0,::-1]-un[:,-1,:] ))/(dy**2)
+
+     u[:,:,-1] += diffusion_location[:,:,-1]*( vis*dt*diffusion_location[:,:,-2]*( un[:,:,-2]-un[:,:,-1] ) + vis*dt*diffusion_location[::-1,::-1,0]*( un[::-1,::-1,0]-un[:,:,-1] ))/(dz**2)
+
 def dirichlet_source_term(u, source_location, i, dt, mod):
     """
     Function that fixes the source terms(after diffusion has happened)
@@ -30,10 +43,6 @@ def dirichlet_source_term(u, source_location, i, dt, mod):
         dt(int): spacetime intervals
     Returns:
         None
-    if load == True:
-        import data_model as mod
-    else:
-        import dustom_model as mod
     """
     u += -u*source_location + mod.set_dirichlet(source_location, i, dt)
 

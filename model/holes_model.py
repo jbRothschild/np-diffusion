@@ -21,8 +21,20 @@ def params(v):
 
 def create_source_location(load_dir, data_dir, filename, other = None):
     #File which loads the file with dirichlet conditions
-    source_location = io.imread(load_dir + filename).astype(float)
-    source_location /= np.max(source_location)
+    holes_location = io.imread(load_dir + filename).astype(float)
+    holes_location /= np.max(holes_location)
+    source_location = np.zeros( np.asarray(holes_location).shape )
+
+    total = np.sum(holes_location)
+    for i in np.arange(0, holes_location.shape[0]):
+        for j in np.arange(0, holes_location.shape[1]):
+            for k in np.arange(0, holes_location.shape[2]):
+                if (holes_location[i,j,k] > 0.0 and other > 0):
+                    prob = np.random.randint(0,total)
+                    total -= 1.0
+                    if prob < other:
+                        source_location[i,j,k] = 1.0
+                        other -= 1
 
     np.save(data_dir + "/source_location", source_location)
     #np.save(data_dir + "/source_location", source_location[150:-150,150:-150,150:-150])
@@ -81,17 +93,18 @@ def create_diffusion_location(load_dir, data_dir, filename, other = None):
     Returns:
         None
     """
-    diffusion_location = io.imread(load_dir + filename).astype(float)
+    tumor_location = io.imread(load_dir + filename).astype(float)
+    diffusio_location = np.ones( np.asarray(tumor_location).shape )
     diffusion_location /= np.max(diffusion_location)
     vessel_location = io.imread(load_dir + other[0]).astype(float)
     vessel_location /= np.max(vessel_location)
-    source_location = io.imread(load_dir + other[1]).astype(float)
+    source_location = np.load(data_dir + other[1]).astype(float)
     source_location /= np.max(source_location)
 
     np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location + source_location)
     #np.save(data_dir + "/diffusion_location", diffusion_location[150:-150,150:-150,150:-150]-vessel_location[150:-150,150:-150,150:-150] + source_location[150:-150,150:-150,150:-150])#got to take out vasculature but add source if there are any.
 
-def model(load_dir, data_dir):
+def model(load_dir, data_dir, holes):
     """
     Function that creates the different arrays that set the geometry of our diffusion landscape.
 
@@ -102,9 +115,9 @@ def model(load_dir, data_dir):
         None
     """
     tic = time.time()
-    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_5000gaps.tif')
+    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_50000gaps.tif', other=holes)
     FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif')
-    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif', other = ['UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif','UT16-T-stack3-Sept10_iso_5000gaps.tif'])
+    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif', other = ['UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif','/source_location.npy'])
     toc = time.time()
     print toc-tic, "sec elapsed creating model..."
 
@@ -114,7 +127,7 @@ def concentration_time(time_point):
 
     Args:
         time(float): time in hours
-    Returns:
+    Returns:SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_50000gaps.tif')
         The concentration
     """
     #return 1.0 #if we make concetration in blood vessel fixed
@@ -122,10 +135,10 @@ def concentration_time(time_point):
 
 def neumann_flow(un, flow_location, i, dt, nu, dx):
     #contribution due to neumann flow_location.
-    return concentration_time(i*dt/3600.)*flow_location*nu*2*dx
-    #return 0 #set when flow location is 0
+    #return concentration_time(i*dt/3600.)*flow_location*nu*2*dx
+    return 0 #set when flow location is 0
 
 def set_dirichlet(source_location, i, dt):
     #contribution due to dirichlet source terms
-    #return concentration_time(i*dt/3600.)*source_location
-    return 0 #set when there are no source locations
+    return concentration_time(i*dt/3600.)*source_location
+    #return 0 #set when there are no source locations

@@ -10,20 +10,20 @@ from skimage import io
 import argparse
 
 parser = argparse.ArgumentParser(description='Submitting different diffusion parameters')
-parser.add_argument('-D', metavar='D', type=float, action='store', default=1.5, required=False, help='Diffusion Coefficient')
+parser.add_argument('-D', metavar='D', type=float, action='store', default=5000, required=False, help='number of holes')
 #Namespace with the arguments
 args = parser.parse_args()
 
-def main(sim_name, load, D_coeff):
+def main(sim_name, load, holes):
     #===============Model selection==================================
     if load == True:
-        import data_model as mod
+        import holes_model as mod
     else:
         import custom_model as mod
     if not os.path.exists('../data/'):
         os.makedirs('../data/')
     #Set directory where the data will be saved. Also set the loading directory (../ChanLan/)
-    data_dir = "../data/sim_" + sim_name + str(D_coeff) #remote use
+    data_dir = "../data/sim_" + sim_name + str(holes)#remote use
     load_dir = '../ChanLab/'
     count = '/lastTime_seconds.npy'
     #data_dir = $HOME #on Scinet
@@ -35,8 +35,8 @@ def main(sim_name, load, D_coeff):
     if not os.path.exists(data_dir + count):
         #Creates models and parameters for models
         #Writes these to a file in the data folder. Be sure to add a comment on the model so we can understand what it is in the future.
-        mod.model(load_dir, data_dir)
-    vis, size, dx, dy, dz, total_time, dt, nu, comment = mod.params(D_coeff)
+        mod.model(load_dir, data_dir, holes)
+    vis, size, dx, dy, dz, total_time, dt, nu, comment = mod.params(1.5)
     if not os.path.exists(data_dir + "/params.txt"):
         wd.write_params_file(data_dir, dx, dy, dz, total_time, dt, vis, nu, comment)
 
@@ -70,13 +70,16 @@ def main(sim_name, load, D_coeff):
         dif.neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod) #locations where there are neumann boundary conditions
 
         #--------------------Saving Data-------------------
+        """
         save_time_2D = 60. #number of seconds to elapse when saving 2D images
         if i*dt in np.arange(0,total_time+1,save_time_2D):
             wd.save_run_2D(i*dt, u[u.shape[0]/2,:,:], data_dir) #u.shape[0]/2 means it's in the middle
+        """
 
         save_time = 300. #number of seconds to elapse when saving 3D images
         if i*dt in np.arange(0,total_time+1,save_time):
             wd.save_run(i*dt, u, data_dir, count)
+            wd.save_run_2D(i*dt, u[u.shape[0]/2,:,:], data_dir)
 
         #saving
         if timeSum[0,timeSum.shape[1]-1] < i*dt:
@@ -91,4 +94,4 @@ def main(sim_name, load, D_coeff):
     print toc-tic, "sec for Euler diffusion !"
 
 if __name__ == "__main__":
-    main(sim_name='sim_holes5k_diffusion_', load=True, D_coeff=vars(args)['D'])
+    main(sim_name='holes', load=True, holes=vars(args)['D'])
