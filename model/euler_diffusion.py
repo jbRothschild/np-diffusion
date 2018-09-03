@@ -91,4 +91,4 @@ def main(sim_name, load, D_coeff):
     print toc-tic, "sec for Euler diffusion !"
 
 if __name__ == "__main__":
-    main(sim_name='holes5k_diffusion_', load=True, D_coeff=vars(args)['D'])
+    main(sim_name='sim_holes5k_diffusion_', load=True, D_coeff=vars(args)['D'])
