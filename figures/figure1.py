@@ -11,6 +11,13 @@ from matplotlib.colors import LogNorm
 from matplotlib.ticker import LogLocator
 from skimage import io
 
+def tif2npy(sim, filename, time):
+    nanoParticles = io.imread('../data/' + sim + filename)
+    nanoP = nanoParticles.astype(float)/np.max(nanoParticles.astype(float))
+    nanoP = np.asarray(nanoP)
+    saveto = '../data/' + sim + '/diff_' + str(time) + 'sec'
+    np.save(saveto, nanoP)
+
 def main(sim, time = ''):
     if time == '':
         time = np.load('../data/' + sim + '/lastTime_seconds.npy')
@@ -19,58 +26,19 @@ def main(sim, time = ''):
     lines = [':', '-', ':', '-', ':', '-', '-']
     n = 10
     colors_gradient = plt.cm.inferno(np.linspace(0,1,n))
-    """
-    #=======================FIGURE Hole==========================
-    fig, ax  = newfig(0.6)
-    Hole = np.load(cwd + '/Dirichlet.npy')
-
-    cax = ax.contourf(range(0,np.shape(Hole)[0],1), range(0,np.shape(Hole)[2],1), Hole[np.int(np.shape(Hole)[1]/2),:,:], cmap=plt.cm.inferno)
-    cbar = fig.colorbar(cax)
-    cbar.ax.set_ylabel(r'$Concentration$')
-    ax.set_xlabel(r"$x-direction$")
-    ax.set_ylabel(r"$y-direction$")
-    #ax.set_yscale("log")
-    ax.minorticks_off()
-    #plt.savefig('Hole.pgf', bbox_inches='tight')
-    #plt.savefig('Hole.pdf', bbox_inches='tight')
-    savefig(cwd + "/Hole")
-    plt.close(fig)
-
-    #=======================FIGURE VESSEL==========================
-    fig, ax  = newfig(0.6)
-    Vessel = np.load(cwd + '/Neumann.npy')
-
-    cax = ax.contourf(range(0,np.shape(Vessel)[0],1), range(0,np.shape(Vessel)[2],1), Vessel[np.int(np.shape(Vessel)[1]/2),:,:], cmap=plt.cm.inferno)
-    cbar = fig.colorbar(cax)
-    cbar.ax.set_ylabel(r'$Concentration$')
-    ax.set_xlabel(r"$x-direction$")
-    """
-    """
-    else:
-        Vessel = np.load(cwd + '/Diff_Coeff.npy')
-        x,y = np.argwhere(Vessel[np.int(np.shape(Vessel)[1]/2),:,:] == 1).T
-        plt.scatter(x,y,c='r',marker='.')
-    """
-    """
-    ax.set_ylabel(r"$y-direction$")
-    #ax.set_yscale("log")
-    ax.minorticks_off()
-    savefig(cwd + "/Vessel")
-    plt.close(fig)
-    """
-    #=======================FIGURE NP==========================
-    #time = 240
 
 
     fig, ax  = lp.newfig(0.6)
     nanoP = np.load('../data/' + sim +'/diff_' + str(time) + 'sec.npy')
     nanoP = nanoP/np.max(nanoP) #in case max in not concentration
-    #Only for ChanLab data
-    #nanoParticles = io.imread(cwd + '/UT16-T-stack3-Sept10_iso_particles-cropped.tif')
-    #nanoP = nanoParticles.astype(float)/np.max(nanoParticles.astype(float))
+    findmin = nanoP
+    findmin[findmin == 0.0 ] = 100.0
+    mini = np.min(findmin)
+    #nanoP = nanoP - np.full(np.shape(nanoP), mini)
+
     minimum = 10**(-3)
     nanoP[nanoP < minimum] = minimum
-    #cax = ax.contourf(range(0,np.shape(nanoP)[0],1), range(0,np.shape(nanoP)[2],1), nanoP[np.int(np.shape(nanoP)[1]/2),:,:], levels=np.logspace(-3, 0, 100), locator=mpl.ticker.LogLocator(50), cmap=plt.cm.inferno)
+
     downsize = 1
     cax = ax.contourf(range(0,np.shape(nanoP)[0],1)[::downsize], range(0,np.shape(nanoP)[2],1)[::downsize], nanoP[np.int(np.shape(nanoP)[1]/2),::downsize,::downsize], levels=np.logspace(-3, 0, 100), locator=mpl.ticker.LogLocator(50), cmap=plt.cm.inferno)
     #cbar = fig.colorbar(cax, ticks=[10**0, 10**(-3), 10**(-6), 10**(-9)])
@@ -88,8 +56,8 @@ def main(sim, time = ''):
     plt.close(fig)
 
 
+
 if __name__ == "__main__":
-    #main(os.getcwd() + "/SimD0.01", time = 240)01
-    main("sim_flow1", time = 14400)
-    #main(os.getcwd() + "/SimFullT", time = 240)
-    #main(os.getcwd() + "/ChanLab", time = 240)
+    #tif2npy('chanlab' ,'/UT16-T-stack3-Sept10_iso_particles-cropped.tif', '1800.0')
+    #main('holes5k_08-31', time = 1800.0)
+    main('chanlab', time = 1800.0)

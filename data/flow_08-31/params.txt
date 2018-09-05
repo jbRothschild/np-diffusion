@@ -1,0 +1,8 @@
+Loaded boundary conditions
+dx = 2.0; dy = 2.0; dz = 2.0 #1 micrometer
+time = 3600.0
+dt = 1.0 #Time steps of seconds
+nu = 0.002 #nu*dudx = du/dt
+vis = 1.5 #Diffusion coefficient
+
+Comments: Diffusion with the proper diffusion coefficient, flow through the walls.
