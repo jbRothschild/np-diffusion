@@ -14,6 +14,10 @@ all :
 custom :
 	$(MAKE) -C model $@
 
+## homogen : scores our different models according to some homogenous score
+homogen :
+	$(MAKE) -C model $@
+
 ## data : runs the diffusion with data model
 data :
 	$(MAKE) -C model $@ ARGS=${DC}

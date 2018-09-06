@@ -18,6 +18,10 @@ all : data custom
 data :
 	python euler_diffusion.py -D $(ARGS)
 
+## homogen : scores our different models according to some homogenous score
+homogen :
+	python homogeneity.py
+
 ## custom : runs diffusion of our own custom model
 custom :
 	python euler_diffusion.py
