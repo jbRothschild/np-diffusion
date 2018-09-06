@@ -1,5 +1,6 @@
 import numpy as np
 import skimage.morphology as morph
+import sys, os
 
 def skeleton_dist(data, vessel, domain):
     dist = []
