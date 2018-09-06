@@ -52,11 +52,11 @@ def main(sim_name, domainfile, sourcefile, datafile, method, use_skel):
     source = np.load(sim_name + sourcefile).astype(int)
     vessel = 1 - domain - source #since what we're reading is the diffusion domain file
 
-    if not os.path.exists(sim + '/skeleton_vessel.npy'):
+    if not os.path.exists(sim_name + '/skeleton_vessel.npy'):
         skel = morph.skeletonize_3d(vessel)
         np.save(sim + '/skeleton_vessel.npy', skel)
     if use_skel == True:
-        vessel = np.load(sim + '/skeleton_vessel.npy')
+        vessel = np.load(sim_name + '/skeleton_vessel.npy')
 
     H_score = []
 
@@ -70,4 +70,5 @@ def main(sim_name, domainfile, sourcefile, datafile, method, use_skel):
     return 0
 
 if __name__ == "__main__":
-    main(sim_name = '../data/holesUT16', domainfile = '/diffusion_location.npy', sourcefile = '/source_location.npy', datafile = ['diff_holes00300.npy','diff_holes00500.npy','diff_holes01000.npy','diff_holes03000.npy','diff_holes05000.npy','diff_holes10000.npy','diff_holes30000.npy','diff_holes50000.npy',], method = rev_diffusion_dist, use_skel=False)
+    main(sim_name = '../data/try', domainfile = 'diffusion_try.npy', sourcefile = 'source_try.npy', datafile = '/data_try.npy', method = rev_diffusion_dist, use_skel=False)
+    #main(sim_name = '../data/holesUT16', domainfile = '/diffusion_location.npy', sourcefile = '/source_location.npy', datafile = ['diff_holes00300.npy','diff_holes00500.npy','diff_holes01000.npy','diff_holes03000.npy','diff_holes05000.npy','diff_holes10000.npy','diff_holes30000.npy','diff_holes50000.npy',], method = rev_diffusion_dist, use_skel=False)

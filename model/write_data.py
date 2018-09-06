@@ -20,3 +20,8 @@ def save_run(t, u, data_dir, count):
 def save_run_2D(t, u, data_dir):
     #save data of diffusion u at time t
     np.save(data_dir + "/diff_2D"+str(t)+"sec", u)
+
+def partial_data(datafile, pd_filename):
+    #save subsection of data
+    data =  np.load(datafile)
+    np.save(pd_filename, data[250:350,250:350,250:350])
