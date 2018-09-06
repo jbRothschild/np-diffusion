@@ -46,7 +46,7 @@ def heterogen_score(dist):
     mean = np.mean(dist)
     return variance/mean**2
 
-def main(sim_name, domainfile, datafile, method, use_skel):
+def main(sim_name, domainfile, sourcefile, datafile, method, use_skel):
     domain = np.load(sim_name + domainfile).astype(int)
     source = np.load(sim_name + sourcefile).astype(int)
     vessel = 1 - domain - source #since what we're reading is the diffusion domain file
