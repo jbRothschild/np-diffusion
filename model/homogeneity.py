@@ -59,12 +59,13 @@ def main(sim_name, domainfile, datafile, method, use_skel):
 
     H_score = []
 
-    for i in np.arange(0,data.shape[])
+    for i in np.arange(0,data.shape):
         data = np.load(sim_name + datafile[i])
         distribution = method(data, vessel, domain-source)
-        H_scord.append(heterogen_score(distribution)
+        H_scores.append(heterogen_score(distribution))
 
     print H_scores
+
     return 0
 
 if __name__ == "__main__":
