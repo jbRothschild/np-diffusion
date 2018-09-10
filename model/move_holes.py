@@ -23,18 +23,21 @@ def create_source_location(load_dir, data_dir, filename, other = []):
     #File which loads the file with dirichlet conditions
     holes_location = io.imread(load_dir + filename).astype(float)
     holes_location /= np.max(holes_location)
+    all_holes = np.sum( holes_location )
     source_location = np.zeros( np.asarray(holes_location).shape )
 
     total = other[0]
     for i in np.arange(0, holes_location.shape[0]):
         for j in np.arange(0, holes_location.shape[1]):
             for k in np.arange(0, holes_location.shape[2]):
-                if (holes_location[i,j,k] > 0.0 and other > 0):
+                if (holes_location[i,j,k] > 0.0 and total > 0):
                     prob = np.random.randint(0,total)
-                    total -= 1.0
+                    all_holes -= 1.0
                     if prob < other:
-                        source_location[i,j,k] = 1.0
-                        other -= 1
+                        source_location[i,j,k] += 1.0
+                        total -= 1
+
+    print np.sum(source_location)
 
     np.save(data_dir + "/source_location", source_location)
     np.save(data_dir + "/holes_location", holes_location)
@@ -116,7 +119,7 @@ def model(load_dir, data_dir, holes):
         None
     """
     tic = time.time()
-    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps.tif', other=[holes])
+    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps.tif', other = [ holes ])
     FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif')
     DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif', other = ['UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif','UT16-T-stack3-Sept10_iso_500000gaps.tif'])
     toc = time.time()
@@ -160,3 +163,4 @@ def update_diff(holes_location, source_location, Time, total_time, hole_time, po
                         if prob < other:
                             source_location[i,j,k] += 1.0
                             other -= 1
+        print np.sum(source_location)
