@@ -50,7 +50,7 @@ def main(sim_name, load, holes):
 
     diffusion_location = np.load(data_dir + "/diffusion_location.npy") #diffusion_
     source_location = np.load(data_dir + "/source_location.npy") #location of fixed concentration
-    num_holes = np.sum(source_holes)
+    num_holes = np.sum(source_location)
     flow_location = np.load(data_dir + "/flow_location.npy") #can be more than 1 (number of directions flow is coming in from)
     if os.path.exists(data_dir + "/holes_location.npy"):
         holes_location = np.load(data_dir + "/holes_location.npy")
