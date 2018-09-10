@@ -35,16 +35,22 @@ def main(sim_name, load, holes):
     if not os.path.exists(data_dir + count):
         #Creates models and parameters for models
         #Writes these to a file in the data folder. Be sure to add a comment on the model so we can understand what it is in the future.
-        mod.model(load_dir, data_dir, holes)
+        mod.model(load_dir, data_dir, 5000)
+        #mod.model(load_dir, data_dir, holes)
     vis, size, dx, dy, dz, total_time, dt, nu, comment = mod.params(1.5)
     if not os.path.exists(data_dir + "/params.txt"):
         wd.write_params_file(data_dir, dx, dy, dz, total_time, dt, vis, nu, comment)
 
     #===============Load======================================
     #We load up models
+
     diffusion_location = np.load(data_dir + "/diffusion_location.npy") #diffusion_
     source_location = np.load(data_dir + "/source_location.npy") #location of fixed concentration
+    num_holes = np.sum(source_holes)
     flow_location = np.load(data_dir + "/flow_location.npy") #can be more than 1 (number of directions flow is coming in from)
+    if os.path.exists(data_dir + "/holes_location.npy"):
+        holes_location = np.load(data_dir + "/holes_location.npy")
+        pos_holes = np.sum( holes_location )
 
     #===============Initialization=============================
     if not os.path.exists(data_dir + count):
@@ -69,6 +75,9 @@ def main(sim_name, load, holes):
         dif.dirichlet_source_term(u, source_location, i, dt, mod) #fixed source locations, dirichlet conditions
         dif.neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod) #locations where there are neumann boundary conditions
 
+        #Updating certain diffusion parameters
+        mod.update_diff(holes_location, source_location, i*dt, total_time, holes, pos_holes, num_holes)
+
         #--------------------Saving Data-------------------
         """
         save_time_2D = 60. #number of seconds to elapse when saving 2D images
@@ -87,6 +96,7 @@ def main(sim_name, load, holes):
             np.save(data_dir + "/time_sum.npy", timeSum)
         #-------------------------------------------
 
+
         toc1 = time.time()
         print toc1-tic1, "sec for roughly one time step..."
 
@@ -94,4 +104,4 @@ def main(sim_name, load, holes):
     print toc-tic, "sec for Euler diffusion !"
 
 if __name__ == "__main__":
-    main(sim_name='holes', load=True, holes=vars(args)['D'])
+    main(sim_name='move_holes_time', load=True, holes=vars(args)['D'])

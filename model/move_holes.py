@@ -19,13 +19,13 @@ def params(v):
 
     return vis, size, dx, dy, dz, total_time, dt, nu, comment
 
-def create_source_location(load_dir, data_dir, filename, other = None):
+def create_source_location(load_dir, data_dir, filename, other = []):
     #File which loads the file with dirichlet conditions
     holes_location = io.imread(load_dir + filename).astype(float)
     holes_location /= np.max(holes_location)
     source_location = np.zeros( np.asarray(holes_location).shape )
 
-    total = np.sum(holes_location)
+    total = other[0]
     for i in np.arange(0, holes_location.shape[0]):
         for j in np.arange(0, holes_location.shape[1]):
             for k in np.arange(0, holes_location.shape[2]):
@@ -37,6 +37,7 @@ def create_source_location(load_dir, data_dir, filename, other = None):
                         other -= 1
 
     np.save(data_dir + "/source_location", source_location)
+    np.save(data_dir + "/holes_location", holes_location)
     #np.save(data_dir + "/source_location", source_location[150:-150,150:-150,150:-150])
 
 def create_flow_location(load_dir, data_dir, filename, other = None):
@@ -98,7 +99,7 @@ def create_diffusion_location(load_dir, data_dir, filename, other = None):
     diffusion_location /= np.max(diffusion_location)
     vessel_location = io.imread(load_dir + other[0]).astype(float)
     vessel_location /= np.max(vessel_location)
-    source_location = np.load(data_dir + other[1]).astype(float)
+    source_location = io.imread(load_dir + other[1]).astype(float)
     source_location /= np.max(source_location)
 
     np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location + source_location)
@@ -115,9 +116,9 @@ def model(load_dir, data_dir, holes):
         None
     """
     tic = time.time()
-    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_50000gaps.tif', other=holes)
+    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps.tif', other=[holes])
     FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif')
-    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif', other = ['UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif','/source_location.npy'])
+    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif', other = ['UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif','UT16-T-stack3-Sept10_iso_500000gaps.tif'])
     toc = time.time()
     print toc-tic, "sec elapsed creating model..."
 
@@ -143,6 +144,19 @@ def set_dirichlet(source_location, i, dt):
     return concentration_time(i*dt/3600.)*source_location
     #return 0 #set when there are no source locations
 
-def update_diff(updates = []):
+def update_diff(holes_location, source_location, Time, total_time, hole_time, pos_holes, num_holes):
 
-    return 0
+    if Time in np.arange(0,end_time+1,hole_time):
+        total = num_holes
+        other = pos_holes
+        source_location *= 0.0
+
+        for i in np.arange(0, holes_location.shape[0]):
+            for j in np.arange(0, holes_location.shape[1]):
+                for k in np.arange(0, holes_location.shape[2]):
+                    if (holes_location[i,j,k] > 0.0 and other > 0):
+                        prob = np.random.randint(0,total)
+                        total -= 1.0
+                        if prob < other:
+                            source_location[i,j,k] += 1.0
+                            other -= 1

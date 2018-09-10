@@ -27,17 +27,14 @@ def main(sim, time = ''):
     n = 10
     colors_gradient = plt.cm.inferno(np.linspace(0,1,n))
 
-
     fig, ax  = lp.newfig(0.6)
     nanoP = np.load('../data/' + sim +'/diff_' + str(time) + 'sec.npy')
     nanoP = nanoP/np.max(nanoP) #in case max in not concentration
-    findmin = nanoP
-    findmin[findmin == 0.0 ] = 100.0
-    mini = np.min(findmin)
+    #findmin = nanoP
+    #findmin[findmin == 0.0 ] = 100.0
+    #mini = np.min(findmin)
     #nanoP = nanoP - np.full(np.shape(nanoP), mini)
 
-    minimum = 10**(-3)
-    nanoP[nanoP < minimum] = minimum
 
     downsize = 1
     cax = ax.contourf(range(0,np.shape(nanoP)[0],1)[::downsize], range(0,np.shape(nanoP)[2],1)[::downsize], nanoP[np.int(np.shape(nanoP)[1]/2),::downsize,::downsize], levels=np.logspace(-3, 0, 100), locator=mpl.ticker.LogLocator(50), cmap=plt.cm.inferno)
@@ -60,4 +57,4 @@ def main(sim, time = ''):
 if __name__ == "__main__":
     #tif2npy('chanlab' ,'/UT16-T-stack3-Sept10_iso_particles-cropped.tif', '1800.0')
     #main('holes5k_08-31', time = 1800.0)
-    main('chanlab', time = 1800.0)
+    main('sim_try', time = 1800.0)

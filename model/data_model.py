@@ -129,3 +129,7 @@ def set_dirichlet(source_location, i, dt):
     #contribution due to dirichlet source terms
     #return concentration_time(i*dt/3600.)*source_location
     return 0 #set when there are no source locations
+
+def update_diff(updates = []):
+
+    return 0

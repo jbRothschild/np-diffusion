@@ -18,12 +18,15 @@ module load anaconda2/5.1.0
 export OMP_NUM_THREADS=1
 
 # Commands to be run now
-(make data DC=300 && echo "DC=number of holes in simulation") &
-(make data DC=500 && echo "DC=number of holes in simulation") &
-(make data DC=1000 && echo "DC=number of holes in simulation") &
-(make data DC=3000 && echo "DC=number of holes in simulation") &
-(make data DC=5000 && echo "DC=number of holes in simulation") &
-(make data DC=10000 && echo "DC=number of holes in simulation") &
-(make data DC=30000 && echo "DC=number of holes in simulation") &
-(make data DC=50000 && echo "DC=number of holes in simulation") &
+(make data DC=1.)
+(make data DC=10.)
+(make data DC=60.)
+(make data DC=300. && echo "DC=number of holes in simulation") &
+#(make data DC=500 && echo "DC=number of holes in simulation") &
+#(make data DC=1000 && echo "DC=number of holes in simulation") &
+#(make data DC=3000 && echo "DC=number of holes in simulation") &
+#(make data DC=5000 && echo "DC=number of holes in simulation") &
+#(make data DC=10000 && echo "DC=number of holes in simulation") &
+#(make data DC=30000 && echo "DC=number of holes in simulation") &
+#(make data DC=50000 && echo "DC=number of holes in simulation") &
 wait
