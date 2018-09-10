@@ -15,12 +15,12 @@ module load intel/2018.2
 module load anaconda2/5.1.0
 
 # Turn off implicit threading in Python, R
-export OMP_NUM_THREADS=40
+export OMP_NUM_THREADS=1
 
 # Commands to be run now
-(make data DC=1.)
-(make data DC=10.)
-(make data DC=60.)
+(make data DC=1.) &
+(make data DC=10.) &
+(make data DC=60.) &
 (make data DC=300. && echo "DC=number of holes in simulation") &
 #(make data DC=500 && echo "DC=number of holes in simulation") &
 #(make data DC=1000 && echo "DC=number of holes in simulation") &
