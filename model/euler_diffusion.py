@@ -14,10 +14,14 @@ parser.add_argument('-D', metavar='D', type=float, action='store', default=5000,
 #Namespace with the arguments
 args = parser.parse_args()
 
+
+
+
+
 def main(sim_name, load, holes):
     #===============Model selection==================================
     if load == True:
-        import holes_model as mod
+        import move_holes as mod
     else:
         import custom_model as mod
     if not os.path.exists('../data/'):
