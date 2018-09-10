@@ -26,16 +26,16 @@ def create_source_location(load_dir, data_dir, filename, other = []):
     all_holes = np.sum( holes_location )
     source_location = np.zeros( np.asarray(holes_location).shape )
 
-    total = other[0]
+    num_holes = other[0]
     for i in np.arange(0, holes_location.shape[0]):
         for j in np.arange(0, holes_location.shape[1]):
             for k in np.arange(0, holes_location.shape[2]):
-                if (holes_location[i,j,k] > 0.0 and total > 0):
-                    prob = np.random.randint(0,total)
+                if (holes_location[i,j,k] > 0.0 and num_holes > 0):
+                    prob = np.random.randint(0,all_holes)
                     all_holes -= 1.0
-                    if prob < other:
+                    if prob < num_holes:
                         source_location[i,j,k] += 1.0
-                        total -= 1
+                        num_holes -= 1
 
     print np.sum(source_location)
 
@@ -147,7 +147,7 @@ def set_dirichlet(source_location, i, dt):
     return concentration_time(i*dt/3600.)*source_location
     #return 0 #set when there are no source locations
 
-def update_diff(holes_location, source_location, Time, total_time, hole_time, pos_holes, num_holes):
+def update_diff(holes_location, source_location, Time, total_time, hole_time, pos_holes, num_holes, data_dir):
 
     if Time in np.arange(0,total_time+1,hole_time):
         total = num_holes
@@ -157,11 +157,12 @@ def update_diff(holes_location, source_location, Time, total_time, hole_time, po
         for i in np.arange(0, holes_location.shape[0]):
             for j in np.arange(0, holes_location.shape[1]):
                 for k in np.arange(0, holes_location.shape[2]):
-                    if (holes_location[i,j,k] > 0.0 and other > 0):
-                        prob = np.random.randint(0,total)
-                        total -= 1.0
-                        if prob < other:
+                    if (holes_location[i,j,k] > 0.0 and total > 0):
+                        prob = np.random.randint(0,other)
+                        other -= 1.0
+                        if prob < num_holes:
                             source_location[i,j,k] += 1.0
-                            other -= 1
-        
+                            total -= 1
+        np.save(data_dir + "/source_location", source_location)
+
         print np.sum(source_location)
