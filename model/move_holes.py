@@ -149,7 +149,7 @@ def set_dirichlet(source_location, i, dt):
 
 def update_diff(holes_location, source_location, Time, total_time, hole_time, pos_holes, num_holes):
 
-    if Time in np.arange(0,end_time+1,hole_time):
+    if Time in np.arange(0,total_time+1,hole_time):
         total = num_holes
         other = pos_holes
         source_location *= 0.0
@@ -163,4 +163,5 @@ def update_diff(holes_location, source_location, Time, total_time, hole_time, po
                         if prob < other:
                             source_location[i,j,k] += 1.0
                             other -= 1
+        
         print np.sum(source_location)
