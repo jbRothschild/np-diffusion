@@ -102,10 +102,10 @@ def create_diffusion_location(load_dir, data_dir, filename, other = None):
     diffusion_location /= np.max(diffusion_location)
     vessel_location = io.imread(load_dir + other[0]).astype(float)
     vessel_location /= np.max(vessel_location)
-    source_location = io.imread(load_dir + other[1]).astype(float)
-    source_location /= np.max(source_location)
+    holes_location = io.imread(load_dir + other[1]).astype(float)
+    holes_location /= np.max(holes_location)
 
-    np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location + source_location)
+    np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location + holes_location)
     #np.save(data_dir + "/diffusion_location", diffusion_location[150:-150,150:-150,150:-150]-vessel_location[150:-150,150:-150,150:-150] + source_location[150:-150,150:-150,150:-150])#got to take out vasculature but add source if there are any.
 
 def model(load_dir, data_dir, holes):
@@ -163,6 +163,5 @@ def update_diff(holes_location, source_location, Time, total_time, hole_time, po
                         if prob < num_holes:
                             source_location[i,j,k] += 1.0
                             total -= 1
-        np.save(data_dir + "/source_location", source_location)
 
-        print np.sum(source_location)
+        np.save(data_dir + "/source_location", source_location)
