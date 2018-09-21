@@ -57,4 +57,4 @@ def main(sim, time = ''):
 if __name__ == "__main__":
     #tif2npy('chanlab' ,'/UT16-T-stack3-Sept10_iso_particles-cropped.tif', '1800.0')
     #main('holes5k_08-31', time = 1800.0)
-    main('sim_try', time = 1800.0)
+    main('holes', time = 1800.0)

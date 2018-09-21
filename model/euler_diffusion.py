@@ -15,9 +15,6 @@ parser.add_argument('-D', metavar='D', type=float, action='store', default=5000,
 args = parser.parse_args()
 
 
-
-
-
 def main(sim_name, load, holes):
     #===============Model selection==================================
     if load == True:
@@ -55,6 +52,7 @@ def main(sim_name, load, holes):
     if os.path.exists(data_dir + "/holes_location.npy"):
         holes_location = np.load(data_dir + "/holes_location.npy")
         pos_holes = np.sum( holes_location )
+    print num_holes, pos_holes
 
     #===============Initialization=============================
     if not os.path.exists(data_dir + count):
@@ -80,7 +78,8 @@ def main(sim_name, load, holes):
         dif.neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod) #locations where there are neumann boundary conditions
 
         #Updating certain diffusion parameters
-        mod.update_diff(holes_location, source_location, i*dt, total_time, holes, pos_holes, num_holes, data_dir)
+        if i*dt in np.arange(0,total_time+1,hles):
+            mod.update_diff(holes_location, source_location, data_dir)
 
         #--------------------Saving Data-------------------
         """
@@ -98,6 +97,8 @@ def main(sim_name, load, holes):
         if timeSum[0,timeSum.shape[1]-1] < i*dt:
             timeSum = np.append(timeSum,[[i*dt],[np.sum(u)]], axis=1)
             np.save(data_dir + "/time_sum.npy", timeSum)
+            print "sum this step", np.sum(u)
+            print "number of holes this step", np.sum(source_location)
         #-------------------------------------------
 
 

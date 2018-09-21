@@ -2,12 +2,18 @@ import numpy as np
 import skimage.morphology as morph
 import sys, os
 
-def skeleton_dist(data, vessel, domain):
-    dist = []
-    return dist
+def syed_dilation(data, vessel):
+    """
+    Function that dilates the vessel into regions such that the contribution from each region can be calculated.
 
+    Input
+        data(array,3d): diffusion data_array
+        vessel(array,3d): vasculature data with 1.0 wherever there's a vessel, an be skeletonized data too!
+    Output
+        distribution
+    """
 
-def rev_diffusion_dist(data, vessel, domain = []):
+def rev_diffusion_dist(data, vessel):
     """
     Function that does a naive reverse diffusion, moving 1/6 of the concentration at each point into the locations adjacent. Sticks to the vessel walls
 
@@ -19,7 +25,7 @@ def rev_diffusion_dist(data, vessel, domain = []):
     """
     #Pseudo reverse diffusion
     data_temp = data
-    for t in np.arange(0,20):
+    for t in np.arange(0,40):
         for i in np.arange(1,data.shape[0]-1):
             for j in np.arange(1,data.shape[1]-1):
                 for k in np.arange(1,data.shape[2]-1):
@@ -43,6 +49,7 @@ def rev_diffusion_dist(data, vessel, domain = []):
     return dist
 
 def heterogen_score(dist):
+    print "The shape of the distribution is " + str(dis.shape)
     variance = np.var(dist)
     mean = np.mean(dist)
     return variance/mean**2
@@ -62,7 +69,7 @@ def main(sim_name, domainfile, sourcefile, datafile, method, use_skel):
 
     for i in np.arange(0,len(datafile)):
         data = np.load(sim_name + datafile[i])
-        distribution = method(data, vessel, domain-source)
+        distribution = method(data, vessel)
         H_score.append(heterogen_score(distribution))
 
     print H_score
@@ -72,3 +79,4 @@ def main(sim_name, domainfile, sourcefile, datafile, method, use_skel):
 if __name__ == "__main__":
     #main(sim_name = '../data/try', domainfile = '/pd_diffusion.npy', sourcefile = '/pd_source.npy', datafile = ['/pd_3000.npy','/pd_5000.npy','/pd_10000.npy','/pd_30000.npy','/pd_50000.npy'], method = rev_diffusion_dist, use_skel=False)
     main(sim_name = '../data/holesUT16', domainfile = '/diffusion_location.npy', sourcefile = '/source_location.npy', datafile = ['/diff_holes00300.npy','/diff_holes00500.npy','/diff_holes01000.npy','/diff_holes03000.npy','/diff_holes05000.npy','/diff_holes10000.npy','/diff_holes30000.npy','/diff_holes50000.npy',], method = rev_diffusion_dist, use_skel=False)
+    main(sim_name = '../data/holesUT16', domainfile = '/diffusion_location.npy', sourcefile = '/source_location.npy', datafile = ['/diff_holes00300.npy','/diff_holes00500.npy','/diff_holes01000.npy','/diff_holes03000.npy','/diff_holes05000.npy','/diff_holes10000.npy','/diff_holes30000.npy','/diff_holes50000.npy',], method = rev_diffusion_dist, use_skel=True)
