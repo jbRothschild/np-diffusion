@@ -1,0 +1,53 @@
+make -C model homogen
+make[1]: Entering directory `/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model'
+python homogeneity.py
+/scinet/niagara/software/2018a/opt/base/anaconda2/5.1.0/lib/python2.7/site-packages/skimage/util/dtype.py:118: UserWarning: Possible sign loss when converting negative image of type int64 to positive image of type uint8.
+  .format(dtypeobj_in, dtypeobj_out))
+/scinet/niagara/software/2018a/opt/base/anaconda2/5.1.0/lib/python2.7/site-packages/skimage/util/dtype.py:171: UserWarning: Downcasting int64 to uint8 without scaling because max value 1 fits in uint8
+  "value {} fits in {}".format(a.dtype, dtype, a.max(), dtype))
+Traceback (most recent call last):
+  File "homogeneity.py", line 74, in <module>
+    main(sim_name = '../data/holesUT16', domainfile = '/diffusion_location.npy', sourcefile = '/source_location.npy', datafile = ['diff_holes00300.npy','diff_holes00500.npy','diff_holes01000.npy','diff_holes03000.npy','diff_holes05000.npy','diff_holes10000.npy','diff_holes30000.npy','diff_holes50000.npy',], method = rev_diffusion_dist, use_skel=False)
+  File "homogeneity.py", line 64, in main
+    data = np.load(sim_name + datafile[i])
+  File "/scinet/niagara/software/2018a/opt/base/anaconda2/5.1.0/lib/python2.7/site-packages/numpy/lib/npyio.py", line 372, in load
+    fid = open(file, "rb")
+IOError: [Errno 2] No such file or directory: '../data/holesUT16diff_holes00300.npy'
+make[1]: *** [homogen] Error 1
+make[1]: Leaving directory `/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/model'
+make: *** [homogen] Error 2
+
+scontrol show jobid 381797
+JobId=381797 JobName=np_diffusion
+   UserId=jbroths(3061232) GroupId=zilmana(6002070) MCS_label=N/A
+   Priority=1355538 Nice=0 Account=rrg-zilmana QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=2:0
+   RunTime=00:00:43 TimeLimit=03:00:00 TimeMin=N/A
+   SubmitTime=2018-09-06T16:00:40 EligibleTime=2018-09-06T16:00:40
+   StartTime=2018-09-06T16:00:56 EndTime=2018-09-06T16:01:39 Deadline=N/A
+   PreemptTime=None SuspendTime=None SecsPreSuspend=0
+   LastSchedEval=2018-09-06T16:00:56
+   Partition=compute AllocNode:Sid=nia-login06:227136
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=nia0576
+   BatchHost=nia0576
+   NumNodes=1 NumCPUs=80 NumTasks=40 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   TRES=cpu=80,node=1,billing=40
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=0 MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   Gres=(null) Reservation=(null)
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/niagara_submit_analysis.sh
+   WorkDir=/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion
+   StdErr=/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/slurm-381797.out
+   StdIn=/dev/null
+   StdOut=/gpfs/fs0/scratch/z/zilmana/jbroths/np-diffusion/slurm-381797.out
+   Power=
+
+sacct -j 381797
+       JobID    JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+381797       np_diffus+ rrg-zilma+   00:00:43                        00:03.636  00:27.370      2:0 
+381797.batch      batch rrg-zilma+   00:00:43   6820796K   5906016K  00:03.636  00:27.370      2:0 

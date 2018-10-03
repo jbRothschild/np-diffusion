@@ -164,4 +164,4 @@ def update_diff(holes_location, source_location, data_dir):
                         total -= 1
     print "New hole count:", np.sum()
 
-        np.save(data_dir + "/source_location", source_location)
+    np.save(data_dir + "/source_location", source_location)

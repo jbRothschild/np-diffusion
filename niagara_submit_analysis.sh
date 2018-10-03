@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=40
-#SBATCH --time=1:00:00
+#SBATCH --time=3:00:00
 #SBATCH --job-name np_diffusion
 
 #run this code using jbroths:~$ sbatch *script_name.sh*
@@ -15,7 +15,7 @@ module load intel/2018.2
 module load anaconda2/5.1.0
 
 # Turn off implicit threading in Python, R
-export OMP_NUM_THREADS=1
+export OMP_NUM_THREADS=40
 
 # Commands to be run now
 make homogen

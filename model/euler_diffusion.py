@@ -78,7 +78,7 @@ def main(sim_name, load, holes):
         dif.neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod) #locations where there are neumann boundary conditions
 
         #Updating certain diffusion parameters
-        if i*dt in np.arange(0,total_time+1,hles):
+        if i*dt in np.arange(0,total_time+1,holes):
             mod.update_diff(holes_location, source_location, data_dir)
 
         #--------------------Saving Data-------------------
