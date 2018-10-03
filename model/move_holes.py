@@ -37,7 +37,8 @@ def create_source_location(load_dir, data_dir, filename, other = []):
                         source_location[i,j,k] += 1.0
                         num_holes -= 1
 
-    print np.sum(source_location)
+    print "initial number of holes:", np.sum(source_location)
+    print "initial potential holes:", np.sum(holes_location)
 
     np.save(data_dir + "/source_location", source_location)
     np.save(data_dir + "/holes_location", holes_location)

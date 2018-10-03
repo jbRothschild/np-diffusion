@@ -49,7 +49,7 @@ def rev_diffusion_dist(data, vessel):
     return dist
 
 def heterogen_score(dist):
-    print "The shape of the distribution is " + str(dis.shape)
+    print 'The shape of the distribution is ' + str(np.shape(dist))
     variance = np.var(dist)
     mean = np.mean(dist)
     return variance/mean**2
@@ -78,5 +78,5 @@ def main(sim_name, domainfile, sourcefile, datafile, method, use_skel):
 
 if __name__ == "__main__":
     #main(sim_name = '../data/try', domainfile = '/pd_diffusion.npy', sourcefile = '/pd_source.npy', datafile = ['/pd_3000.npy','/pd_5000.npy','/pd_10000.npy','/pd_30000.npy','/pd_50000.npy'], method = rev_diffusion_dist, use_skel=False)
-    main(sim_name = '../data/holesUT16', domainfile = '/diffusion_location.npy', sourcefile = '/source_location.npy', datafile = ['/diff_holes00300.npy','/diff_holes00500.npy','/diff_holes01000.npy','/diff_holes03000.npy','/diff_holes05000.npy','/diff_holes10000.npy','/diff_holes30000.npy','/diff_holes50000.npy',], method = rev_diffusion_dist, use_skel=False)
-    main(sim_name = '../data/holesUT16', domainfile = '/diffusion_location.npy', sourcefile = '/source_location.npy', datafile = ['/diff_holes00300.npy','/diff_holes00500.npy','/diff_holes01000.npy','/diff_holes03000.npy','/diff_holes05000.npy','/diff_holes10000.npy','/diff_holes30000.npy','/diff_holes50000.npy',], method = rev_diffusion_dist, use_skel=True)
+    #main(sim_name = '../data/holesUT16', domainfile = '/diffusion_location.npy', sourcefile = '/source_location.npy', datafile = ['/diff_holes00300.npy','/diff_holes00500.npy','/diff_holes01000.npy','/diff_holes03000.npy','/diff_holes05000.npy','/diff_holes10000.npy','/diff_holes30000.npy','/diff_holes50000.npy',], method = rev_diffusion_dist, use_skel=False)
+    main(sim_name = '../data/partial', domainfile = '/p_domain5k.npy', sourcefile = '/p_hole5k.npy', datafile = ['/p_particles5h.npy','/p_particles1k.npy','/p_particles5k.npy','/p_particles10k.npy','/p_particles50k.npy','/p_particlesF.npy'], method = rev_diffusion_dist, use_skel=False)
