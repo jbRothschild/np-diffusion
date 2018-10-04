@@ -107,7 +107,7 @@ def create_diffusion_location(load_dir, data_dir, filename, other = None):
     holes_location /= np.max(holes_location)
 
     np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location + holes_location)
-    #np.save(data_dir + "/diffusion_location", diffusion_location[150:-150,150:-150,150:-150]-vessel_location[150:-150,150:-150,150:-150] + source_location[150:-150,150:-150,150:-150])#got to take out vasculature but add source if there are any.
+    print "max,min", np.max(diffusion_location - vessel_location + holes_location), np.min(diffusion_location - vessel_location + holes_location)
 
 def model(load_dir, data_dir, holes):
     """
