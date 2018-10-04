@@ -163,6 +163,6 @@ def update_diff(holes_location, source_location, data_dir):
                     if prob < total:
                         source_location[i,j,k] += 1.0
                         total -= 1
-    print "New hole count:", np.sum()
+    print "New hole count:", np.sum(source_location)
 
     np.save(data_dir + "/source_location", source_location)
