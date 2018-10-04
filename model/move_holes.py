@@ -106,8 +106,10 @@ def create_diffusion_location(load_dir, data_dir, filename, other = None):
     holes_location = io.imread(load_dir + other[1]).astype(float)
     holes_location /= np.max(holes_location)
 
-    np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location + holes_location)
-    print "max,min", np.max(diffusion_location - vessel_location + holes_location), np.min(diffusion_location - vessel_location + holes_location)
+    domain = diffusion_location - vessel_location + holes_location
+    domain[domain > 1.0] = 1.0
+
+    np.save(data_dir + "/diffusion_location", domain)
 
 def model(load_dir, data_dir, holes):
     """
