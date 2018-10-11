@@ -10,57 +10,50 @@ from skimage import io
 import argparse
 
 parser = argparse.ArgumentParser(description='Submitting different diffusion parameters')
-parser.add_argument('-D', metavar='D', type=float, action='store', default=5000, required=False, help='number of holes')
+parser.add_argument('-p', metavar='P', type=float, action='store', default=[], required=False, help='Additional parameters to be passed on for the simulation')
 #Namespace with the arguments
 args = parser.parse_args()
 
 
-def main(sim_name, load, holes):
+def main(sim_name, load, model, parameter):
     #===============Model selection==================================
-    if load == True:
-        import move_holes as mod
-    else:
-        import custom_model as mod
+    import model as mod #Make sure model is a python file that
     if not os.path.exists('../data/'):
         os.makedirs('../data/')
-    #Set directory where the data will be saved. Also set the loading directory (../ChanLan/)
+    #Set directory where the data will be saved. Also set the loading directory for certain diffusion geometries (../ChanLan/)
     data_dir = "../data/sim_" + sim_name + str(holes)#remote use
     load_dir = '../ChanLab/'
-    count = '/lastTime_seconds.npy'
-    #data_dir = $HOME #on Scinet
+
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
 
     #=================Model + Parameter Creation=====================
     #This is where we create our models from the different functions in either data_model.py or custom_model.py
+    count = '/lastTime_seconds.npy'
     if not os.path.exists(data_dir + count):
         #Creates models and parameters for models
         #Writes these to a file in the data folder. Be sure to add a comment on the model so we can understand what it is in the future.
-        mod.model(load_dir, data_dir, 5000)
-        #mod.model(load_dir, data_dir, holes)
-    vis, size, dx, dy, dz, total_time, dt, nu, comment = mod.params(1.5)
+        mod.model(load_dir, data_dir, model_var) 
+    vis, dx, dy, dz, total_time, dt, nu, save_time = mod.params()
     if not os.path.exists(data_dir + "/params.txt"):
         wd.write_params_file(data_dir, dx, dy, dz, total_time, dt, vis, nu, comment)
 
     #===============Load======================================
-    #We load up models
-
-    diffusion_location = np.load(data_dir + "/diffusion_location.npy") #diffusion_
+    #We load up the different domains defined in models
+    diffusion_location = np.load(data_dir + "/diffusion_location.npy") #diffusion locations
     source_location = np.load(data_dir + "/source_location.npy") #location of fixed concentration
     num_holes = np.sum(source_location)
     flow_location = np.load(data_dir + "/flow_location.npy") #can be more than 1 (number of directions flow is coming in from)
-    if os.path.exists(data_dir + "/holes_location.npy"):
+    if os.path.exists(data_dir + "/holes_location.npy"): #If there are other locations of possible holes, we need this array
         holes_location = np.load(data_dir + "/holes_location.npy")
-        pos_holes = np.sum( holes_location )
-    print num_holes, pos_holes
 
     #===============Initialization=============================
-    if not os.path.exists(data_dir + count):
+    if not os.path.exists(data_dir + count): #Check if there is saved timepoint of simulation, if it isn't we set the time to 0
         np.save(data_dir + count, np.asarray(0))
-        np.save(data_dir + "/diff_0sec.npy", source_location*mod.concentration_time(0))
-        np.save(data_dir + "/time_sum.npy", np.array([[0.0],[0.0]]))
+        np.save(data_dir + "/diff_0sec.npy", source_location*mod.concentration_time(0)) #Save initial solution
+        np.save(data_dir + "/time_sum.npy", np.array([[0.0],[0.0]])) #Save initial concentration and time (0,0)
 
-    ijk = (np.linspace(1, diffusion_location.shape[0]-2, diffusion_location.shape[0]-2)).astype(int) #part of domain
+    ijk = (np.linspace(1, diffusion_location.shape[0]-2, diffusion_location.shape[0]-2)).astype(int) #part of domain to sum over
 
     #Basically checks at what step we're at
     initial = np.load(data_dir + count)
@@ -78,35 +71,24 @@ def main(sim_name, load, holes):
         dif.neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod) #locations where there are neumann boundary conditions
 
         #Updating certain diffusion parameters
-        if i*dt in np.arange(0,total_time+1,holes):
-            mod.update_diff(holes_location, source_location, data_dir)
+        if i*dt in np.arange(0,total_time+1,update_time):
+            mod.update_diff(holes_location, source_location, data_dir) #function arguments will need to change, depending on the model
 
         #--------------------Saving Data-------------------
-        """
-        save_time_2D = 60. #number of seconds to elapse when saving 2D images
-        if i*dt in np.arange(0,total_time+1,save_time_2D):
-            wd.save_run_2D(i*dt, u[u.shape[0]/2,:,:], data_dir) #u.shape[0]/2 means it's in the middle
-        """
-
-        save_time = 300. #number of seconds to elapse when saving 3D images
         if i*dt in np.arange(0,total_time+1,save_time):
             wd.save_run(i*dt, u, data_dir, count)
             wd.save_run_2D(i*dt, u[u.shape[0]/2,:,:], data_dir)
 
-        #saving
+        #saving the sum at each time step.
         if timeSum[0,timeSum.shape[1]-1] < i*dt:
             timeSum = np.append(timeSum,[[i*dt],[np.sum(u)]], axis=1)
             np.save(data_dir + "/time_sum.npy", timeSum)
-            print "sum this step", np.sum(u)
-            print "number of holes this step", np.sum(source_location)
+            print "         >> Sum this step", np.sum(u)
+            #print "number of holes this step", np.sum(source_location)
         #-------------------------------------------
-
 
         toc1 = time.time()
         print toc1-tic1, "sec for roughly one time step..."
 
-    toc = time.time()
-    print toc-tic, "sec for Euler diffusion !"
-
 if __name__ == "__main__":
-    main(sim_name='move_holes_time', load=True, holes=vars(args)['D'])
+    main(sim_name='hopping_model', model=hopping_model, load=True, parameter=vars(args)['P'])

@@ -5,6 +5,7 @@
 *.pgf
 *.png
 *.pyc
+*.out
 #ignore folder ChanLab and others
 ChanLab*/
 data_old/

@@ -20,7 +20,7 @@ homogen :
 
 ## data : runs the diffusion with data model
 data :
-	$(MAKE) -C model $@ ARGS=${DC}
+	$(MAKE) -C model $@ ARGS=${param}
 
 ## Figs : runs all figures in figures
 Figs :

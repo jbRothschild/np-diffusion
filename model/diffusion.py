@@ -37,10 +37,10 @@ def dirichlet_source_term(u, source_location, i, dt, mod):
 
     Args:
         u(array,3): solution
-        source(array,3): value of source term (dirichlet)
         source_location(array,3): The location of the source terms
         i(int): time step #
         dt(int): spacetime intervals
+        mod: the model we're using
     Returns:
         None
     """
