@@ -9,9 +9,9 @@ You will need a version of python 2.7.15 (although most of the code runs on othe
 ### Structure
 
 ### Simulation run
-A couple of scripts (makefiles) are available to help run everything smoothly from the home directory. Running from command line, you can simply 
+A couple of scripts (makefiles) are available to help run everything smoothly from the home directory. Running from command line, you can simply type (from the home directory)
 ```python
-example code
+make 
 ```
 ```bash
 example code
