@@ -1,6 +1,6 @@
 import numpy as np
 import skimage.io as io
-import tifffile as TIFF
+#import tifffile as TIFF
 
 def write_params_file(data_dir, dx, dy, dz, time, dt, vis, nu, comment, model_var, model_var_comment):
     #A parameters file where we can check what parameters where being used
@@ -34,4 +34,4 @@ def partial_data(datafile, pd_filename, n):
 def crop_tif(datafile, dim=(0,-1,0,-1,0,-1)):
     image = io.imread(datafile) #Normally uint8 for certain files I was sent
     crop_image = image[dim[0]:dim[1], dim[2]:dim[3], dim[4]:dim[5]]
-    TIFF.imsave(datafile[:-4]+'_tcrop.tif',crop_image)
+    #TIFF.imsave(datafile[:-4]+'_tcrop.tif',crop_image)
