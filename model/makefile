@@ -12,19 +12,15 @@ parent_dir = $(notdir ${current_dir}/..)
 ##<<Different commands for makefile>>
 
 ## all : runs main code
-all : data custom
+all : data
 
 ## data : runs the diffusion according to the loaded data from ChanLab
 data :
-	python2 euler_diffusion.py -D $(ARGS)
+	python2 main.py -D $(ARGS)
 
 ## homogen : scores our different models according to some homogenous score
 homogen :
 	python2 homogeneity.py
-
-## custom : runs diffusion of our own custom model
-custom :
-	python2 euler_diffusion.py
 
 ## clean : remove auto-generated files
 clean :
