@@ -10,18 +10,20 @@ from skimage import io
 import argparse
 
 parser = argparse.ArgumentParser(description='Submitting different diffusion parameters')
+#parser.add_argument('-m', metavar='M', type=string, action='store', default=[], required=False, help='Additional parameters to be passed on for the simulation')
 parser.add_argument('-p', metavar='P', type=float, action='store', default=[], required=False, help='Additional parameters to be passed on for the simulation')
 #Namespace with the arguments
 args = parser.parse_args()
 
 
-def main(sim_name, load, model, parameter):
+def main(model, parameter):
     #===============Model selection==================================
     import model as mod #Make sure model is a python file that
     if not os.path.exists('../data/'):
         os.makedirs('../data/')
+
     #Set directory where the data will be saved. Also set the loading directory for certain diffusion geometries (../ChanLan/)
-    data_dir = "../data/sim_" + sim_name + str(holes)#remote use
+    data_dir = "../data/sim_" + str(model) + '_' + str(parameter)
     load_dir = '../ChanLab/'
 
     if not os.path.exists(data_dir):
@@ -30,13 +32,11 @@ def main(sim_name, load, model, parameter):
     #=================Model + Parameter Creation=====================
     #This is where we create our models from the different functions in either data_model.py or custom_model.py
     count = '/lastTime_seconds.npy'
+    vis, dx, dy, dz, total_time, dt, nu, save_time, model_var, update_time = mod.params(parameter)
     if not os.path.exists(data_dir + count):
         #Creates models and parameters for models
         #Writes these to a file in the data folder. Be sure to add a comment on the model so we can understand what it is in the future.
-        mod.model(load_dir, data_dir, model_var) 
-    vis, dx, dy, dz, total_time, dt, nu, save_time = mod.params()
-    if not os.path.exists(data_dir + "/params.txt"):
-        wd.write_params_file(data_dir, dx, dy, dz, total_time, dt, vis, nu, comment)
+        mod.model(load_dir, data_dir, parameter)
 
     #===============Load======================================
     #We load up the different domains defined in models
@@ -62,7 +62,7 @@ def main(sim_name, load, model, parameter):
 
     #================Euleur's method============================
     tic = time.time()
-    for i in np.arange(initial/dt+1,total_time/dt+1): #run simulation from time
+    for i in np.arange(initial/dt+1,total_time/dt+1): #run sother = []imulation from time
         tic1 = time.time()
         un = u[:,:,:]
 
@@ -91,4 +91,4 @@ def main(sim_name, load, model, parameter):
         print toc1-tic1, "sec for roughly one time step..."
 
 if __name__ == "__main__":
-    main(sim_name='hopping_model', model=hopping_model, load=True, parameter=vars(args)['P'])
+    main(model=hopping_model, parameter=vars(args)['P'])

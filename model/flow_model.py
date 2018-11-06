@@ -15,9 +15,9 @@ def params(other = []):
     nu = 0.002 # nu = dudx
 
     save_time = 24*300. #how long we wait until we save
-    update_time = 6*300 #how often updates happen
-    model_var = [50000/(5*5*5)] #Model variant. In this model: [hole number]. ##Note these can change depending on what we're doing
-    model_var_comment = '[number of holes]'
+    update_time = 24*300 #how often updates happen
+    model_var = [] #Model variant. In this model: [hole number]. ##Note these can change depending on what we're doing
+    model_var_comment = ''
     #---------------------------------------------------------------------
     #IMPORTANT: ADD A COMMENT FOR EACH RUN
     comment = 'Diffusion with the proper diffusion coefficient, 50000 holes in total image which is 5*5*5 times larger than the image we're using'
@@ -26,7 +26,7 @@ def params(other = []):
 
     return vis, dx, dy, dz, total_time, dt, nu, save_time, model_var, update_time
 
-def create_source_location(load_dir, data_dir, filename, other = None):
+def create_source_location(load_dir, data_dir, filename, *args):
     #File which loads the file with dirichlet conditions
     holes_location = io.imread(load_dir + filename).astype(float)
     holes_location /= np.max(holes_location)
@@ -46,7 +46,7 @@ def create_source_location(load_dir, data_dir, filename, other = None):
     np.save(data_dir + "/source_location", source_location)
     #np.save(data_dir + "/source_location", source_location[150:-150,150:-150,150:-150])
 
-def create_flow_location(load_dir, data_dir, filename, other = None):
+def create_flow_location(load_dir, data_dir, filename, *args):
     """
     Function that creates the location of flow. +1 for each place which is beside a vessel. can have -1 for certain otehr things I guess!
 
@@ -88,7 +88,7 @@ def create_flow_location(load_dir, data_dir, filename, other = None):
     toc1 = time.time()
     print toc1-tic1, "sec elapsed creating flow..."
 
-def create_diffusion_location(load_dir, data_dir, filename, other = None):
+def create_diffusion_location(load_dir, data_dir, filename, *args):
     """
     Function that creates the location of diffusion. For now that's anything that's not
 
@@ -103,9 +103,9 @@ def create_diffusion_location(load_dir, data_dir, filename, other = None):
     tumor_location = io.imread(load_dir + filename).astype(float)
     diffusion_location = np.ones( np.asarray(tumor_location).shape )
     diffusion_location /= np.max(diffusion_location)
-    vessel_location = io.imread(load_dir + other[0]).astype(float)
+    vessel_location = io.imread(load_dir + args[0]).astype(float)
     vessel_location /= np.max(vessel_location)
-    source_location = np.load(data_dir + other[1]).astype(float)
+    source_location = np.load(data_dir + args[1]).astype(float)
     source_location /= np.max(source_location)
 
     np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location + source_location)
@@ -122,15 +122,15 @@ def model(load_dir, data_dir, parameter):
         None
     """
     tic = time.time()
-    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_50000gaps.tif', other=parameter)
-    FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif', other=parameter)
-    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif', other = ['UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif','/source_location.npy'])
+    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps_tcop.tif', parameter)
+    FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif', parameter)
+    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif', '/source_location.npy', parameter)
     toc = time.time()
     print toc-tic, "sec elapsed creating model..."
 
 def concentration_time(time_point):
     """
-    Function that calculates the change in concentration in the blood vessel as #---------------------------------------------------------------------#---------------------------------------------------------------------a function of time (according to Syed et co. observations)
+    Function that calculates the change in concentration in the blood vessel as a function of time (according to Syed et co. observations)
 
     Args:
         time(float): time in hours
@@ -142,30 +142,13 @@ def concentration_time(time_point):
 
 def neumann_flow(un, flow_location, i, dt, nu, dx):
     #contribution due to neumann flow_location.
-    #return concentration_time(i*dt/3600.)*flow_location*nu*2*dx
-    return 0 #set when flow location is 0
+    return concentration_time(i*dt/3600.)*flow_location*nu*2*dx
+    #return 0 #set when flow location is 0
 
 def set_dirichlet(source_location, i, dt):
     #contribution due to dirichlet source terms
-    return concentration_time(i*dt/3600.)*source_location
-    #return 0 #set when there are no source locations
+    #return concentration_time(i*dt/3600.)*source_location
+    return 0 #set when there are no source locations
 
-def update_diff(holes_location, source_location, data_dir, parameter = []):
-
-    total = np.sum(source_location)
-    other = np.sum(holes_location)
-    source_location *= 0.0
-
-    for i in np.arange(0, holes_location.shape[0]):
-        for j in np.arange(0, holes_location.shape[1]):
-            for k in np.arange(0, holes_location.shape[2]):
-                if (holes_location[i,j,k] > 0.0 and total > 0):
-                    prob = np.random.randint(0,other)
-                    other -= 1.0
-                    if prob < total:
-                        source_location[i,j,k] += 1.0
-                        total -= 1
-    print "New hole count:", np.sum(source_location)
-
-    np.save(data_dir + "/source_location", source_location)
+def update_diff(holes_location, source_location, data_dir, *args):
     return 0

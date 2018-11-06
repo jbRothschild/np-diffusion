@@ -34,4 +34,4 @@ def partial_data(datafile, pd_filename, n):
 def crop_tif(datafile, dim=(0,-1,0,-1,0,-1)):
     image = io.imread(datafile) #Normally uint8 for certain files I was sent
     crop_image = image[dim[0]:dim[1], dim[2]:dim[3], dim[4]:dim[5]]
-    TIFF.imsave(datafile[:-5]+'_tcrop.tif',crop_image)
+    TIFF.imsave(datafile[:-4]+'_tcrop.tif',crop_image)
