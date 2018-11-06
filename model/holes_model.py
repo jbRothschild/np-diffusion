@@ -20,13 +20,11 @@ def params(other = []):
     model_var_comment = '[number of holes]'
     #---------------------------------------------------------------------
     #IMPORTANT: ADD A COMMENT FOR EACH RUN
-    comment = 'Diffusion with the proper diffusion coefficient, 50000 holes in total image which is 5*5*5 times larger than the image we're using'
-    #---------------------------------------------------------------------
-    wd.write_params_file(data_dir, dx, dy, dz, total_time, dt, vis, nu, comment, model_var, model_var_comment)
+    comment = "Diffusion with the proper diffusion coefficient, 50000 holes in total image which is 5*5*5 times larger than the image we're using"
 
-    return vis, dx, dy, dz, total_time, dt, nu, save_time, model_var, update_time
+    return vis, dx, dy, dz, total_time, dt, nu, save_time, model_var, update_time, model_var_comment, comment
 
-def create_source_location(load_dir, data_dir, filename, other = None):
+def create_source_location(load_dir, data_dir, filename,*args):
     #File which loads the file with dirichlet conditions
     holes_location = io.imread(load_dir + filename).astype(float)
     holes_location /= np.max(holes_location)
@@ -46,7 +44,7 @@ def create_source_location(load_dir, data_dir, filename, other = None):
     np.save(data_dir + "/source_location", source_location)
     #np.save(data_dir + "/source_location", source_location[150:-150,150:-150,150:-150])
 
-def create_flow_location(load_dir, data_dir, filename, other = None):
+def create_flow_location(load_dir, data_dir, filename, *args):
     """
     Function that creates the location of flow. +1 for each place which is beside a vessel. can have -1 for certain otehr things I guess!
 
@@ -59,7 +57,7 @@ def create_flow_location(load_dir, data_dir, filename, other = None):
         Nonesim_name='hopping_model',
     """
     tic1 = time.time()
-    vessel_location = io.imread(load_dir + filename).astype(float)sim_name='hopping_model',
+    vessel_location = io.imread(load_dir + filename).astype(float)
     vessel_location /= np.max(vessel_location)
     flow_location = np.zeros((vessel_location.shape[0], vessel_location.shape[1], vessel_location.shape[2]))
     for i in range(1,vessel_location.shape[0]-1):
@@ -88,7 +86,7 @@ def create_flow_location(load_dir, data_dir, filename, other = None):
     toc1 = time.time()
     print toc1-tic1, "sec elapsed creating flow..."
 
-def create_diffusion_location(load_dir, data_dir, filename, other = None):
+def create_diffusion_location(load_dir, data_dir, filename, *args):
     """
     Function that creates the location of diffusion. For now that's anything that's not
 
@@ -111,7 +109,7 @@ def create_diffusion_location(load_dir, data_dir, filename, other = None):
     np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location + source_location)
     #np.save(data_dir + "/diffusion_location", diffusion_location[150:-150,150:-150,150:-150]-vessel_location[150:-150,150:-150,150:-150] + source_location[150:-150,150:-150,150:-150])#got to take out vasculature but add source if there are any.
 
-def model(load_dir, data_dir, parameter):
+def model(load_dir, data_dir, model_var, *args):
     """
     Function that creates the different arrays that set the geometry of our diffusion landscape.
 
@@ -130,7 +128,7 @@ def model(load_dir, data_dir, parameter):
 
 def concentration_time(time_point):
     """
-    Function that calculates the change in concentration in the blood vessel as #---------------------------------------------------------------------#---------------------------------------------------------------------a function of time (according to Syed et co. observations)
+    Function that calculates the change in concentration in the blood vessel as a function of time (according to Syed et co. observations)
 
     Args:
         time(float): time in hours

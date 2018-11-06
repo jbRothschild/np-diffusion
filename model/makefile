@@ -16,7 +16,7 @@ all : data
 
 ## data : runs the diffusion according to the loaded data from ChanLab
 data :
-	python2 main.py -p $(ARGS)
+	python2 main.py -m $(ARGS1) -p $(ARGS2)
 
 ## homogen : scores our different models according to some homogenous score
 homogen :

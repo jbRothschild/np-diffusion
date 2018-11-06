@@ -14,14 +14,12 @@ def params(*args): ####TURN INTO A CLASS
 
     update_time = args[0] #how often updates happen
     save_time = 24*300.
-    model_var = [50000/(5*5*5)] #Model variant. In this model: [hole number]. ##Note these can change depending on what we're doing
+    model_var = 50000/(5*5*5) #Model variant. In this model: [hole number]. ##Note these can change depending on what we're doing
     model_var_comment = '[number of holes]'
     #---------------------COMMENT TO DESCRIBE THIS SIM--------------------
     comment = "Model with holes that switch location"
-    #---------------------------------------------------------------------
-    wd.write_params_file(data_dir, dx, dy, dz, total_time, dt, vis, nu, comment, model_var, model_var_comment)
 
-    return vis, dx, dy, dz, total_time, dt, nu, save_time, model_var, update_time
+    return vis, dx, dy, dz, total_time, dt, nu, save_time, model_var, update_time, model_var_comment, comment
 
 def create_source_location(load_dir, data_dir, filename, *args):
     """
@@ -110,15 +108,15 @@ def create_diffusion_location(load_dir, data_dir, filename, *args):
     """
     tumor_location = io.imread(load_dir + filename).astype(float)
     diffusion_location = np.ones( np.asarray(tumor_location).shape ); diffusion_location /= np.max(diffusion_location)
-    vessel_location = io.imread(load_dir + other[0]).astype(float); vessel_location /= np.max(vessel_location)
-    holes_location = io.imread(load_dir + other[1]).astype(float); holes_location /= np.max(holes_location)
+    vessel_location = io.imread(load_dir + args[0]).astype(float); vessel_location /= np.max(vessel_location)
+    holes_location = io.imread(load_dir + args[1]).astype(float); holes_location /= np.max(holes_location)
 
     domain = diffusion_location - vessel_location + holes_location
     domain[domain > 1.0] = 1.0
 
     np.save(data_dir + "/diffusion_location", domain)
 
-def model(load_dir, data_dir, model_var):
+def model(load_dir, data_dir, model_var, *args):
     """
     Function that calls all the other functions that create the different arrays setting the geometry of our diffusion landscape.
 
@@ -129,9 +127,9 @@ def model(load_dir, data_dir, model_var):
         None
     """
     tic = time.time()
-    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps_tcrop.tif', model_var[0])
+    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps_tcrop.tif', model_var)
     FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif')
-    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', other = ['UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif','UT16-T-stack3-Sept10_iso_500000gaps_tcrop.tif'])
+    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif','UT16-T-stack3-Sept10_iso_500000gaps_tcrop.tif')
     toc = time.time()
     print toc-tic, "sec elapsed creating model..."
 

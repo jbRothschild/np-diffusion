@@ -10,17 +10,13 @@ parent_dir = $(notdir ${current_dir}/..)
 all :
 	$(MAKE) -C $(CODE_DIR)
 
-## custom : runs the diffusion with a custom model, not the loaded data
-custom :
-	$(MAKE) -C model $@
-
 ## homogen : scores our different models according to some homogenous score
 homogen :
 	$(MAKE) -C model $@
 
 ## data : runs the diffusion with data model
 data :
-	$(MAKE) -C model $@ ARGS=${param}
+	$(MAKE) -C model $@ ARGS1=${model} ARGS2=${param}
 
 ## Figs : runs all figures in figures
 Figs :

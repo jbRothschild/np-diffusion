@@ -3,7 +3,7 @@ import skimage.io as io
 import time
 import write_data as wd
 
-def params(other = []):
+def params(*args):
     #parameters for the diffusion
 
     #vis = 0.01 #DIffusion coefficient um^2/s
@@ -20,11 +20,9 @@ def params(other = []):
     model_var_comment = ''
     #---------------------------------------------------------------------
     #IMPORTANT: ADD A COMMENT FOR EACH RUN
-    comment = 'Diffusion with the proper diffusion coefficient, 50000 holes in total image which is 5*5*5 times larger than the image we're using'
-    #---------------------------------------------------------------------
-    wd.write_params_file(data_dir, dx, dy, dz, total_time, dt, vis, nu, comment, model_var, model_var_comment)
+    comment = 'Diffusion with the proper diffusion coefficient, flow through walls of vasculature'
 
-    return vis, dx, dy, dz, total_time, dt, nu, save_time, model_var, update_time
+    return vis, dx, dy, dz, total_time, dt, nu, save_time, model_var, update_time, model_var_comment, comment
 
 def create_source_location(load_dir, data_dir, filename, *args):
     #File which loads the file with dirichlet conditions
@@ -33,6 +31,7 @@ def create_source_location(load_dir, data_dir, filename, *args):
     source_location = np.zeros( np.asarray(holes_location).shape )
 
     total = np.sum(holes_location)
+    other = 1
     for i in np.arange(0, holes_location.shape[0]):
         for j in np.arange(0, holes_location.shape[1]):
             for k in np.arange(0, holes_location.shape[2]):
@@ -59,7 +58,7 @@ def create_flow_location(load_dir, data_dir, filename, *args):
         Nonesim_name='hopping_model',
     """
     tic1 = time.time()
-    vessel_location = io.imread(load_dir + filename).astype(float)sim_name='hopping_model',
+    vessel_location = io.imread(load_dir + filename).astype(float)
     vessel_location /= np.max(vessel_location)
     flow_location = np.zeros((vessel_location.shape[0], vessel_location.shape[1], vessel_location.shape[2]))
     for i in range(1,vessel_location.shape[0]-1):
@@ -105,13 +104,11 @@ def create_diffusion_location(load_dir, data_dir, filename, *args):
     diffusion_location /= np.max(diffusion_location)
     vessel_location = io.imread(load_dir + args[0]).astype(float)
     vessel_location /= np.max(vessel_location)
-    source_location = np.load(data_dir + args[1]).astype(float)
-    source_location /= np.max(source_location)
 
-    np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location + source_location)
+    np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location)
     #np.save(data_dir + "/diffusion_location", diffusion_location[150:-150,150:-150,150:-150]-vessel_location[150:-150,150:-150,150:-150] + source_location[150:-150,150:-150,150:-150])#got to take out vasculature but add source if there are any.
 
-def model(load_dir, data_dir, parameter):
+def model(load_dir, data_dir, model_var, *args):
     """
     Function that creates the different arrays that set the geometry of our diffusion landscape.
 
@@ -122,9 +119,9 @@ def model(load_dir, data_dir, parameter):
         None
     """
     tic = time.time()
-    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps_tcop.tif', parameter)
-    FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif', parameter)
-    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif', '/source_location.npy', parameter)
+    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps_tcrop.tif', model_var)
+    FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif')
+    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif')
     toc = time.time()
     print toc-tic, "sec elapsed creating model..."
 

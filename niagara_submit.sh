@@ -18,8 +18,7 @@ module load anaconda2/5.1.0
 export OMP_NUM_THREADS=40
 
 # Commands to be run now
-(make data param=1.) &
-(make data param=10.) &
-(make data param=60.) &
-(make data param=300. && echo "DC=number of holes in simulation") &
+(make data model='hopping_model' param=60.) &
+(make data model='hopping_model' param=300.) &
+(make data model='hopping_model' param=1800. && echo "DC=number of holes in simulation") &
 wait

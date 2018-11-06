@@ -10,15 +10,15 @@ from skimage import io
 import argparse
 
 parser = argparse.ArgumentParser(description='Submitting different diffusion parameters')
-#parser.add_argument('-m', metavar='M', type=string, action='store', default=[], required=False, help='Additional parameters to be passed on for the simulation')
-parser.add_argument('-p', metavar='P', type=float, action='store', default=[], required=False, help='Additional parameters to be passed on for the simulation')
+parser.add_argument('-m', metavar='M', type=str, action='store', default='holes_model', required=False, help='Additional parameters to be passed on for the simulation')
+parser.add_argument('-p', metavar='p', type=float, action='store', default=[], required=False, help='Additional parameters to be passed on for the simulation')
 #Namespace with the arguments
 args = parser.parse_args()
 
 
 def main(model, parameter):
     #===============Model selection==================================
-    import model as mod #Make sure model is a python file that
+    mod = __import__(model) #Make sure model is a python file that
     if not os.path.exists('../data/'):
         os.makedirs('../data/')
 
@@ -32,11 +32,13 @@ def main(model, parameter):
     #=================Model + Parameter Creation=====================
     #This is where we create our models from the different functions in either data_model.py or custom_model.py
     count = '/lastTime_seconds.npy'
-    vis, dx, dy, dz, total_time, dt, nu, save_time, model_var, update_time = mod.params(parameter)
+    vis, dx, dy, dz, total_time, dt, nu, save_time, model_var, update_time, model_var_comment, comment = mod.params(parameter)
     if not os.path.exists(data_dir + count):
         #Creates models and parameters for models
         #Writes these to a file in the data folder. Be sure to add a comment on the model so we can understand what it is in the future.
-        mod.model(load_dir, data_dir, parameter)
+        mod.model(load_dir, data_dir, model_var, parameter)
+    #---------------------------------------------------------------------
+    wd.write_params_file(data_dir, dx, dy, dz, total_time, dt, vis, nu, comment, model_var, model_var_comment)
 
     #===============Load======================================
     #We load up the different domains defined in models
@@ -91,4 +93,4 @@ def main(model, parameter):
         print toc1-tic1, "sec for roughly one time step..."
 
 if __name__ == "__main__":
-    main(model=hopping_model, parameter=vars(args)['P'])
+    main(model=vars(args)['m'], parameter=vars(args)['p'])
