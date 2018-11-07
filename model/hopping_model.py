@@ -13,7 +13,7 @@ def params(*args): ####TURN INTO A CLASS
     nu = 0.002 # nu = dudx
 
     update_time = args[0] #how often updates happen
-    save_time = 24*300.
+    save_time = 24*300. #new changes
     model_var = 50000/(5*5*5) #Model variant. In this model: [hole number]. ##Note these can change depending on what we're doing
     model_var_comment = '[number of holes]'
     #---------------------COMMENT TO DESCRIBE THIS SIM--------------------
