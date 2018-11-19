@@ -32,7 +32,7 @@ def create_source_location(load_dir, data_dir, filename, *args):
     total = np.sum(holes_location)
     other =  None
    
-    print 'hi' 
+
     for i in np.arange(0, holes_location.shape[0]):
         for j in np.arange(0, holes_location.shape[1]):
             for k in np.arange(0, holes_location.shape[2]):
@@ -46,7 +46,7 @@ def create_source_location(load_dir, data_dir, filename, *args):
     np.save(data_dir + "/source_location", source_location)
     #np.save(data_dir + "/source_location", source_location[150:-150,150:-150,150:-150])
 
-def create_flow_location(load_dir, data_dir, filename, macrofile, *args):
+def create_flow_location(load_dir, data_dir, filename, *args):
     """
     Function that creates the location of flow. +1 for each place which is beside a vessel. can have -1 for certain otehr things I guess!
     Args:
@@ -61,7 +61,7 @@ def create_flow_location(load_dir, data_dir, filename, macrofile, *args):
     tic1 = time.time()
     vessel_location = io.imread(load_dir + filename).astype(float)
     vessel_location /= np.max(vessel_location)
-    macro_location = io.imread(load_dir + macrofile).astype(float)
+    macro_location = io.imread(load_dir + filename).astype(float)
     macro_location /= np.max(macro_location)
     flow_location = np.zeros((vessel_location.shape[0], vessel_location.shape[1], vessel_location.shape[2]))
     flow_location_mo = np.zeros((macro_location.shape[0], macro_location.shape[1], macro_location.shape[2]))
@@ -142,11 +142,16 @@ def model(load_dir, data_dir, model_var, *args):
     """
     tic = time.time()
     SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps_tcrop.tif', model_var)
-    FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif','UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif', args[0])
+    FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif', args[0])
+    MFL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif', args[0])
     DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif')
     MDL= create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif' )
     toc = time.time()
     print toc-tic, "sec elapsed creating model..."
+    print SL
+    print FL
+    print DL
+    print MDL
 
 def concentration_time(time_point):
     """

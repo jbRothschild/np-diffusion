@@ -61,3 +61,19 @@ def neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod):
         None
     """
     u += mod.neumann_flow(un, flow_location, i, dt, nu, dx)*dt
+    
+def neumann_source_term_mo(u, un, flow_location_mo, i, dt, nu, dx, mod):
+    """
+    Function that fixes the source terms(after diffusion has happened)
+
+    Args:
+        u(array,3): solution
+        un(array,3): previous solution
+        flow_location_mo(array,3): The location of the macrophage flow terms
+        i(int): time step #
+        dt(int), dx(int): spacetime intervals
+        nu(float): du/dx
+    Returns:
+        None
+    """
+    u += mod.neumann_flow(un, flow_location_mo, i, dt, nu, dx)*dt    
