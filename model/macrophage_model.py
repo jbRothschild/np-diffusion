@@ -142,9 +142,9 @@ def model(load_dir, data_dir, model_var, *args):
     """
     tic = time.time()
     SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps_tcrop.tif', model_var)
-    FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif',args[0])
+    FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif','UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif', args[0])
     DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif')
-    MDL= creat_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop' )
+    MDL= create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif' )
     toc = time.time()
     print toc-tic, "sec elapsed creating model..."
 
