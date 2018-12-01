@@ -10,7 +10,7 @@ from skimage import io
 import argparse
 
 parser = argparse.ArgumentParser(description='Submitting different diffusion parameters')
-parser.add_argument('-m', metavar='M', type=str, action='store', default='generic_model', required=False, help='Additional parameters to be passed on for the simulation')
+parser.add_argument('-m', metavar='M', type=str, action='store', default='generic_model', required=False, help='model passed to import')
 parser.add_argument('-p', metavar='p', type=float, action='store', default=[], required=False, help='Additional parameters to be passed on for the simulation')
 #Namespace with the arguments
 args = parser.parse_args()
@@ -18,17 +18,13 @@ args = parser.parse_args()
 
 def main(model, parameter):
     #===============Model selection==================================
-    mod = __import__(model) #Make sure model is a python file that
-    if not os.path.exists('../data/'):
-        os.makedirs('../data/')
+    if not os.path.exists('../sim/'):
+        os.makedirs('../sim/')
 
-    #Set directory where the data will be saved. Also set the loading directory for certain diffusion geometries (../ChanLan/)
-    data_dir = "../data/sim_" + str(model) + '_' + str(parameter)
-    load_dir = '../ChanLab/'
-
-    if not os.path.exists(data_dir):
-        os.makedirs(data_dir)
-
+    mod = __import__(model)
+    sim_model = mod.Model()
+    
+    """
     #=================Model + Parameter Creation=====================
     #This is where we create our models from the different functions in either data_model.py or custom_model.py
     count = '/lastTime_seconds.npy'
@@ -46,11 +42,20 @@ def main(model, parameter):
     source_location = np.load(data_dir + "/source_location.npy") #location of fixed concentration
     num_holes = np.sum(source_location)
     flow_location = np.load(data_dir + "/flow_location.npy") #can be more than 1 (number of directions flow is coming in from)
-    if os.path.exists(data_dir + "/holes_location.npy"): #If there are other locations of possible holes, we need this array
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+
+    if os.path.exists(data_dir + "
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+/holes_location.npy"): #If there are other locations of possible holes, we need this array
         holes_location = np.load(data_dir + "/holes_location.npy")
 
     #===============Initialization=============================
-    if not os.path.exists(data_dir + count): #Check if there is saved timepoint of simulation, if it isn't we set the time to 0
+    if not os.path.exists(data_dir
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+ + count): #Check if there is saved timepoint of simulation, if it isn't we set the time to 0
         np.save(data_dir + count, np.asarray(0))
         np.save(data_dir + "/diff_0sec.npy", source_location*mod.concentration_time(0)) #Save initial solution
         np.save(data_dir + "/time_sum.npy", np.array([[0.0],[0.0]])) #Save initial concentration and time (0,0)
@@ -91,6 +96,7 @@ def main(model, parameter):
 
         toc1 = time.time()
         print toc1-tic1, "sec for roughly one time step..."
+        """
 
 if __name__ == "__main__":
     main(model=vars(args)['m'], parameter=vars(args)['p'])

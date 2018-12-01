@@ -1,7 +1,29 @@
+import sys, os, time
 import numpy as np
-import write_data as wd
 import skimage.io as io
-import time
+
+import generic_model as gm
+
+from parameters import DIF_COEF, VISC, TOT_TIME, TIME_STEP, GLOB_DX, GLOB_DY, GLOB_DZ, LOAD_DIR, DOMAIN, VESSEL, HOLES, MPHAGE, NUCL
+
+class Model(gm.Model):
+    def __init__(self,  sim_dir='../sim/hopping_model', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", diff=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ):
+
+        gm.Model.__init__(self, sim_dir=sim_dir, load_dir="../ChanLab/", diff=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ)
+
+    #--------------INITIALIZATION-------------
+    #Same as Parent
+
+    #--------------SIMULATION-------------
+    #Same as Parent, except for update!
+
+    def update_simulation(self):
+        self.source_location()
+        self.diffusion_location()
+        return 0
+
+    def simulation(self):
+        return 0
 
 def params(*args): ####TURN INTO A CLASS
     #parameters for the diffusion
@@ -45,6 +67,7 @@ def create_source_location(load_dir, data_dir, filename, *args):
                 if (holes_location[i,j,k] > 0.0 and num_holes > 0):
                     prob = np.random.randint(0,all_holes)
                     all_holes -= 1.0
+
                     if prob < num_holes:
                         source_location[i,j,k] += 1.0
                         num_holes -= 1
@@ -84,10 +107,10 @@ def create_flow_location(load_dir, data_dir, filename, *args):
                     if vessel_location[i,j+1,k] == 0.0:
                         flow_location[i,j+1,k] += 1.0
 
-                    if vessel_location[i,j,k-1] == 0.0:
+                    if vessel_location[i,j,k-1] == 0.0:os.makedirs(sim_dir)
                         flow_location[i,j,k-1] += 1.0
 
-                    if vessel_location[i,j,k+1] == 0.0:
+                    if vessel_location[i,j,k+1] == 0.0:os.makedirs(sim_dir)
                         flow_location[i,j,k+1] += 1.0
     np.save(data_dir + "/flow_location", flow_location)
     toc1 = time.time()
@@ -95,11 +118,11 @@ def create_flow_location(load_dir, data_dir, filename, *args):
 
 def create_diffusion_location(load_dir, data_dir, filename, *args):
     """
-    Function that creates the location of diffusion. For now that's anything that's not on a vessel (holes included)
+    Function that creates the location of diffusion. For now that's anything that's not on a vessel (holes included)os.makedirs(sim_dir)os.makedirs(sim_dir)
 
     Args:
         load_dir(string): directory with all the data files
-        data_dir(string): directory where all the manipulated arrays are stored after creation
+        data_dir(string): directory where all the manipulated aos.makedirs(sim_dir)rrays are stored after creation
         filename(string): name of file which has the tumor domain.
         other[0]: vasculature
         other[1]: holes
