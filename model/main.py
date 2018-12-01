@@ -23,7 +23,7 @@ def main(model, parameter):
 
     mod = __import__(model)
     sim_model = mod.Model()
-    
+
     """
     #=================Model + Parameter Creation=====================
     #This is where we create our models from the different functions in either data_model.py or custom_model.py

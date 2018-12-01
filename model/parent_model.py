@@ -5,16 +5,15 @@ from skimage import io
 from parameters import DIF_COEF, VISC, TOT_TIME, TIME_STEP, GLOB_DX, GLOB_DY, GLOB_DZ, LOAD_DIR, DOMAIN, VESSEL, HOLES, MPHAGE, NUCL
 
 class Model:
-    def __init__(self,  sim_dir='../sim/generic_model', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", diff=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=0):
-        self.diff = diff; self.vis = vis #Diffusion coefficient and viscosity
+    def __init__(self,  sim_dir='../sim/generic_model', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=0, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL):
+        self.d_co = d_co; self.vis = vis #Diffusion coefficient and viscosity
         self.tot_time = TOT_TIME #total time for simulation
         self.dt = TIME_STEP; self.dx = GLOB_DX; self.dy = GLOB_DY; self.dz = GLOB_DZ #metric
         if not os.path.exists(sim_dir):
             os.makedirs(sim_dir)
         self.load_dir = load_dir+load_num; self.sim_dir = sim_dir
-        self.conc_vessel = self.concentration_time(0.)
         self.datafile = self.load_dir + load_datafile
-        self.domain = ; self.vessel = ; self.holes = ; self.mphage = ; self.nucl =
+        self.domain = self.load_dir + DOMAIN; self.vessel = self.load_dir + VESSEL; self.holes = self.load_dir + HOLES; self.mphage = self.load_dir + MPHAGE; self.nucl = self.load_dir + NUCL
         self.number_holes = number_holes
 
         if os.path.exists(sim_dir+"timepoint.npy"): #If continuing simulation, reloads
@@ -25,7 +24,7 @@ class Model:
     def unpack(self):
         return self.d, self.vis, self.time, self.dt, self.dx, self.dy, self.dz
 
-    def concentration_time(self, time_point):
+    def concentration_time(self):
         return 0.7521*np.exp(-1.877*self.time) + 0.2479*np.exp(-0.1353*self.time)
 
     #--------------INITIALIZATION-------------
@@ -77,9 +76,9 @@ class Model:
                         if vessel_location[i+1,j,k] == 0.0:
                             self.flow_loc[i+1,j,k] += 1.0
                         if vessel_location[i,j-1,k] == 0.0:
-                            self.flow_loc[i,j-1,k] += 1.0macrophage
+                            self.flow_loc[i,j-1,k] += 1.0
                         if vessel_location[i,j+1,k] == 0.0:
-                            self.flow_loc[i,j+1,k] += 1.0macrophage
+                            self.flow_loc[i,j+1,k] += 1.0
                         if vessel_location[i,j,k-1] == 0.0:
                             self.flow_loc[i,j,k-1] += 1.0
                         if vessel_location[i,j,k+1] == 0.0:
@@ -99,6 +98,8 @@ class Model:
             self.diffusion_loc +=  - vessel_location + holes_location
             del vessel_location, holes_location
             self.diffusion_loc[self.diffusion_loc > 1.0] = 1.0
+        self.ijk = (np.linspace(1, self.diffusion_loc.shape[0]-2, diffusion_loc.shape[0]-2)).astype(int)
+        un = np.copy(self.solution)
         return 0
 
     def create_mphage_location(self):
@@ -118,10 +119,30 @@ class Model:
     #--------------SIMULATION-------------
 
     def diffusion(self):
+
+        self.solution[self.ijk,:,:] += self.diffusion_loc[self.ijk,:,:]*( self.d_co*self.dt*self.diffusion_loc[self.ijk+1,:,:]*( un[self.ijk+1,:,:]-un[self.ijk,:,:] ) + self.d_co*self.dt*self.diffusion_loc[self.ijk-1,:,:]*( un[self.ijk-1,:,:]-un[self.ijk,:,:] ))/(self.dx**2)
+
+        self.solution[:,self.ijk,:] += self.diffusion_loc[:,self.ijk,:]*( self.d_co*self.dt*self.diffusion_loc[:,self.ijk+1,:]*( un[:,self.ijk+1,:]-un[:,self.ijk,:] ) + self.d_co*self.dt*self.diffusion_loc[:,self.ijk-1,:]*( un[:,self.ijk-1,:]-un[:,self.ijk,:] ))/(self.dy**2)
+
+        self.solution[:,:,self.ijk] += self.diffusion_loc[:,:,self.ijk]*( self.d_co*self.dt*self.diffusion_loc[:,:,self.ijk+1]*( un[:,:,self.ijk+1]-un[:,:,self.ijk] ) + self.d_co*self.dt*self.diffusion_loc[:,:,self.ijk-1]*( un[:,:,self.ijk-1]-un[:,:,self.ijk] ))/(self.dz**2)
+
+        #Periodic Boundary Conditions
+        self.solution[0,:,:] += self.diffusion_loc[0,:,:]*( self.d_co*self.dt*self.diffusion_loc[1,:,:]*( un[1,:,:]-un[0,:,:] ) + self.d_co*self.dt*self.diffusion_loc[-1,::-1,::-1]*( un[-1,::-1,::-1]-un[0,:,:] ))/(self.dx**2)
+
+        self.solution[:,0,:] += self.diffusion_loc[:,0,:]*( self.d_co*self.dt*self.diffusion_loc[:,1,:]*( un[:,1,:]-un[:,0,:] ) + self.d_co*self.dt*self.diffusion_loc[::-1,-1,::-1]*( un[::-1,-1,::-1]-un[:,0,:] ))/(self.dy**2)
+
+        self.solution[:,:,0] += self.diffusion_loc[:,:,0]*( self.d_co*self.dt*self.diffusion_loc[:,:,1]*( un[:,:,1]-un[:,:,0] ) + self.d_co*self.dt*self.diffusion_loc[::-1,::-1,-1]*( un[::-1,::-1,-1]-un[:,:,0] ))/(self.dz**2)
+
+        self.solution[-1,:,:] += self.diffusion_loc[-1,:,:]*( self.d_co*self.dt*self.diffusion_loc[-2,:,:]*( un[-2,:,:]-un[-1,:,:] ) + self.d_co*self.dt*self.diffusion_loc[0,::-1,::-1]*( un[0,::-1,::-1]-un[-1,:,:] ))/(self.dx**2)
+
+        self.solution[:,-1,:] += self.diffusion_loc[:,-1,:]*( self.d_co*self.dt*self.diffusion_loc[:,-2,:]*( un[:,-2,:]-un[:,-1,:] ) + self.d_co*self.dt*self.diffusion_loc[::-1,0,::-1]*( un[::-1,0,::-1]-un[:,-1,:] ))/(self.dy**2)
+
+        self.solution[:,:,-1] += self.diffusion_loc[:,:,-1]*( self.d_co*self.dt*self.diffusion_loc[:,:,-2]*( un[:,:,-2]-un[:,:,-1] ) + self.d_co*self.dt*self.diffusion_loc[::-1,::-1,0]*( un[::-1,::-1,0]-un[:,:,-1] ))/(self.dz**2)
+        del self.ijk, un
         return 0
 
     def neumann_condition(self):
-        self.solution += -self.solution*self.source_loc + self.concentration_time(self.time)*self.source_loc
+        self.solution += self.concentration_time*self.flow_loc
         return 0
 
     def dirichlet_condition(self):
@@ -133,6 +154,10 @@ class Model:
 
     def simulation_step(self):
         self.diffusion()
-        self.neumann_condition()
         self.dirichlet_condition()
+        #self.neumann_condition()
+        return 0
+
+    def save_sim(self):
+
         return 0
