@@ -5,7 +5,7 @@ from skimage import io
 from parameters import DIF_COEF, VISC, TOT_TIME, TIME_STEP, GLOB_DX, GLOB_DY, GLOB_DZ, LOAD_DIR, DOMAIN, VESSEL, HOLES, MPHAGE, NUCL
 
 class Model:
-    def __init__(self,  sim_dir='../sim/generic_model', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=0, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL):
+    def __init__(self,  sim_dir='../sim/generic_model/', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=0, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL):
         self.d_co = d_co; self.vis = vis #Diffusion coefficient and viscosity
         self.tot_time = TOT_TIME #total time for simulation
         self.dt = TIME_STEP; self.dx = GLOB_DX; self.dy = GLOB_DY; self.dz = GLOB_DZ #metric
@@ -16,10 +16,17 @@ class Model:
         self.domain = self.load_dir + DOMAIN; self.vessel = self.load_dir + VESSEL; self.holes = self.load_dir + HOLES; self.mphage = self.load_dir + MPHAGE; self.nucl = self.load_dir + NUCL
         self.number_holes = number_holes
 
-        if os.path.exists(sim_dir+"timepoint.npy"): #If continuing simulation, reloads
-            self.time = np.load(sim_dir+"timepoint.npy")
+        if os.path.exists(self.sim_dir + "timepoint.npy"): #If continuing simulation, reloads
+            self.time = np.load(self.sim_dir + "timepoint.npy")
         else:
-            self.time = 0.0
+            self.time = 0
+            np.save(self.sim_dir + "timepoint.npy", np.asarray(self.time))
+
+        if os.path.exists(self.sim_dir + "time_sum.npy"): #If continuing simulation, reloads
+            self.timeSum = np.load(self.sim_dir + "time_sum.npy")
+        else:
+            self.timeSum = [[0],[0.0]]
+            np.save(self.sim_dir + "time_sum.npy", self.timeSum)
 
     def unpack(self):
         return self.d, self.vis, self.time, self.dt, self.dx, self.dy, self.dz
@@ -30,11 +37,11 @@ class Model:
     #--------------INITIALIZATION-------------
 
     def initialize(self):
-        self.create_flow_location(self)
-        self.create_source_location(self)
-        self.create_diffusion_location(self)
-        self.create_mphage_location(self)
-        self.create_nucl_location(self)
+        self.create_flow_location()
+        self.create_source_location()
+        self.create_diffusion_location()
+        self.create_mphage_location()
+        self.create_nucl_location()
         return 0
 
     def create_source_location(self):
@@ -42,7 +49,7 @@ class Model:
         if os.path.exists(self.sim_dir+"source_location.npy"): #If continuing simulation, reloads
             self.source_loc = np.load(self.sim_dir+"source_location.npy")
         else: #Creates new source, location
-            holes_location = io.imread(self.holes).astype(float); holes_location /= np.max(self.holes_location)
+            holes_location = io.imread(self.holes).astype(float); holes_location /= np.max(holes_location)
             all_holes = np.sum( holes_location )
             self.source_loc = np.zeros( np.asarray(holes_location).shape )
             num_holes = self.number_holes
@@ -86,40 +93,41 @@ class Model:
         del vessel_location
         return 0
 
-    def diffusion_location(self):
+    def create_diffusion_location(self):
         if os.path.exists(self.sim_dir+"flow_location.npy"): #If continuing simulation, reloads
             self.diffusion_loc = np.load(self.sim_dir+"flow_location.npy")
         else:
             tumor_location = io.imread(self.domain).astype(float)
-            self.diffusion_loc = np.ones( np.asarray(tumor_location).shape ); diffusion_location /= np.max(diffusion_location)
+            self.diffusion_loc = np.ones( np.asarray(tumor_location).shape ); self.diffusion_loc /= np.max(self.diffusion_loc)
             vessel_location = io.imread(self.vessel).astype(float); vessel_location /= np.max(vessel_location)
             holes_location = io.imread(self.holes).astype(float); holes_location /= np.max(holes_location)
 
             self.diffusion_loc +=  - vessel_location + holes_location
             del vessel_location, holes_location
             self.diffusion_loc[self.diffusion_loc > 1.0] = 1.0
-        self.ijk = (np.linspace(1, self.diffusion_loc.shape[0]-2, diffusion_loc.shape[0]-2)).astype(int)
-        un = np.copy(self.solution)
+        self.ijk = (np.linspace(1, self.diffusion_loc.shape[0]-2, self.diffusion_loc.shape[0]-2)).astype(int)
+
         return 0
 
     def create_mphage_location(self):
-        if os.path.exists(sim_dir+"marcophage_location.npy"): #If continuing simulation, reloads
-            self.mphage_loc = np.load(sim_dir+"macrophage_location.npy")
+        if os.path.exists(self.sim_dir+"marcophage_location.npy"): #If continuing simulation, reloads
+            self.mphage_loc = np.load(self.sim_dir+"macrophage_location.npy")
         else:
             self.mphage_loc = 0.
         return 0
 
     def create_nucl_location(self):
-        if os.path.exists(sim_dir+"nucleus_location.npy"): #If continuing simulation, reloads
-            self.mphage_loc = np.load(sim_dir+"nucleus_location.npy")
+        if os.path.exists(self.sim_dir+"nucleus_location.npy"): #If continuing simulation, reloads
+            self.mphage_loc = np.load(self.sim_dir+"nucleus_location.npy")
         else:
             self.mphage_loc = 0.
         return 0
 
     #--------------SIMULATION-------------
+    #Explain each one
 
     def diffusion(self):
-
+        un = np.copy(self.solution)
         self.solution[self.ijk,:,:] += self.diffusion_loc[self.ijk,:,:]*( self.d_co*self.dt*self.diffusion_loc[self.ijk+1,:,:]*( un[self.ijk+1,:,:]-un[self.ijk,:,:] ) + self.d_co*self.dt*self.diffusion_loc[self.ijk-1,:,:]*( un[self.ijk-1,:,:]-un[self.ijk,:,:] ))/(self.dx**2)
 
         self.solution[:,self.ijk,:] += self.diffusion_loc[:,self.ijk,:]*( self.d_co*self.dt*self.diffusion_loc[:,self.ijk+1,:]*( un[:,self.ijk+1,:]-un[:,self.ijk,:] ) + self.d_co*self.dt*self.diffusion_loc[:,self.ijk-1,:]*( un[:,self.ijk-1,:]-un[:,self.ijk,:] ))/(self.dy**2)
@@ -149,14 +157,18 @@ class Model:
         self.solution += -self.solution*self.source_loc + self.concentration_time(self.time)*self.source_loc
         return 0
 
-    def update_simulation(self):
-        return 0
+    #--------------SIMULATION-------------
 
     def simulation_step(self):
         self.diffusion()
         self.dirichlet_condition()
         #self.neumann_condition()
         return 0
+
+    def update_simulation(self):
+        return 0
+
+    #--------------SAVING-------------
 
     def save_sim(self):
 

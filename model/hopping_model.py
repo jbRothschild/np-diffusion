@@ -15,6 +15,12 @@ class Model(gm.Model):
     #Same as Parent
     self.holes_loc = io.imread(self.holes).astype(float); self.holes_loc /= np.max(self.holes_loc)
 
+    def initialize(self):
+        self.create_source_location()
+        self.create_diffusion_location()
+        self.create_mphage_location()
+        return 0
+
     #--------------SIMULATION-------------
     #Same as Parent, except for update!
 
