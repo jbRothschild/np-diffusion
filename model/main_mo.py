@@ -64,8 +64,9 @@ def main(model, parameter):
     timeSum = np.load(data_dir + "/time_sum.npy")
 
     #================Euleur's method============================
-    
+
     tic = time.time()
+
     for i in np.arange(initial/dt+1,total_time/dt+1): #run sother = []imulation from time
         tic1 = time.time()
         un = u[:,:,:]
@@ -74,8 +75,8 @@ def main(model, parameter):
         dif.dirichlet_source_term(u, source_location, i, dt, mod) #fixed source locations, dirichlet conditions
         dif.neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod) #locations where there are neumann boundary conditions
         dif.neumann_source_term_mo(u, un, flow_location_mo, i, dt, nu, dx, mod) # locations where there are macrophage neumann boundry conditions
-    
-        
+
+
         #Updating certain diffusion parameters
         if i*dt in np.arange(0,total_time+1,update_time):
             mod.update_diff(holes_location, source_location, data_dir) #function arguments will need to change, depending on the model
@@ -95,6 +96,7 @@ def main(model, parameter):
 
         toc1 = time.time()
         print toc1-tic1, "sec for roughly one time step..."
+
 
 if __name__ == "__main__":
     main(model=vars(args)['m'], parameter=vars(args)['p'])
