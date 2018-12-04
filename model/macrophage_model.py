@@ -8,13 +8,13 @@ def params(*args):
     vis = 1.5 #Diffusion coefficient in um^2/s
     count = '/lastTime_seconds.npy'
     dx = 2.; dy = 2.; dz = 2. #1 micrometer
-    total_time = 24*3600. #seconds
+    total_time = 1*3600. #seconds
     dt = 1.0 #dx*dx/(2.*vis) #Time steps of seconds dt < dx^2/2*D
     nu = 0.002 # nu = dudx
     uptake = args[0]
 
-    save_time = 24*300. #how long we wait until we save
-    update_time = 24*3600. #how often updates happen
+    save_time = 1*300. #how long we wait until we save
+    update_time = 1*3600. #how often updates happen
     model_var = [] #Model variant. In this model: [hole number]. ##Note these can change depending on what we're doing
     model_var_comment = ''
     #---------------------------------------------------------------------
@@ -44,6 +44,7 @@ def create_source_location(load_dir, data_dir, filename, *args):
                         other -= 1.0
 
     np.save(data_dir + "/source_location", source_location)
+    np.save(data_dir + "/holes_location", holes_location)
     #np.save(data_dir + "/source_location", source_location[150:-150,150:-150,150:-150])
 
 def create_flow_location(load_dir, data_dir, filename, *args):
@@ -107,6 +108,7 @@ def create_flow_location(load_dir, data_dir, filename, *args):
                         flow_location_mo[i,j,k+1] -= 1.0
    
     np.save(data_dir + "/flow_location", flow_location)
+    np.save(data_dir + "/flow_location_mo", flow_location_mo)
     #np.save(data_dir + "/flow_location", flow_location[150:-150,150:-150,150:-150])
     toc1 = time.time()
     print toc1-tic1, "sec elapsed creating flow..."

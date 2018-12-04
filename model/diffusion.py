@@ -1,6 +1,9 @@
 def diffusion(u, un, ijk, diffusion_location, vis, dt, dx, dy, dz, mod):
      """
-     Function that calculates the diffusion from solution un to solution u in the diffusion_location. Time in between is dt, with diffusion coeffecient vis. This iteration of this diffusion function assumes that anywhere that is not a diffusion location has a reflective boundary (hence the *diffusion_locationf[:,ijk+-1,:]=0 for non diffusion spots.)
+     Function that calculates the diffusion from solution un to solution u in the diffusion_location. 
+     Time in between is dt, with diffusion coeffecient vis. This iteration of this diffusion 
+     function assumes that anywhere that is not a diffusion location has a reflective boundary 
+     (hence the *diffusion_locationf[:,ijk+-1,:]=0 for non diffusion spots.)
 
      Args:
          u(array,3): solution

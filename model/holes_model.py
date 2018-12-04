@@ -29,6 +29,7 @@ def create_source_location(load_dir, data_dir, filename,*args):
     holes_location = io.imread(load_dir + filename).astype(float)
     holes_location /= np.max(holes_location)
     source_location = np.zeros( np.asarray(holes_location).shape )
+    other = None
 
     total = np.sum(holes_location)
     for i in np.arange(0, holes_location.shape[0]):
@@ -101,9 +102,9 @@ def create_diffusion_location(load_dir, data_dir, filename, *args):
     tumor_location = io.imread(load_dir + filename).astype(float)
     diffusion_location = np.ones( np.asarray(tumor_location).shape )
     diffusion_location /= np.max(diffusion_location)
-    vessel_location = io.imread(load_dir + other[0]).astype(float)
+    vessel_location = io.imread(load_dir + args[0]).astype(float)
     vessel_location /= np.max(vessel_location)
-    source_location = np.load(data_dir + other[1]).astype(float)
+    source_location = np.load(data_dir + args[1]).astype(float)
     source_location /= np.max(source_location)
 
     np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location + source_location)
@@ -120,9 +121,9 @@ def model(load_dir, data_dir, model_var, *args):
         None
     """
     tic = time.time()
-    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_50000gaps.tif', other=parameter)
-    FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif', other=parameter)
-    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped.tif', other = ['UT16-T-stack3-Sept10_iso_vesthresh-cropped.tif','/source_location.npy'])
+    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_50000gaps.tif', args[0])
+    FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif', args[0])
+    DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif','/source_location.npy')
     toc = time.time()
     print toc-tic, "sec elapsed creating model..."
 
