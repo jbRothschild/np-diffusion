@@ -7,11 +7,10 @@ import parent_model as pm
 from parameters import DIF_COEF, VISC, TOT_TIME, TIME_STEP, GLOB_DX, GLOB_DY, GLOB_DZ, LOAD_DIR, DOMAIN, VESSEL, HOLES, MPHAGE, NUCL
 
 class Model(pm.Model):
-    def __init__(self,  sim_dir='../sim/hopping_model/', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=5000, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL, hole_update_time=9999999):
+    def __init__(self,  sim_dir='../sim/hopping_model/', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=5000, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL, update_time=9999999):
 
-        super(Model, self).__init__(sim_dir=sim_dir, load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=number_holes, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL)
+        super(Model, self).__init__(sim_dir=sim_dir, load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=number_holes, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL, update_time=update_time)
         self.holes_loc = io.imread(self.holes).astype(float); self.holes_loc /= np.max(self.holes_loc)
-        self.update1_time = hole_update_time
 
     #--------------INITIALIZATION-------------
     #Same as Parent
@@ -51,7 +50,7 @@ class Model(pm.Model):
     def dirichlet_condition( self ):
         super(Model, self).dirichlet_condition()
 
-    def update1_simulation( self ):
+    def update_simulation( self ):
         #UPDATING HAPPENS HERE, can have multiple update I guess
         total = self.number_holes
         other = np.sum(self.holes_loc)

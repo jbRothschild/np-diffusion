@@ -55,7 +55,7 @@ def main(model, parameter):
         sim_model.time = i*sim_model.dt
         #CHange to a for loop, for any updates that might happen and their time
         if sim_model.time in np.arange( 0, sim_model.total_time, sim_model.update1_time):
-            sim_model.update1_simulation()
+            sim_model.update_simulation()
 
         toc1 = time.time()
         print toc1 - tic1, "sec for roughly one time step..."

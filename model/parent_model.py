@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from parameters import DIF_COEF, VISC, TOT_TIME, TIME_STEP, GLOB_DX, GLOB_DY, GLOB_DZ, LOAD_DIR, DOMAIN, VESSEL, HOLES, MPHAGE, NUCL
 
 class Model(object):
-    def __init__( self,  sim_dir='../sim/parent_model/', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=5000, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL , *args):
+    def __init__( self,  sim_dir='../sim/parent_model/', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=5000, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL , update_time=9999999, *args):
         self.d_co = d_co; self.vis = vis #Diffusion coefficient and viscosity
         self.total_time = tot_time #total time for simulation
         self.dt = dt; self.dx = dx; self.dy = dy; self.dz = dz #metric
@@ -17,6 +17,7 @@ class Model(object):
         self.datafile = self.load_dir + load_datafile
         self.domain = self.load_dir + domain; self.vessel = self.load_dir + vessel; self.holes = self.load_dir + holes; self.mphage = self.load_dir + mphage; self.nucl = self.load_dir + nucl
         self.number_holes = number_holes
+        self.update_time = update_time
 
         if os.path.exists( self.sim_dir + "timepoint.npy" ): #If continuing simulation, reloads
             self.time = np.load( self.sim_dir + "timepoint.npy" )
