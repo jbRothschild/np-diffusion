@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=40
 #SBATCH --time=24:00:00
