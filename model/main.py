@@ -8,7 +8,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Submitting different diffusion parameters')
 parser.add_argument('-m', metavar='M', type=str, action='store', default='parent_model', required=False, help='model passed to import')
-parser.add_argument('-p', metavar='p', type=float, action='store', default=[], required=False, help='Additional parameters to be passed on for the simulation')
+parser.add_argument('-p', metavar='p', nargs='*', action='store', default=[], required=False, help='Additional parameters to be passed on for the simulation')
 #Namespace with the arguments
 args = parser.parse_args()
 

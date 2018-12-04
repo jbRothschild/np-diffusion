@@ -20,7 +20,9 @@ export OMP_NUM_THREADS=40
 # Commands to be run now
 for i in 158 159 160; do
   for j in 1 2 3; do
-    (make sim model=hopping_model param=("../sim/hopping_model_${i}_$j/" "MSC${i}-T-stack${j}-Nov29-2018_iso" "particles_trimmed.tif gaps_actual.tif" "gaps_50x.tif" "thresh_vessels.tif" "tissue_boundary.tif'") &
+    yes=("../sim/hopping_model_${i}_${j}/" "MSC${i}-T-stack${j}-Nov29-2018_iso" "particles_trimmed.tif" "gaps_actual.tif" "gaps_50x.tif" "thresh_vessels.tif" "tissue_boundary.tif")
+    (make sim model=parent_model param="${yes[@]}")
+    #(make sim model="parent_model" param=("../sim/hopping_model_${i}_${j}/" "MSC${i}-T-stack${j}-Nov29-2018_iso" "particles_trimmed.tif gaps_actual.tif" "gaps_50x.tif" "thresh_vessels.tif" "tissue_boundary.tif")) &
     #(make sim model=parent_model param=( ../sim/parent_model_'$i'_'$j'/ MSC'$i'-T-stack'$j'-Nov29-2018_iso particles_trimmed.tif gaps_actual.tif gaps_50x.tif thresh_vessels.tif tissue_boundary.tif) ) &
   done
 done
