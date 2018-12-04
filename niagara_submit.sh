@@ -17,12 +17,11 @@ module load anaconda2/5.1.0
 # Turn off implicit threading in Python, R
 export OMP_NUM_THREADS=40
 
-MSC[158,159,160]-T-stack[1,2,3]-Nov29-2018_iso[gaps_actual, gaps_50x, thresh_vessels, particles trimmed, tissue_boundary].tif
 # Commands to be run now
 for i in 158 159 160; do
   for j in 1 2 3; do
-    (make sim model='hopping_model' param=['../sim/hopping_model_'$i'_'$j'/', 'MSC'$i'-T-stack'$j'-Nov29-2018_iso', 'particles_trimmed.tif', 'gaps_actual.tif', 'gaps_50x.tif', 'thresh_vessels.tif', 'tissue_boundary.tif']) &
-    (make sim model='parent_model' param=['../sim/parent_model_'$i'_'$j'/', 'MSC'$i'-T-stack'$j'-Nov29-2018_iso', 'particles_trimmed.tif', 'gaps_actual.tif', 'gaps_50x.tif', 'thresh_vessels.tif', 'tissue_boundary.tif', 'gaps_actual.tif']) &
+    (make sim model='hopping_model' param=" '../sim/hopping_model_'$i'_'$j'/' 'MSC'$i'-T-stack'$j'-Nov29-2018_iso' 'particles_trimmed.tif' 'gaps_actual.tif' 'gaps_50x.tif' 'thresh_vessels.tif' 'tissue_boundary.tif'" ) &
+    (make sim model='parent_model' param=" '../sim/hoppin_model_'$i'_'$j'/' 'MSC'$i'-T-stack'$j'-Nov29-2018_iso' 'particles_trimmed.tif' 'gaps_actual.tif' 'gaps_50x.tif' 'thresh_vessels.tif' 'tissue_boundary.tif'" ) &
   done
 done
 wait
