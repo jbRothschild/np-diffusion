@@ -54,7 +54,7 @@ def main(model, parameter):
 
         sim_model.time = i*sim_model.dt
         #CHange to a for loop, for any updates that might happen and their time
-        if sim_model.time in np.arange( 0, sim_model.total_time, sim_model.update1_time):
+        if sim_model.time in np.arange( 0, sim_model.total_time, sim_model.update_time):
             sim_model.update_simulation()
 
         toc1 = time.time()
