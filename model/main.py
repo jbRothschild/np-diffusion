@@ -19,7 +19,7 @@ def main(model, parameter):
         os.makedirs('../sim/')
 
     mod = __import__(model)
-    sim_model = mod.Model(sim_dir=parameter[0], load_num=parameter[1], load_data=parameter[2], domain=parameter[6], vessel=parameter[5], holes=parameter[4])
+    sim_model = mod.Model(sim_dir=parameter[0], load_num=parameter[1], load_datafile=parameter[2], domain=parameter[6], vessel=parameter[5], holes=parameter[4])
     sim_num_holes = io.imread( sim_model.load_dir + parameter[1] + parameter[3] ).astype(float) ; sim_num_holes /= np.max(sim_num_holes)
     sim_model.number_holes = np.sum(sim_num_holes)
     del sim_num_holes

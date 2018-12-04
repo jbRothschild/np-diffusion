@@ -16,7 +16,7 @@ all : sim
 
 ## sim : runs the diffusion according to the loaded data from ChanLab
 sim :
-	python2 main.py -m $(ARGS1) -p $(ARGS2)
+	python2 main.py -m $(ARGS1) -p ${ARGS2}
 
 ## homogen : scores our different models according to some homogenous score
 homogen :

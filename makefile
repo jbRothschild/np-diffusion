@@ -4,7 +4,7 @@ parent_dir = $(notdir ${current_dir}/..)
 .PHONY : clean zip custom sim data Figs fig%
 # setting up suffix rules
 
-##<<Different commands for makefile>>
+##<<Different commands for makefile>>git
 
 ## all : runs main code and creates figure
 all :
@@ -16,7 +16,8 @@ homogen :
 
 ## sim : runs the diffusion with
 sim :
-	$(MAKE) -C model $@ ARGS1=${model} ARGS2=${param}
+	echo $(param)
+	$(MAKE) -C model $@ ARGS1=$(model) ARGS2=${param}
 
 ## Figs : runs all figures in figures
 Figs :
