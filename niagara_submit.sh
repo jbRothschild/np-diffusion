@@ -31,14 +31,14 @@ done
 """
 # hopping model
 for i in 5 10 60 300; do
-  (python2 main.py -m hopping_model -p '../sim/hopping_model_$i' $i) &
+#  (python2 main.py -m hopping_model -p '../sim/hopping_model_$i' $i) &
 done
 """
 
 """
 # hopping model
 for i in 5 10 60 300; do
-  (python2 main.py -m macrophage_model -p '../sim/macrophage_model_$i' $i) &
+#  (python2 main.py -m macrophage_model -p '../sim/macrophage_model_$i' $i) &
 done
 """
 
