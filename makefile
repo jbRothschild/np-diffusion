@@ -1,7 +1,7 @@
 CODE_DIR = model figures
 current_dir = $(notdir $(shell pwd))
 parent_dir = $(notdir ${current_dir}/..)
-.PHONY : clean zip custom data Figs fig%
+.PHONY : clean zip custom sim data Figs fig%
 # setting up suffix rules
 
 ##<<Different commands for makefile>>
