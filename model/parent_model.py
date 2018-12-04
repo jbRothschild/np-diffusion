@@ -174,25 +174,16 @@ class Model(object):
 
     #--------------SIMULATION-------------
 
-    def reduce_simulation( self, minimum, maximum ):
-        self.diffusion_loc = self.diffusion_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
-        self.source_loc = self.source_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
-        self.flow_loc = self.flow_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
-        self.solution = np.zeros( np.asarray( self.diffusion_loc ).shape )
-        self.ijk = ( np.linspace(1, self.diffusion_loc.shape[0]-2, self.diffusion_loc.shape[0] - 2 ) ).astype(int)
-
-        return 0
-
     def simulation_step( self ):
         self.diffusion()
         self.dirichlet_condition()
         #self.neumann_condition()
         #self.
         return 0
-    """
+
     def update_simulation( self ):
         return 0
-    """
+    
     #--------------SAVING-------------
 
     def save_sim( self ):

@@ -14,8 +14,8 @@ all :
 homogen :
 	$(MAKE) -C model $@
 
-## data : runs the diffusion with data model
-data :
+## sim : runs the diffusion with
+sim :
 	$(MAKE) -C model $@ ARGS1=${model} ARGS2=${param}
 
 ## Figs : runs all figures in figures

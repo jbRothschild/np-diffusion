@@ -12,10 +12,10 @@ parent_dir = $(notdir ${current_dir}/..)
 ##<<Different commands for makefile>>
 
 ## all : runs main code
-all : data
+all : sim
 
-## data : runs the diffusion according to the loaded data from ChanLab
-data :
+## sim : runs the diffusion according to the loaded data from ChanLab
+sim :
 	python2 main.py -m $(ARGS1) -p $(ARGS2)
 
 ## homogen : scores our different models according to some homogenous score
