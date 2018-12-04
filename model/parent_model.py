@@ -15,7 +15,7 @@ class Model(object):
             os.makedirs(sim_dir)
         self.load_dir = load_dir+load_num; self.sim_dir = sim_dir
         self.datafile = self.load_dir + load_datafile
-        self.domain = self.load_dir + DOMAIN; self.vessel = self.load_dir + VESSEL; self.holes = self.load_dir + HOLES; self.mphage = self.load_dir + MPHAGE; self.nucl = self.load_dir + NUCL
+        self.domain = self.load_dir + DOMAIN; self.vessel = self.load_dir + vessel; self.holes = self.load_dir + holes; self.mphage = self.load_dir + mphage; self.nucl = self.load_dir + nucl
         self.number_holes = number_holes
 
         if os.path.exists( self.sim_dir + "timepoint.npy" ): #If continuing simulation, reloads
