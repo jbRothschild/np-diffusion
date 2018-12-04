@@ -19,28 +19,24 @@ def main(model, parameter):
         os.makedirs('../sim/')
 
     mod = __import__(model)
-    sim_model = mod.Model(number_holes=5000)
+    sim_model = mod.Model( number_holes = 50 )
 
     #=================Model + Parameter Creation=====================
     #This is where we create our models from the different functions in either data_model.py or custom_model.py
-    sim_model.initialize()
-    sim_model.reduce_simulation( 255, 610-255 )
+    sim_model.initialize( minimum = 255, maximum = 610 - 255 )
+    #sim_model.reduce_simulation( 255, 610-255 )
+    sim_model.solution = np.copy( sim_model.source_loc )
 
     #================Euleur's method============================
 
     tic = time.time()
     for i in np.arange( sim_model.time/sim_model.dt + 1, sim_model.total_time/sim_model.dt + 1 ): #run from time saved previously
         tic1 = time.time()
-        sim_model.time = i*sim_model.dt
-        print sim_model.time
         sim_model.simulation_step()
-
-        if sim_model.time in [100000000,100000000]:
-            sim_model.update_simulation()
 
         #--------------------Saving Data-------------------
         if sim_model.time in np.arange(0 , sim_model.total_time + 1, 300):
-            wd.save_run(sim_model.time, sim_model.solution, sim_model.sim_dir, sim_model.sim_dir + "timepoint.npy")
+            wd.save_run(sim_model.time, sim_model.solution, sim_model.sim_dir, "timepoint.npy")
             wd.save_run_2D(sim_model.time, sim_model.solution[sim_model.solution.shape[0]/2,:,:], sim_model.sim_dir)
 
         #saving the sum at each time step.
@@ -50,11 +46,15 @@ def main(model, parameter):
             print "         >> Sum this step", np.sum( sim_model.timeSum[1,-1] )
         #-------------------------------------------
 
+        sim_model.time = i*sim_model.dt
+        #CHange to a for loop, for any updates that might happen and their time
+        if sim_model.time in np.arange( 0, sim_model.total_time, sim_model.update1_time):
+            sim_model.update1_simulation()
+
         toc1 = time.time()
         print toc1 - tic1, "sec for roughly one time step..."
     toc = time.time()
     print toc - tic, "sec for total simulation."
-
 
 if __name__ == "__main__":
     main(model=vars(args)['m'], parameter=vars(args)['p'])
