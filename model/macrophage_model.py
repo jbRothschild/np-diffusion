@@ -7,9 +7,9 @@ import hopping_model as hm
 from parameters import DIF_COEF, VISC, TOT_TIME, TIME_STEP, GLOB_DX, GLOB_DY, GLOB_DZ, LOAD_DIR, DOMAIN, VESSEL, HOLES, MPHAGE, NUCL, GEN_HOLES
 
 class Model(hm.Model):
-    def __init__( self,  sim_dir='../sim/mphage_model/', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=5000, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL, gen_holes=GEN_HOLES, mphage_rate=0.2, update_time=9999999 ):
+    def __init__( self,  sim_dir='../sim/mphage_model/', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=5000, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL, gen_holes=GEN_HOLES, mphage_rate=0.2, update_time=9999999, , save_data_time=SAVE_DATA ):
 
-        super(Model, self).__init__( sim_dir=sim_dir, load_dir=load_dir, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=d_co, vis=vis, tot_time=tot_time, dt=dt, dx=dx, dy=dy, dz=dz, number_holes=number_holes, domain=domain, vessel=vessel, holes=holes, mphage=mphage, nucl=nucl, gen_holes=gen_holes, update_time=update_time )
+        super(Model, self).__init__( sim_dir=sim_dir, load_dir=load_dir, load_num=load_num, load_datafile=load_datafile, d_co=d_co, vis=vis, tot_time=tot_time, dt=dt, dx=dx, dy=dy, dz=dz, number_holes=number_holes, domain=domain, vessel=vessel, holes=holes, mphage=mphage, nucl=nucl, gen_holes=gen_holes, update_time=update_time, save_data_time=save_data_time )
 
         self.mphage_rate = mphage_rate
         self.holes_loc = io.imread(self.holes).astype(float); self.holes_loc /= np.max(self.holes_loc)
