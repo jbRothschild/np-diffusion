@@ -13,24 +13,18 @@ parser.add_argument('-p', metavar='p', nargs='*', action='store', default=[], re
 args = parser.parse_args()
 
 
-def main(model, parameter):
+def main(model, data):
     #===============Model selection==================================
     if not os.path.exists('../sim/'):
         os.makedirs('../sim/')
 
     mod = __import__(model)
 
-    sim_model = mod.Model(sim_dir=parameter[0], load_num=parameter[1], load_datafile=parameter[2], domain=parameter[6], vessel=parameter[5], holes=parameter[4], update_time=int(parameter[7]))
-    sim_num_holes = io.imread( sim_model.load_dir + parameter[3] ).astype(float) ; sim_num_holes /= np.max(sim_num_holes)
-    sim_model.number_holes = np.sum(sim_num_holes)
-    del sim_num_holes
-
-    #sim_model = mod.Model(sim_dir=parameter[0], update_time=int(parameter[1])
+    sim_model = mod.Model(**data)
 
     #=================Model + Parameter Creation=====================
     #This is where we create our models from the different functions in either data_model.py or custom_model.py
     sim_model.initialize()
-    #sim_model.reduce_simulation( 205, 610-205 )
     sim_model.solution = np.copy( sim_model.source_loc )
 
     #================Euleur's method============================
@@ -40,8 +34,10 @@ def main(model, parameter):
         tic1 = time.time()
         sim_model.simulation_step()
 
+        sim_model.time = i*sim_model.dt
+
         #--------------------Saving Data-------------------
-        if sim_model.time in np.arange(0 , sim_model.total_time + 1, 300):
+        if sim_model.time in np.arange(0 , sim_model.total_time + 1, sim_model.save_data_time):
             wd.save_run(sim_model.time, sim_model.solution, sim_model.sim_dir, "timepoint.npy")
             wd.save_run_2D(sim_model.time, sim_model.solution[sim_model.solution.shape[0]/2,:,:], sim_model.sim_dir)
 
@@ -52,7 +48,6 @@ def main(model, parameter):
             print "         >> Sum this step", np.sum( sim_model.timeSum[1,-1] )
         #-------------------------------------------
 
-        sim_model.time = i*sim_model.dt
         #CHange to a for loop, for any updates that might happen and their time
         if sim_model.time in np.arange( 0, sim_model.total_time, sim_model.update_time):
             sim_model.update_simulation()
@@ -63,4 +58,11 @@ def main(model, parameter):
     print toc - tic, "sec for total simulation."
 
 if __name__ == "__main__":
-    main(model=vars(args)['m'], parameter=vars(args)['p'])
+    parameter=vars(args)['p']
+    #hopping model
+    data = {'sim_dir':parameter[0], 'load_num':parameter[1], 'load_datafile':parameter[2], 'domain':parameter[6], 'vessel':parameter[5], 'holes':parameter[4], 'gen_holes':parameter[3], 'update_time':int(parameter[7])}
+
+    #macrophage model
+    #data = {'sim_dir':parameter[0], 'update_time':int(parameter[1]}
+
+    main(model=vars(args)['m'], data)

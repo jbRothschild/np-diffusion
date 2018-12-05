@@ -4,19 +4,29 @@ from skimage import io
 
 import matplotlib.pyplot as plt
 
-from parameters import DIF_COEF, VISC, TOT_TIME, TIME_STEP, GLOB_DX, GLOB_DY, GLOB_DZ, LOAD_DIR, DOMAIN, VESSEL, HOLES, MPHAGE, NUCL
+from parameters import DIF_COEF, VISC, TOT_TIME, TIME_STEP, GLOB_DX, GLOB_DY, GLOB_DZ, LOAD_DIR, DOMAIN, VESSEL, HOLES, MPHAGE, NUCL, GEN_HOLES, SAVE_DATA
 
 class Model(object):
-    def __init__( self,  sim_dir='../sim/parent_model/', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=5000, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL , update_time=9999999, *args):
+    def __init__( self,  sim_dir='../sim/parent_model/', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=5000, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL , gen_holes=GEN_HOLES, update_time=9999999, save_data_time=SAVE_DATA, *args):
         self.d_co = d_co; self.vis = vis #Diffusion coefficient and viscosity
         self.total_time = tot_time #total time for simulation
         self.dt = dt; self.dx = dx; self.dy = dy; self.dz = dz #metric
+        self.save_data_time = save_data_time
+
         if not os.path.exists(sim_dir):
             os.makedirs(sim_dir)
+
         self.load_dir = load_dir+load_num; self.sim_dir = sim_dir
         self.datafile = self.load_dir + load_datafile
         self.domain = self.load_dir + domain; self.vessel = self.load_dir + vessel; self.holes = self.load_dir + holes; self.mphage = self.load_dir + mphage; self.nucl = self.load_dir + nucl
-        self.number_holes = number_holes
+
+        if gen_holes != "":
+            sim_num_holes = io.imread( self.load_dir + gen_holes ).astype(float) ; sim_num_holes /= np.max(sim_num_holes)
+            self.number_holes = np.sum(sim_num_holes)
+            del sim_num_holes
+        else:
+            self.number_holes = number_holes
+
         self.update_time = update_time
 
         if os.path.exists( self.sim_dir + "timepoint.npy" ): #If continuing simulation, reloads
@@ -36,7 +46,7 @@ class Model(object):
 
     def concentration_time( self ):
         return 0.7521 * np.exp( -1.877*self.time/3600. ) + 0.2479 * np.exp( -0.1353*self.time/3600. )
-        #return 0.5407 * np.exp( -0.3465*self.time ) + 0.4593 * np.exp( -5.122*self.time ) (in hours or minutes or sec????)
+        #return 0.5407 * np.exp( -0.3465*self.time/3600. ) + 0.4593 * np.exp( -5.122*self.time/3600. ) (in hours or minutes or sec????)
 
     #--------------INITIALIZATION-------------
 
