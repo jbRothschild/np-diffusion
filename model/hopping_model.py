@@ -9,7 +9,7 @@ from parameters import DIF_COEF, VISC, TOT_TIME, TIME_STEP, GLOB_DX, GLOB_DY, GL
 class Model(pm.Model):
     def __init__(self,  sim_dir='../sim/hopping_model/', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=5000, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL, update_time=9999999):
 
-        super(Model, self).__init__(sim_dir=sim_dir, load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=number_holes, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL, update_time=update_time)
+        super(Model, self).__init__(sim_dir=sim_dir, load_dir=load_dir, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=d_co, vis=vis, tot_time=tot_time, dt=dt, dx=dx, dy=dy, dz=dz, number_holes=number_holes, domain=DOMAIN, vessel=vessel, holes=holes, mphage=mphage, nucl=nucl, update_time=update_time)
         self.holes_loc = io.imread(self.holes).astype(float); self.holes_loc /= np.max(self.holes_loc)
 
     #--------------INITIALIZATION-------------
