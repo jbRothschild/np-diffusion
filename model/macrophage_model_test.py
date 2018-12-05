@@ -8,13 +8,13 @@ def params(*args):
     vis = 1.5 #Diffusion coefficient in um^2/s
     count = '/lastTime_seconds.npy'
     dx = 2.; dy = 2.; dz = 2. #1 micrometer
-    total_time = 1*60. #seconds
+    total_time = 1*300. #seconds
     dt = 1.0 #dx*dx/(2.*vis) #Time steps of seconds dt < dx^2/2*D
     nu = 0.002 # nu = dudx
     uptake = args[0]
 
-    save_time = 1*30. #how long we wait until we save
-    update_time = 1*30. #how often updates happen
+    save_time = 1*60. #how long we wait until we save
+    update_time = 1*60. #how often updates happen
     model_var = [] #Model variant. In this model: [hole number]. ##Note these can change depending on what we're doing
     model_var_comment = ''
     #---------------------------------------------------------------------
@@ -23,14 +23,14 @@ def params(*args):
 
     return vis, dx, dy, dz, total_time, dt, nu, save_time, model_var, update_time, model_var_comment, comment
 
-def create_source_location(load_dir, data_dir, filename, *args):
+def create_source_location(load_dir, data_dir, filename, filename_mo, *args):
     #File which loads the file with dirichlet conditions
     holes_location = io.imread(load_dir + filename).astype(float)
     holes_location /= np.max(holes_location)
-    macro_image = io.imread(load_dir + filename).astype(float)
+    macro_image = io.imread(load_dir + filename_mo).astype(float)
     macro_image /= np.max(macro_image)
     source_location = np.zeros( np.asarray(holes_location).shape )
-    macro_location = np.zeros(np.asarray(macro_image.shape))
+    macro_source_location = np.zeros(np.asarray(macro_image.shape))
 
     total = np.sum(holes_location)
     other =  None
@@ -48,10 +48,12 @@ def create_source_location(load_dir, data_dir, filename, *args):
 
     np.save(data_dir + "/source_location", source_location)
     np.save(data_dir + "/holes_location", holes_location)
-    np.save(data_dir + "/macro_location", macro_location)
+    np.save(data_dir + "/macro_souce_location", macro_source_location)
+    np.save(data_dir + "/macro_location", macro_image)
+   
     #np.save(data_dir + "/source_location", source_location[150:-150,150:-150,150:-150])
 
-def create_flow_location(load_dir, data_dir, filename, *args):
+def create_flow_location(load_dir, data_dir, filename, macrofile, *args):
     """
     Function that creates the location of flow. +1 for each place which is beside a vessel. can have -1 for certain otehr things I guess!
     Args:
@@ -66,7 +68,7 @@ def create_flow_location(load_dir, data_dir, filename, *args):
     tic1 = time.time()
     vessel_location = io.imread(load_dir + filename).astype(float)
     vessel_location /= np.max(vessel_location)
-    macro_location = io.imread(load_dir + filename).astype(float)
+    macro_location = io.imread(load_dir + macrofile).astype(float)
     macro_location /= np.max(macro_location)
     flow_location = np.zeros((vessel_location.shape[0], vessel_location.shape[1], vessel_location.shape[2]))
     flow_location_mo = np.zeros((macro_location.shape[0], macro_location.shape[1], macro_location.shape[2]))
@@ -93,22 +95,23 @@ def create_flow_location(load_dir, data_dir, filename, *args):
                         flow_location[i,j,k+1] += 1.0
                         
                 elif macro_location[i,j,k] == 1.0:
-                    if macro_location[i-1,j,k] == 0.0:
+                     flow_location_mo == 0.0
+                     if macro_location[i-1,j,k] == 0.0:
                         flow_location_mo[i-1,j,k] -= 1.0
 
-                    if macro_location[i+1,j,k] == 0.0:
+                     if macro_location[i+1,j,k] == 0.0:
                         flow_location_mo[i+1,j,k] -= 1.0
 
-                    if macro_location[i,j-1,k] == 0.0:
+                     if macro_location[i,j-1,k] == 0.0:
                         flow_location_mo[i,j-1,k] -= 1.0
 
-                    if macro_location[i,j+1,k] == 0.0:
+                     if macro_location[i,j+1,k] == 0.0:
                         flow_location_mo[i,j+1,k] -= 1.0
 
-                    if macro_location[i,j,k-1] == 0.0:
+                     if macro_location[i,j,k-1] == 0.0:
                         flow_location_mo[i,j,k-1] -= 1.0
 
-                    if macro_location[i,j,k+1] == 0.0:
+                     if macro_location[i,j,k+1] == 0.0:
                         flow_location_mo[i,j,k+1] -= 1.0
    
     np.save(data_dir + "/flow_location", flow_location)
@@ -147,17 +150,17 @@ def model(load_dir, data_dir, model_var, *args):
         None
     """
     tic = time.time()
-    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps_tcrop.tif', model_var)
-    FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif', args[0])
-    MFL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif', args[0])
+    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps_tcrop.tif', 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif', model_var)
+    FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif','UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif', args[0])
+   # MFL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif', args[0])
     DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif','/source_location.npy')
-    MDL= create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif' )
+    #MDL= create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif' )
     toc = time.time()
     print toc-tic, "sec elapsed creating model..."
     print SL
     print FL
     print DL
-    print MDL
+  # print MDL
 
 def concentration_time(time_point):
     """
