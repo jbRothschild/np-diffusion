@@ -13,7 +13,7 @@ parser.add_argument('-p', metavar='p', nargs='*', action='store', default=[], re
 args = parser.parse_args()
 
 
-def main(model, data):
+def main(model, **data):
     #===============Model selection==================================
     if not os.path.exists('../sim/'):
         os.makedirs('../sim/')
@@ -65,4 +65,4 @@ if __name__ == "__main__":
     #macrophage model
     #data = {'sim_dir':parameter[0], 'update_time':int(parameter[1]}
 
-    main(model=vars(args)['m'], data)
+    main(model=vars(args)['m'], **data)
