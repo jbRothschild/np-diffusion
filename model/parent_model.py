@@ -115,12 +115,24 @@ class Model(object):
 
     def create_nucl_location( self, minimum=0, maximum=-1 ):
         if os.path.exists( self.sim_dir + "nucleus_location.npy" ): #If continuing simulation, reloads
-            self.mphage_loc = np.load( self.sim_dir + "nucleus_location.npy" )
+            self.nucl_loc = np.load( self.sim_dir + "nucleus_location.npy" )
         else:
-            self.mphage_loc = 0.
+            self.nucl_loc = 0.
+        return 0
+
+    def reduce_simulation( self, minimum, maximum ):
+        self.diffusion_loc = self.diffusion_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        self.flow_loc = self.flow_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        self.source_loc = self.source_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        self.mphage_loc = self.mphage_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        self.nucl_loc = self.nucl_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        self.holes_loc = self.holes_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        self.solution = self.mphage_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        self.ijk = ( np.linspace(1, self.solution.shape[0]-2, self.solution.shape[0]-2) ).astype(int)
         return 0
 
     def initialize( self, minimum=0, maximum=-1 ):
+        #Should be the only
         self.create_flow_location( minimum, maximum )
         self.create_source_location( minimum, maximum )
         self.create_mphage_location( minimum, maximum )
@@ -170,10 +182,7 @@ class Model(object):
 
     def dirichlet_condition( self ):
         self.solution += - self.solution * self.source_loc + self.concentration_time() * self.source_loc
-
         return 0
-
-    #--------------SIMULATION-------------
 
     def simulation_step( self ):
         self.diffusion()

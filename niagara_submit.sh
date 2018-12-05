@@ -19,20 +19,20 @@ export OMP_NUM_THREADS=40
 
 # Commands to be run now
 
-#for i in 158 159 160; do
-#  for j in 1 2 3; do
-#    data=("../sim/parent_model_${i}_${j}/" "MSC${i}-T-stack${j}-Nov29-2018_iso" "particles_trimmed.tif" "gaps_actual.tif" "gaps_50x.tif" "thresh_vessels.tif" "tissue_boundary.tif")
-#    (python2 main.py -m parent_model -p ${data[@]}) &
+for i in 158 159 160; do
+  for j in 1 2 3; do
+    data=("../sim/parent_model_${i}_${j}/" "MSC${i}-T-stack${j}-Nov29-2018_iso" "particles_trimmed.tif" "gaps_actual.tif" "gaps_50x.tif" "thresh_vessels.tif" "tissue_boundary.tif")
+    (python2 main.py -m parent_model -p ${data[@]}) &
     #(make sim model="parent_model" param=("../sim/hopping_model_${i}_${j}/" "MSC${i}-T-stack${j}-Nov29-2018_iso" "particles_trimmed.tif gaps_actual.tif" "gaps_50x.tif" "thresh_vessels.tif" "tissue_boundary.tif")) &
     #(make sim model=parent_model param=( ../sim/parent_model_'$i'_'$j'/ MSC'$i'-T-stack'$j'-Nov29-2018_iso particles_trimmed.tif gaps_actual.tif gaps_50x.tif thresh_vessels.tif tissue_boundary.tif) ) &
-#  done
-#done
+  done
+done
 
 
 # hopping model
-for i in 5 10 60 300 1800; do
-  (python2 main.py -m hopping_model -p "../sim/hopping_model_${i}/" $i) &
-done
+#for i in 5 10 60 300 1800; do
+#  (python2 main.py -m hopping_model -p "../sim/hopping_model_${i}/" $i) &
+#done
 
 
 

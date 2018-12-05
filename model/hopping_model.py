@@ -33,6 +33,10 @@ class Model(pm.Model):
     def create_diffusion_location( self, minimum=0, maximum=-1 ):
         super(Model, self).create_diffusion_location( minimum, maximum )
 
+    def reduce_simulation( self, minimum, maximum ):
+        super(Model, self).reduce_simulation( minimum, maximum )
+        return 0
+
     def initialize( self, minimum=0, maximum=-1 ):
         self.create_source_location( minimum, maximum )
         self.create_diffusion_location( minimum, maximum )
@@ -52,7 +56,7 @@ class Model(pm.Model):
 
     def update_simulation( self ):
         #UPDATING HAPPENS HERE, can have multiple update I guess
-        total = self.number_holes
+        total = np.sum(self.source_loc)
         other = np.sum(self.holes_loc)
         self.source_loc *= 0.0
 

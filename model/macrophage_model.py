@@ -52,11 +52,18 @@ class Model(hm.Model):
 
     def create_diffusion_location( self, minimum=0, maximum=-1 ):
         super(Model, self).create_diffusion_location( minimum, maximum )
-        self.diffusion_loc -= self.mphage_loc #macrophae location not part of diffusion
+        self.diffusion_loc -= self.mphage_loc #macrophage location not part of diffusion
         self.diffusion_loc[ self.diffusion_loc >= 1.0 ] = 1.0
         self.diffusion_loc[ self.diffusion_loc < 1.0 ] = 0.0
         self.particles_in_macrophage = self.mphage_loc + self.mphage_flow_loc #include the area around macrophage in mphage
 
+    def reduce_simulation( self, minimum, maximum ):
+        super(Model, self).reduce_simulation( minimum, maximum )
+        self.mphage_loc_flow = self.mphage_loc_flow[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        self.mphage_loc = self.mphage_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        self.particles_in_macrophage = self.mphage_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        return 0
+            
     def initialize( self, minimum=0, maximum=-1 ):
         self.create_source_location( minimum, maximum )
         self.create_mphage_location( minimum, maximum )
@@ -74,14 +81,7 @@ class Model(hm.Model):
 
     def dirichlet_condition( self ):
         super(Model, self).dirichlet_condition()
-    """
-    def reduce_simulation( self, minimum, maximum ):
-        super(Model, self).reduce_simulation( minimum, maximum )
-        self.mphage_loc_flow = self.mphage_loc_flow[ minimum:maximum, minimum:maximum, minimum:maximum ]
-        self.mphage_loc = self.mphage_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
-        self.particles_in_macrophage = self.mphage_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
-        return 0
-    """
+
     def mphage_dynamics(self):
         print np.max(self.mphage_flow_loc)
         self.solution += - self.mphage_rate * self.solution * self.mphage_flow_loc * self.dt
