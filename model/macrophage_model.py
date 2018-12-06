@@ -85,10 +85,9 @@ class Model(hm.Model):
         super(Model, self).dirichlet_condition()
 
     def mphage_dynamics(self):
-        print np.max(self.mphage_flow_loc)
         self.solution += - self.mphage_rate * self.solution * self.mphage_flow_loc * self.dt
         self.particles_in_macrophage += self.mphage_rate * self.solution * self.mphage_flow_loc * self.dt
-        if self.time in range(0, self.total_time +1, 3600.):
+        if self.time in range(0, self.total_time +1, self.save_data_time):
             np.save(self.sim_dir + "macrophage", self.particles_in_macrophage)
         return 0
 
