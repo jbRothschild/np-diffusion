@@ -135,10 +135,9 @@ class Model(object):
         self.flow_loc = self.flow_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
         self.source_loc = self.source_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
         self.mphage_loc = self.mphage_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
-        self.nucl_loc = self.nucl_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        #self.nucl_loc = self.nucl_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
         self.holes_loc = self.holes_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
-        self.solution = self.mphage_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
-        self.ijk = ( np.linspace(1, self.solution.shape[0]-2, self.solution.shape[0]-2) ).astype(int)
+        self.ijk = ( np.linspace(1, self.diffusion_loc.shape[0]-2, self.diffusion_loc.shape[0]-2) ).astype(int)
         return 0
 
     def initialize( self, minimum=0, maximum=-1 ):

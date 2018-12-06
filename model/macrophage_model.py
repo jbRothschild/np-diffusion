@@ -59,16 +59,17 @@ class Model(hm.Model):
 
     def reduce_simulation( self, minimum, maximum ):
         super(Model, self).reduce_simulation( minimum, maximum )
-        self.mphage_loc_flow = self.mphage_loc_flow[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        self.mphage_flow_loc = self.mphage_flow_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
         self.mphage_loc = self.mphage_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
-        self.particles_in_macrophage = self.mphage_loc[ minimum:maximum, minimum:maximum, minimum:maximum ]
+        self.particles_in_macrophage = self.particles_in_macrophage[ minimum:maximum, minimum:maximum, minimum:maximum ]
         return 0
 
     def initialize( self, minimum=0, maximum=-1 ):
         self.create_source_location( minimum, maximum )
+        self.create_flow_location( minimum, maximum )
         self.create_mphage_location( minimum, maximum )
         self.create_diffusion_location( minimum, maximum )
-        sim_model.reduce_simuSAVE_TIMElation( 205, 610-205 )
+        self.reduce_simulation( 205, 610-205 )
         return 0
 
     #--------------SIMULATION-------------
@@ -87,8 +88,8 @@ class Model(hm.Model):
         print np.max(self.mphage_flow_loc)
         self.solution += - self.mphage_rate * self.solution * self.mphage_flow_loc * self.dt
         self.particles_in_macrophage += self.mphage_rate * self.solution * self.mphage_flow_loc * self.dt
-        if self.time in range(0, self.tot_time +1, 3600.):
-            np.save(self.sim_dir + "macrophage" ,self.particles_in_macrophage)
+        if self.time in range(0, self.total_time +1, 3600.):
+            np.save(self.sim_dir + "macrophage", self.particles_in_macrophage)
         return 0
 
     def update_simulation( self ):
@@ -97,5 +98,5 @@ class Model(hm.Model):
 
     def simulation_step(self):
         super(Model, self).simulation_step()
-        #self.mphage_dynamics()
+        self.mphage_dynamics()
         return 0
