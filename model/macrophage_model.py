@@ -68,7 +68,7 @@ class Model(hm.Model):
         self.create_source_location( minimum, maximum )
         self.create_mphage_location( minimum, maximum )
         self.create_diffusion_location( minimum, maximum )
-        sim_model.reduce_simulation( 205, 610-205 )
+        sim_model.reduce_simuSAVE_TIMElation( 205, 610-205 )
         return 0
 
     #--------------SIMULATION-------------
@@ -87,6 +87,8 @@ class Model(hm.Model):
         print np.max(self.mphage_flow_loc)
         self.solution += - self.mphage_rate * self.solution * self.mphage_flow_loc * self.dt
         self.particles_in_macrophage += self.mphage_rate * self.solution * self.mphage_flow_loc * self.dt
+        if self.time in range(0, self.tot_time +1, 3600.):
+            np.save(self.sim_dir + "macrophage" ,self.particles_in_macrophage)
         return 0
 
     def update_simulation( self ):
