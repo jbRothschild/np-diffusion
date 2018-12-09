@@ -9,9 +9,14 @@ from skimage import io
 #Argument is the diffusion coefficient for now
 import argparse
 
+import datetime
+
+runtime = datetime.datetime.now()
+folder_suffix = runtime.strftime('%Y%m%d_%H%M%S')
+
 parser = argparse.ArgumentParser(description='Submitting different diffusion parameters')
 parser.add_argument('-m', metavar='M', type=str, action='store', default='macrophage_model_test', required=False, help='Additional parameters to be passed on for the simulation')
-parser.add_argument('-p', metavar='p', type=float, action='store', default=['test'], required=False, help='Additional parameters to be passed on for the simulation')
+parser.add_argument('-p', metavar='p', type=float, action='store', default=[folder_suffix], required=False, help='Additional parameters to be passed on for the simulation')
 #Namespace with the arguments
 args = parser.parse_args()
 
@@ -46,10 +51,11 @@ def main(model, parameter):
     source_location = np.load(data_dir + "/source_location.npy") #location of fixed concentration
     num_holes = np.sum(source_location)
     flow_location = np.load(data_dir + "/flow_location.npy") #can be more than 1 (number of directions flow is coming in from)
-    flow_location_mo = np.load(data_dir + "/flow_location_mo.npy") #need a new flow location for macrophages.
+    #flow_location_mo = np.load(data_dir + "/flow_location_mo.npy") #need a new flow location for macrophages.
     # if os.path.exists(data_dir + "/holes_location.npy"): #If there are other locations of possible holes, we need this array
     holes_location = np.load(data_dir + "/holes_location.npy")
     macro_location = np.load(data_dir + "/macro_location.npy")
+    macro_source_location = np.load(data_dir + "/macro_source_location.npy")
 
     #===============Initialization=============================
     if not os.path.exists(data_dir + count): #Check if there is saved timepoint of simulation, if it isn't we set the time to 0
@@ -74,7 +80,7 @@ def main(model, parameter):
         dif.diffusion(u, un, ijk, diffusion_location, vis, dt, dx, dy, dz, mod) #diffusion of particles within the diffusion_location
         dif.dirichlet_source_term(u, source_location, i, dt, mod) #fixed source locations, dirichlet conditions
         dif.neumann_source_term(u, un, flow_location, i, dt, nu, dx, mod) #locations where there are neumann boundary conditions
-        dif.neumann_source_term_mo(u, un, flow_location_mo, i, dt, nu, dx, mod) # locations where there are macrophage neumann boundry conditions
+        #dif.neumann_source_term_mo(u, un, flow_location_mo, i, dt, nu, dx, mod) # locations where there are macrophage neumann boundry conditions
     
         
         #Updating certain diffusion parameters

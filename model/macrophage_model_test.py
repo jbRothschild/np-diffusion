@@ -12,11 +12,12 @@ def params(*args):
     dt = 1.0 #dx*dx/(2.*vis) #Time steps of seconds dt < dx^2/2*D
     nu = 0.002 # nu = dudx
     uptake = args[0]
+    mo_uptake = 0.2 #random number for 
 
     save_time = 1*60. #how long we wait until we save
     update_time = 1*60. #how often updates happen
     model_var = [] #Model variant. In this model: [hole number]. ##Note these can change depending on what we're doing
-    model_var_comment = ''
+    model_var_comment = '5000_holes'
     #---------------------------------------------------------------------
     #IMPORTANT: ADD A COMMENT FOR EACH RUN
     comment = 'Diffusion with macrophages'
@@ -31,9 +32,10 @@ def create_source_location(load_dir, data_dir, filename, filename_mo, *args):
     macro_image /= np.max(macro_image)
     source_location = np.zeros( np.asarray(holes_location).shape )
     macro_source_location = np.zeros(np.asarray(macro_image.shape))
+    mo_solution = np.zeros(np.asarray(macro_source_location).shape)
 
     total = np.sum(holes_location)
-    other =  None
+    other =  None #none for now
    
 
     for i in np.arange(0, holes_location.shape[0]):
@@ -48,8 +50,9 @@ def create_source_location(load_dir, data_dir, filename, filename_mo, *args):
 
     np.save(data_dir + "/source_location", source_location)
     np.save(data_dir + "/holes_location", holes_location)
-    np.save(data_dir + "/macro_souce_location", macro_source_location)
+    np.save(data_dir + "/macro_source_location", macro_source_location)
     np.save(data_dir + "/macro_location", macro_image)
+    np.save(data_dir + "/mo_solution", mo_solution)
    
     #np.save(data_dir + "/source_location", source_location[150:-150,150:-150,150:-150])
 
@@ -139,7 +142,24 @@ def create_diffusion_location(load_dir, data_dir, filename, *args):
 
     np.save(data_dir + "/diffusion_location", diffusion_location - vessel_location)
     #np.save(data_dir + "/diffusion_location", diffusion_location[150:-150,150:-150,150:-150]-vessel_location[150:-150,150:-150,150:-150] + source_location[150:-150,150:-150,150:-150])#got to take out vasculature but add source if there are any.
+def create_mo_diffusion_location(load_dir, data_dir, filename, *args):
+    """
+    Function that creates the location of diffusion. For now that's anything that's not
+    Args:
+        load_dir(string): directory with all the data files
+        data_dir(string): directory where all the manipulated arrays are stored after creation
+        filename(string): name of file which has the tumor domain.
+        other(): Nothing for now.
+    Returns:
+        None
+    """
+    tumor_location = io.imread(load_dir + filename).astype(float)
+    diffusion_location = np.ones( np.asarray(tumor_location).shape )
+    diffusion_location /= np.max(diffusion_location)
+    macrophage_location = io.imread(load_dir + args[0]).astype(float)
+    macrophage_location /= np.max(macrophage_location)
 
+    np.save(data_dir + "/macrophage_location", diffusion_location - macrophage_location)
 def model(load_dir, data_dir, model_var, *args):
     """
     Function that creates the different arrays that set the geometry of our diffusion landscape.
@@ -150,17 +170,14 @@ def model(load_dir, data_dir, model_var, *args):
         None
     """
     tic = time.time()
-    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_500000gaps_tcrop.tif', 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif', model_var)
+    SL = create_source_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_50000gaps.tif', 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif', model_var)
     FL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif','UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif', args[0])
    # MFL = create_flow_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif', args[0])
     DL = create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_vesthresh-cropped_tcrop.tif','/source_location.npy')
-    #MDL= create_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif' )
+    MDL= create_mo_diffusion_location(load_dir, data_dir, 'UT16-T-stack3-Sept10_iso_tissueboundary-cropped_tcrop.tif', 'UT16-T-stack3-Sept10_iso_labelmac-cropped_tcrop.tif', '/macro_source_location.npy' )
     toc = time.time()
     print toc-tic, "sec elapsed creating model..."
-    print SL
-    print FL
-    print DL
-  # print MDL
+   
 
 def concentration_time(time_point):
     """
@@ -175,13 +192,34 @@ def concentration_time(time_point):
 
 def neumann_flow(un, flow_location, i, dt, nu, dx):
     #contribution due to neumann flow_location.
-    return concentration_time(i*dt/60.)*flow_location*nu*2*dx
-    #return 0 #set when flow location is 0
+    #return concentration_time(i*dt/60.)*flow_location*nu*2*dx
+    return 0 #set when flow location is 0
 
 def set_dirichlet(source_location, i, dt):
     #contribution due to dirichlet source terms
-    #return concentration_time(i*dt/3600.)*source_location
-    return 0 #set when there are no source locations
+    return concentration_time(i*dt/60.)*source_location
+    #return 0 #set when there are no source locations
 
-def update_diff(holes_location, source_location, data_dir, *args):
+#def update_diff(holes_location, source_location, macro_source_location, data_dir, *args):
+ #   return 0
+
+def update_diff(holes_location, source_location, data_dir, parameter = []):
+    '''Using holes?'''
+    total = np.sum(source_location)
+    other = np.sum(holes_location)
+    source_location *= 0.0
+
+    for i in np.arange(0, holes_location.shape[0]):
+        for j in np.arange(0, holes_location.shape[1]):
+            for k in np.arange(0, holes_location.shape[2]):
+                if (holes_location[i,j,k] > 0.0 and total > 0):
+                    prob = np.random.randint(0,other)
+                    other -= 1.0
+                    if prob < total:
+                        source_location[i,j,k] += 1.0
+                        total -= 1
+    print "New hole count:", np.sum(source_location)
+
+   
+    np.save(data_dir + "/source_location", source_location)
     return 0
