@@ -1,0 +1,71 @@
+\documentclass[article,superscriptaddress,aps,prd,longbibliography]{revtex4}
+%\documentclass[article,superscriptaddress,twocolumn,longbibliography]{revtex4}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{color}
+\topmargin -1.0cm
+
+\usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{pgfplots}
+
+
+\usepackage{graphicx}
+\usepackage[font={footnotesize}]{caption}
+\usepackage{soul}
+%\usepackage{titlesec}
+\usepackage{subfiles}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{tabularx}
+\usepackage{braket}
+%\usepackage{multicol}
+%\usepackage{subcaption}
+\usepackage{subfigure}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newcommand\at[2]{\left.#1\right|_{#2}}
+
+
+\begin{document}
+
+\title{Modelling the penetration and distribution of nanoparticles inside the tumor microenvironment}
+\author{Jeremy Rothschild}
+\affiliation{Department of Physics, University of Toronto, Toronto, Ontario, Canada M5S 1A7.}
+\email{rothschild@physics.utoronto.ca}
+
+\pacs{}
+\date{\today}
+
+\maketitle
+
+\section{Nanoparticles in drug delivery}
+
+\subfile{intro.tex}
+
+\section{Work past}
+
+\subfile{work_past.tex}
+
+\section{Work present}
+
+\subfile{work_present.tex}
+
+\section{Work yet to come} 
+
+\subfile{work_future.tex}
+
+\section{Conclusion}
+
+\subfile{concl.tex}
+
+\bibliographystyle{unsrt}
+\bibliography{collection_18_05_2018.bib} 
+
+\end{document}

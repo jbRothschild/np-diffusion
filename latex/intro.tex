@@ -1,0 +1,41 @@
+\subsection{Introduction}
+Current treatments of cancer are unsuitable: a variety of obstacles still hinder the success of any one treatment, from difficulties in diagnostics to medication non-specificity.
+Chemotherapy, a common treatment that aims to eradicate a tumor by evenly distributing chemotherapeutic agents across regions in the body, causes much stress on the patients' system\cite{Extermann2012,Johnstone2002} due to the generalized delivery process.
+Systemic treatments are currently not a sustainable solution\cite{Curigliano2010}, yet neither are localized therapies and operations.
+Surgery inflicts strain on the system as a whole, weakening the immune system, and the metastatic nature of the disease means that local procedures are vulnerable to causing relapses\cite{VanDalum2015}.
+Hence there is a clear need for a method that can efficiently locate and target tumors without prior knowledge of where they are situated.
+
+Given that the transport of many materials, such as proteins, in biological systems happen on the nanometer scale, it is unsurprising that one would venture to develop nanoparticle machinery to exploit natural mechanisms of transport to address the problem of drug delivery.
+The use of nanoparticles in treating cancer was inspired by early observations that microparticles, such as polymers, injected in the bloodstream accumulated in tumors\cite{Matsumura1986}.
+Through the years, particles have been functionalized to exhibit elusive properties and active targeting mechanisms in the hopes this would increase circulation time and improve drug buildup in tumors.
+Although much was learnt from these studies, these designs have yet to produce significant improvements in accumulation of nanoparticles in desired sites\cite{Kirpotin2006}.
+As we come to better understand the identity of these nanoparticles in biological settings, smarter designs are proposed to facilitate the delivery to their target locations.
+
+%Many studies attribute this accumulation to the enhanced permeability and retention effect\cite{DUNCAN1999441}: the environment of the tumor allows for enhanced transport from the cardiovascular system and retention of said particles within the tumor compared to the uptake by other tissues in the body (other than some clearance organs such as the spleen and liver)\cite{Choi2010}.
+Although years of study have given the medical community a much better understanding of the limitations of this effect by a variety of substances and molecules, little is known about the physiological process that enables the enhanced permeability of endothelial cells in tumors.
+A community of researchers in the field advocate that the phenomenon is a result of the abnormal architecture of the blood vessels due to cancer angiogenesis\cite{Danhier2010}.
+Larger tumors must produce and restructure surrounding blood vessels in order to sustain their growth\cite{Bergers2003}.
+The assumption is that, through this remodelling of the vasculature, many holes and fenestrations form between endothelial cells.
+Recently, studies have observed `eruptions' of nanoparticles in forming tumors and propose that these fenestrations are the main mechanism through which nanoparticles penetrate cancerous tissue\cite{Matsumoto2016}.
+We set out to model this and test this assumption.
+
+In the framework of this study, we hope to elucidate the main physical barriers of nanoparticle transport through biological fluid and membranes by modeling the nanoparticle in its environment.
+In this report, I will briefly summarize the work that was completed previously before presenting the most recent work and results.
+In the most recent work, I will offer predictable results and discuss experiments that will test the validity of these predictions.
+Finally, I will propose a re-evaluated plan for the future direction of this project in light of discussions and work pursued thus far.
+
+\subsection{Experimental Collaboration}
+
+The modelling of the nanoparticle dynamics is done in collaboration with the Chan Lab at the University of Toronto.
+Warren Chan's group have developed innovative technologies to image and explore in vivo cancer cells in their tumor environments\cite{Syed2017}.
+Amongst these many experimental techniques, 2 have thus far been our primary investigative tools in comparing working models.
+
+T.E.M. (Transmission Electron Microscopy) images offer statistical observations of nanoparticle accumulation in different cellular compartments.
+Over the last couple of months, members of the lab have manually analyzed and labelled hundreds of images to identify biological structures, features and the nanoparticles in these images.
+From these images, we've estimated the ratio of fenestrae surface area to vasculature surface area.
+We can also obtain estimates for the fraction of particles in endothelial cells, endosomes, and different regions of the tumor as well as some quantitative spatial distribution of the particles.
+ 
+3-dimensional images obtained via the CLARITY technique\cite{chung2013structural} offer us spatial profiles of the nanoparticles in the tumor.
+Although these images are impressive to visualize and are a great qualitative tool for analyzing colocatization of different components, they suffer from non-trivial noise distributions which complicate quantitative analysis.
+
+Finally, we have at hand the total quantity of gold nanoparticle that accumulated in the tumor at a given time post-injection. At the desired time, the tumor is extracted from the mouse, weighed and then placed in nitric and hydrochloric acid. The filtered solution was then processed by Inductively Coupled Plasma Mass Spectrometry (I.C.P.-M.S.) to find the amount of gold. This is the most precise experimental measurement at our disposal and, as of now, has been our best feature for quantitative comparaison of models and experiments.

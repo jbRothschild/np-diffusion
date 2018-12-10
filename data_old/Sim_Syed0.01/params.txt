@@ -1,8 +1,0 @@
-Created from model in euler_boudary
-size =301
-v_radius = 10 #vessel radius in units of dx
-h_radius = 1 #hole radius in units of dx
-dx = 1; dy = 1; dz = 1 #1 micrometer
-time = 14400
-dt = 30 #Time steps of 30 seconds
-vis = 0.01 #Diffusion coefficient

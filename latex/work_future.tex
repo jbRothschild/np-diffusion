@@ -1,0 +1,38 @@
+\subsection{Interaction with other tumor constituents}
+
+%Reasonning
+Along with how the nanoparticles pass through endothelial cells, the question of how they diffuse through the tumor is of great importance to the design of successful treatments.
+Unfortunately, of the small percentage of nanoparticles that are successfully transported into the target site, the majority do not distribute evenly within.
+Instead, higher concentrations are found closer to the cancer vessels with decreasing gradient further from the vessel walls, indicating that few nanoparticles penetrate deeply enough in the tissue to come in contact with all cancer cells\cite{Sykes2014}.
+Problems such as the emergence of edge populations and cancer relapse raise concerns as to the effectiveness of this treatment under such conditions.
+
+%Objective
+Can simulations of the environment give an insight as to how the particles distribute in the tumor and lead to more efficient nanoparticle designs?
+We would like to develop a model of the microenvironment and sets of interactions between different components to simulate and explore regimes of the nanoparticle parameter space that offer more even dispersion.
+Following fluid mechanics models, different source and sink terms representing biological materials, such as membranes or macrophages, can be integrated to construct a realistic environement for nanoparticles to disperse in.
+This was commenced by adding macrophages to our model, but there are still many different components to add.
+We have data on the location of cell nuclei in CLARITY images and, once we have experimentally separated which are cancer cells from healthy cells, we can add these different consituents to our simulations.
+Additionally, describing the interaction of the different species in the tumor as a competitive population will give insight as to the different spatial patterns that this system may exhibit.
+I would like to have a population dynamics model that allowsfor the migration of these different species within the tumor.
+By identifying and perturbing the network of the main players in this environment, I hope to characterise how the population of cancer cells are affected by the varying  spatial distributions of inhibitors and activators.
+
+%Significance
+Finding a correct model of tumor-nanoparticle interactions offers an insight as to the most significant physical barriers that must be overcome for the successful delivery of the nanoparticles, i.e. an even distribution throughout the tumor.
+
+
+\subsection{Spatial distributions and machine learning}
+
+So far the only measurement that we have relied upon to compare validity of models has been the amount of gold in the tumors measured using I.C.P.-M.S. 
+However, the CLARITY images contain much more information regarding spatial distributions of nanoparticles, macrophages, and cell nucleus. 
+It may be possible to express formulaic comparaison of these distributions, such as Kullback-Leibler divergence, fitness scores or maximum-likelihood estimates.
+This would be crucial to quantitatively describe the similarity between distributions and offer some sort argument as to which dynamics describe the most similar distribution to what is observed.
+Additionally, being able to analyze these images would allow us to compare differences between experiments and to find  quantitative descriptions of these changes.
+
+
+On another note, it is with slight hesitation that I propose the use of certain Machine Learning techniques to expand this study; not because I believe that it will not produce results but because I do not want this to dominate my project (as I'm sure it can). 
+Given the amount of packages and ease of implementation, I believe it would be straightforward to apply certain clustering and image identification techniques to streamline some steps in the experimental process.
+
+As mentionned previously, we now have a couple hundred T.E.M. images that have labelled structures and species. 
+I would like to try feeding these images into various neural nets and other image processing techniques to see if we can automate this step.
+The 3-dimensional images we obtain from CLARITY, although noisy, are also candidates for certain clustering algorithms.
+I hope to uncover some spatial patterns or information from certain images.

@@ -18,7 +18,7 @@ def tif2npy(sim, filename, time):
     saveto = '../data/' + sim + '/diff_' + str(time) + 'sec'
     np.save(saveto, nanoP)
 
-def main(sim, time = ''):
+def main(sim, run='', time = ''):
     if time == '':
         time = np.load('../sim/' + sim + '/lastTime_seconds.npy')
 
@@ -28,7 +28,7 @@ def main(sim, time = ''):
     colors_gradient = plt.cm.inferno(np.linspace(0,1,n))
 
     fig, ax  = lp.newfig(0.6)
-    nanoP = np.load('../sim/' + sim +'/diff_' + str(time) + 'sec.npy')
+    nanoP = np.load('../sim/' + sim +'/diff_' + str(time) + 'sec' + str(run) + '.npy')
     nanoP = nanoP/np.max(nanoP) #in case max in not concentration
     #findmin = nanoP
     #findmin[findmin == 0.0 ] = 100.0
@@ -49,7 +49,7 @@ def main(sim, time = ''):
     ax.set_xlabel(r"$z$-direction ($\mu m$)")
     ax.set_ylabel(r"$y$-direction ($\mu m$)")
     ax.minorticks_off()
-    filename = sim + "_" + str(time)
+    filename = sim + "_" + str(time) + str(run)
     lp.savefig(filename)
     plt.close(fig)
 
@@ -59,4 +59,5 @@ if __name__ == "__main__":
     #tif2npy('chanlab' ,'/UT16-T-stack3-Sept10_iso_particles-cropped.tif', '1800.0')
     #main('holes5k_08-31', time = 1800.0)
     #main('hm_160_3_2k', time = 1800.0)
-    main('mp_1800', '2D10800.0')
+    #main('mp_1800', '2D10800.0')
+    main('CM', run='_mphage_1800', time='2D10800.0')

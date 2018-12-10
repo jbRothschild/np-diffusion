@@ -1,0 +1,15 @@
+\subsection{Fenestrae models}
+
+We worked to develop a simple model to test the hypothesis of passive diffusion and advective flow through a hole in the vessel wall.
+We started by describing the system using a three dimensional diffusion equation with constant diffusion (although in reality the diffusion coefficient is not constant given the extracellular matrix and variable environment of the tumor).
+\begin{equation}\label{diffusion}
+		\frac{\partial n(\vec{x},t)}{\partial t} + {\nabla \cdot (\vec{v}n(\vec{x},t))} = \nabla^2n(\vec{x},t)
+\end{equation}
+Our boundary conditions set the geometry of problem: fixing a cylindrical boundary forms a vessel wall where particles cannot diffuse through and a hole in this boundary made for a fenestration through which particles diffuse.
+
+For our simulations, we assumed that the advective term was negligeable and focussed on diffusive flow, hence we omitted ${\nabla \cdot (\vec{v}n(\vec{x},t))}$ in equation \ref{diffusion}.
+I chose to develop computational tools to integrate the diffusion equation and obtain numerical results: I used a simple Euler method on a cubic lattice to integrate the equations.
+This allowed for the design of boundaries as desired, with runtime only affected by the size of our space and number of time steps.
+This choice of constructing our own computational framework allowed us to take larger, experimentally obtained three-dimensional images from the Chan Lab, randomly generate holes along the vessel walls and directly compare the simulated profiles.
+
+In our first simulations the concentrations were fixed at the holes, however later simulations allowed for varying concentration of particles as observed experimentally. Using the measured ratio of fenestrae area to vessel surface area from T.E.M., we estimated the number of holes in our three dimensional vasculature image and simulated the diffusion through holes randomly distributed on this image. From these numerical simulations, we found that fenestrae alone did not allow for sufficient transport into the tumor 30 minutes after injection.

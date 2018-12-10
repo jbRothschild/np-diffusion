@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 ########################### PLOTTING STARTS HERE
 ###########################################################################
 
-import matplotlib as mpl
+#import matplotlib as mpl
 from matplotlib.colors import LogNorm
 from matplotlib.ticker import LogLocator
 from skimage import io
@@ -14,41 +14,53 @@ from skimage import io
 def main():
 
     #colors_techniques = plt.cm.viridis(np.linspace(0.,1.,len(techniques))) #BuPu
-    lines = [':', '-', ':', '-', ':', '-', '-']
+    lines = [':', '--', '-']
     n = 10
-    colors_gradient = plt.cm.inferno(np.linspace(0,1,n))
-
+    color_gradient = plt.cm.inferno(np.linspace(0,1,3))
 
     fig, ax  = lp.newfig(0.6)
-    holes3 = np.load('../data/time_sum/' + 'time_sum_hole300.npy')
-    holes30 = np.load('../data/time_sum/' + 'time_sum_hole3000.npy')
-    holes300 = np.load('../data/time_sum/' + 'time_sum_hole30000.npy')
-    holes10 = np.load('../data/time_sum/' + 'time_sum_hole1000.npy')
-    holes100 = np.load('../data/time_sum/' + 'time_sum_hole10000.npy')
-    holes5 = np.load('../data/time_sum/' + 'time_sum_hole500.npy')
-    holes50 = np.load('../data/time_sum/' + 'time_sum_hole5000.npy')
-    holes500 = np.load('../data/time_sum/' + 'time_sum_hole50000.npy')
+    """
+    simrun1 = np.load('../sim/CM/time_sum_158_1_10.npy')
+    simrun2 = np.load('../sim/CM/time_sum_158_1_300.npy')
+    simrun3 = np.load('../sim/CM/time_sum_158_1_2000.npy')
+    simrun4 = np.load('../sim/CM/time_sum_158_2_10.npy')
+    simrun5 = np.load('../sim/CM/time_sum_158_2_300.npy')
+    simrun6 = np.load('../sim/CM/time_sum_158_2_2000.npy')
+    simrun7 = np.load('../sim/CM/time_sum_158_3_10.npy')
+    simrun8 = np.load('../sim/CM/time_sum_158_3_300.npy')
+    simrun9 = np.load('../sim/CM/time_sum_158_3_2000.npy')
 
-    plt.plot(holes3[0],1.37*holes3[1], color=colors_gradient[0], linestyle = lines[1], label = '300 holes')
-    plt.plot(holes5[0],1.37*holes5[1], color=colors_gradient[1], linestyle = lines[1], label = '500 holes')
-    plt.plot(holes10[0],1.37*holes10[1], color=colors_gradient[2], linestyle = lines[1], label = '1000 holes')
-    plt.plot(holes30[0],1.37*holes30[1], color=colors_gradient[3], linestyle = lines[1], label = '3000 holes')
-    plt.plot(holes50[0],1.37*holes50[1], color=colors_gradient[4], linestyle = lines[1], label = '5000 holes')
-    plt.plot(holes100[0],1.37*holes100[1], color=colors_gradient[5], linestyle = lines[1], label = '10000 holes')
-    plt.plot(holes300[0],1.37*holes300[1], color=colors_gradient[6], linestyle = lines[1], label = '30000 holes')
-    plt.plot(holes500[0],1.37*holes500[1], color=colors_gradient[7], linestyle = lines[1], label = '50000 holes')
+
+    plt.plot(simrun1[0],simrun1[1], color=color_gradient[0], linestyle = lines[0], label = '10 secs')
+    plt.plot(simrun2[0],simrun2[1], color = color_gradient[1], linestyle = lines[0], label = '5 mins')
+    plt.plot(simrun3[0],simrun3[1], color = color_gradient[2], linestyle = lines[0], label = '30 mins')
+    plt.plot(simrun4[0],simrun4[1], color = color_gradient[0], linestyle = lines[1], label = '10 secs')
+    plt.plot(simrun5[0],simrun5[1], color = color_gradient[1], linestyle = lines[1], label = '5 mins')
+    plt.plot(simrun6[0],simrun6[1], color = color_gradient[2], linestyle = lines[1], label = '30 mins')
+    plt.plot(simrun7[0],simrun7[1], color = color_gradient[0], linestyle = lines[2], label = '10 secs')
+    plt.plot(simrun8[0],simrun8[1], color = color_gradient[1], linestyle = lines[2], label = '5 mins')
+    plt.plot(simrun9[0],simrun9[1], color = color_gradient[2], linestyle = lines[2], label = '30 mins')
+    """
+    simrun1 = np.load('../sim/CM/time_sum_mphage60.npy')
+    simrun2 = np.load('../sim/CM/time_sum_mphage300.npy')
+    simrun3 = np.load('../sim/CM/time_sum_mphage1800.npy')
+
+    plt.plot(simrun1[0],simrun1[1], color=color_gradient[0], linestyle = lines[0], label = '1 min')
+    plt.plot(simrun2[0],simrun2[1], color=color_gradient[0], linestyle = lines[1], label = '5 min')
+    plt.plot(simrun3[0],simrun3[1], color=color_gradient[0], linestyle = lines[2], label = '30 min')
+
 
     plt.legend()
     plt.title("Total gold nanoparticles")
     ax.set_xlabel(r"time (seconds)")
     ax.set_ylabel(r"total particles in tumor")
     ax.minorticks_off()
-    filename = 'fig2a'
+    filename = 'sum_mphage_hopping'
     lp.savefig(filename)
     plt.close(fig)
 
     #------------------------2A----------------------
-
+    """
     fig, ax  = lp.newfig(0.6)
 
     holes50_1 = np.load('../data/time_sum/' + 'time_sum_hole5000_1s.npy')
@@ -71,6 +83,7 @@ def main():
     filename = 'fig2b'
     lp.savefig(filename)
     plt.close(fig)
+    """
 
 if __name__ == "__main__":
     main()

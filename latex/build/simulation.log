@@ -1,0 +1,48 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840) (preloaded format=pdflatex 2018.12.9)  10 DEC 2018 12:22
+entering extended mode
+**./simulation.tex
+(simulation.tex
+LaTeX2e <2018-04-01> patch level 5
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1 \begin{equation}
+                    \label{diffusion}
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (20.0pt too wide) in paragraph at lines 1--1
+[] 
+ []
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 1.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 1.
+
+Overfull \hbox (168.83517pt too wide) detected at line 3
+[][] \OT1/cmr/m/n/10 + [] = \OMS/cmsy/m/n/10 r[]\OML/cmm/m/it/10 n\OT1/cmr/m/n/
+10 ([]\OML/cmm/m/it/10 ; t\OT1/cmr/m/n/10 ) + \OML/cmm/m/it/10 R
+ []
+
+)
+! Emergency stop.
+<*> ./simulation.tex
+                    
+*** (job aborted, no legal \end found)
+
+ 
+Here is how much of TeX's memory you used:
+ 11 strings out of 494871
+ 330 string characters out of 3177920
+ 51466 words of memory out of 3000000
+ 3738 multiletter control sequences out of 15000+200000
+ 3640 words of font info for 14 fonts, out of 3000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 18i,3n,12p,128b,79s stack positions out of 5000i,500n,10000p,200000b,50000s
+!  ==> Fatal error occurred, no output PDF file produced!

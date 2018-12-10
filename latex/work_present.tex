@@ -1,0 +1,68 @@
+\subsection{Fenestrae Continued}
+
+The analysis up to this point had been on one image, obtained using CLARITY, of the vasculature in one tumor.
+Images of different samples from a same tumor were collected for multiple tumors.
+Given this new data, we were able to run multiple simulations in different vasculatures of each tumor to get multiple estimates of nanoparticle weight in each.
+These new estimates agree with our previous conclusions that the fixed fenestrae cannot account for the total accumulation of nanoparticles in the tumors.
+
+As yet, our simulations we were interested in fixed fenestrae, open for the duration of the simulation.
+This is significantly different from the case where these fenestrae are dynamically appearing in the vasculature; the quantity of nanoparticle accumulating in the tumor will vary greatly depending on how long these fenestrae are open.
+These possible fenestrae are not well understood or observed, as such it is possibile that they are dynamically forming in this way along the endothelial cell.
+We took this possibility into account in new numerical runs, simulating the diffusion for different times the holes could be open for on average before closing and opening at other locations, while the number of holes at any given moment was held fixed.
+We found that if fenestrae were open for shorter periods of time there was greater total accumulation in the tumor after 30 minutes.
+This is to be expected: since diffusion dictates the flow into the tumor in this scheme, the redistribution of holes to locations with less particles locally allows for greater flow than would have happened at their previous locations.
+We have yet to compare this result to the experimentally derived amount of total gold in each tumor.
+
+\begin{figure}[h!]
+\centering
+\subfigure[\ Nanoparticle diffusion at 30 mins.]{
+\includegraphics[scale=0.75]{CM_2D1800_158_2_2000.pdf}
+\label{nano_dist}}
+\subfigure[\ Nanoparticle accumulation]{
+\includegraphics[scale=.75]{sum_nano_hopping.pdf}
+\label{nano_accum}}
+\caption{\label{fig:fenestrae} Solutions of our nanoparticle diffusion from dynamically openning and closing holes, where white blobs represent vessel locations. \ref{nano_dist} is the diffusion profile in a slice of the tumor. \ref{nano_accum} show the increase in accumulation as time decreases for 3 different vasculature simulations (each simulation is a different linestyle). For each vasculature, openning times of holes for 10 seconds, 5 minutes and 30 minutes were simulated }
+\end{figure}
+
+\subsection{Exploring endocytosis}
+
+Since diffusion of nanoparticles through fenestrae does not explain the observed accumulation of nanoparticles, we turned to modelling this accumulation by active transport of nanoparticles through the endothelial cell, from inside the vessel into the tumor E.C.M.
+Indeed, vesicles within these cells have been observed to carry nanoparticles, suggesting that transcytosis is a possible pathway for tumor penetration.
+In terms of our diffusion equations, this implies selecting an appropriate boundary on the surface of the vessels.
+We chose Neumann boundary conditions $\frac{\partial u}{\partial t} = k_t n_0$ proportional to the product of a transcytosis rate and concentration within the vessel to describe the transport into the tumor.
+Preliminary simulations have shown that we can tune nanoparticle sequestration by varying the transcytosis rate, which is to be expected.
+As such we can offer a prediction as to the transcytosis rate of these nanoparticles through endothelial cell walls.
+I am working on a network model to formalize this transcytosis more rigourously.
+
+This model of transcytosis has an interesting observation: that the accumulation of nanoparticles is completely determined by the surface area of vessels (transcytosis rate) and concentration within the vessel.
+As such the full simulation of nanoparticle diffusion inside the tumor is unnecessary unless we decide to employ the CLARITY images for further analysis, or if we decide to work with a different model for transcytosis which depends on the concentration of nanoparticle in the E.C.M. outside the vessel.
+
+\subsection{Including macrophages}
+
+
+Amongst the CLARITY images, one channel we are able to distinguish is the flourescence produced by staining of macrophages.
+Macrophages are a cell type crucial to our immune system, engulfing cellular and foreign debris as they explore the tissue.
+They are particularly active in tumors: after 24 hours all nanoparticles in the tumor have been uptaken by macrophages.
+In our pursuit to understand the distribution of nanoparticles within the tumor, we would like to understand how the macrophages affect the accumulation in tumors and how the distribution is affected by macrophage uptake.
+
+We can describe macrophages in our mathematical formulation as sinks. 
+Particles that are near macrophages are absorbed at a certain rate whilst unabsorbed particles are free to continue their Brownian motion until they too have been absorbed.
+As the macrophage uptake rate is unknown in the tumor microenvironment, different uptake rates are being investigated and we hope to offer some prediction from our analysis.
+We've appended this macrophage dynamic to our current simulations, however they must run for significantly longer (solutions at 24 hours) than our previous solutions at 30 minutes.
+
+Interestingly, although unsurprising, total nanoparticle uptake in the tumor increases in the fenestrae model and stays unchanged in the current transcytosis model.
+After discussions with my colleagues in the Chan Lab, we've established the framework of an experiment that will be attempted to determine the dominating dynamic (fenestrae or transcytosis) mediating nanoparticle sequestration.
+By depleting the macrophages in the tumor, we can compare the total accumulated gold nanoparticles of these macrophage depleted tumors to non-depleted macrophage tumors. 
+Whether the accumulation is different or similar will determine which model is more biologically relevant.
+Unfortunately, particular details of this experiment are as of yet undetermined as certain phenomenolgical changes (such as depletion of vasculature endothelial growth factors) remain unanswered consequences of macrophage depletion.
+
+\begin{figure}[h!]
+\centering
+\subfigure[\ Diffusion profile with macrophage present in simulation]{
+\includegraphics[scale=0.75]{CM_2D10800_mphage_1800.pdf}
+\label{mphage_dist}}
+\subfigure[\ Nanoparticle diffusion (minus particles present in macrophage)]{
+\includegraphics[scale=.75]{sum_mphage_hopping.pdf}
+\label{mphage_accum}}
+\caption{\label{fig:fenestrae} Solutions of our nanoparticle diffusion from dynamically opening and closing holes in a tumor with macrophage. Not that in \ref{mphage_dist} the white spaces are not labelled but they are macrophages and vessels alike. In \ref{mphage_accum} the total gold particles in the tumor excluding those that have been uptaken by macrophages. The different plottedlines refer to the different times holes are open at once. The increase at 8000 seconds for the holes open for 30 minutes is most likely due to holes openning and closing in a location without many macrophages.}
+\end{figure}

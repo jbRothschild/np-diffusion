@@ -1,0 +1,75 @@
+% ****** Start of file aipsamp.tex ******
+%
+% It also requires running BibTeX. The commands are as follows:
+%
+%  1)  latex  aipsamp
+%  2)  bibtex aipsamp
+%  3)  latex  aipsamp
+%  4)  latex  aipsamp
+
+\documentclass[aip, jmp, amsmath,amssymb, preprint, reprint, author-year,%
+%author-numerical
+]{revtex4-1}
+
+\usepackage{graphicx}% Include figure files
+\usepackage{dcolumn}% Align table columns on decimal point
+\usepackage{bm}% bold math
+\usepackage{subfiles}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usetikzlibrary{shapes,arrows,automata}
+%\usepackage{tikz-network}
+%\usepackage[mathlines]{lineno}% Enable numbering of text and display math
+%\linenumbers\relax % Commence numbering lines
+\graphicspath{{images/}{../images/}} %where the images are
+%\usepackage[numbers,sort&compress]{natbib}
+
+\begin{document}
+
+%\preprint{AIP/123-QED}
+
+\title[Summary to help me remember what is going on]{Nanoparticle penetration and diffusion in tumor}% Force line breaks with \\
+%\thanks{Footnote to title of article.}
+
+\author{Jeremy Rothschild}
+\author{Syed}
+\author{Shrey}
+\author{Presley}
+ %\altaffiliation[Also at ]{Physics Department, XYZ University.}%Lines break automatically or can be forced with \\
+\author{Anton Zilman}%
+ %\email{Second.Author@institution.edu.}
+%\affiliation{ Authors' institution and/or address%\\This line break forced with \textbackslash\textbackslash }%
+
+
+\date{\today}% It is always \today, today,
+             %  but any date may be explicitly specified
+
+%Abstract file
+\subfile{abstract.tex}
+%\keywords{Suggested keywords}%Use showkeys class option if keyword
+                              %display desired
+\maketitle
+
+%brief description of what has been going on and what we need to do still
+\subfile{ttd.tex}
+
+%Some of the biology
+\section{\label{sec:prob}The Problem}
+\subfile{intro.tex}
+
+%Some of the biology
+\section{\label{sec:bio}The Biology}
+\subfile{cancer.tex}
+
+\section{\label{sec:model}The model}
+
+\subsection{\label{subsec:euler}Simulations}
+
+\subfile{simulation.tex}
+
+\bibliographystyle{unsrt}
+%\bibliography{library.bib,paper1-6final.bib}
+
+\end{document}
+%
+% ****** End of file aipsamp.tex ******
