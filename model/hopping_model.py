@@ -22,26 +22,26 @@ class Model(pm.Model):
     def concentration_time( self ):
         return super(Model, self).concentration_time()
 
-    def create_source_location( self, minimum=0, maximum=-1 ):
+    def create_source_location( self, minimum=0, maximum=None ):
         super(Model, self).create_source_location( minimum, maximum )
 
-    def create_flow_location( self, minimum=0, maximum=-1 ):
+    def create_flow_location( self, minimum=0, maximum=None ):
         super(Model, self).create_flow_location( minimum, maximum )
 
-    def create_mphage_location( self, minimum=0, maximum=-1 ):
+    def create_mphage_location( self, minimum=0, maximum=None ):
         super(Model, self).create_mphage_location( minimum, maximum )
 
-    def create_nucl_location( self, minimum=0, maximum=-1 ):
+    def create_nucl_location( self, minimum=0, maximum=None ):
         super(Model, self).create_nucl_location( minimum, maximum )
 
-    def create_diffusion_location( self, minimum=0, maximum=-1 ):
+    def create_diffusion_location( self, minimum=0, maximum=None ):
         super(Model, self).create_diffusion_location( minimum, maximum )
 
     def reduce_simulation( self, minimum, maximum ):
         super(Model, self).reduce_simulation( minimum, maximum )
         return 0
 
-    def initialize( self, minimum=0, maximum=-1 ):
+    def initialize( self, minimum=0, maximum=None ):
         self.create_source_location( minimum, maximum )
         self.create_diffusion_location( minimum, maximum )
         return 0

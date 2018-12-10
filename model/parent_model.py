@@ -50,7 +50,7 @@ class Model(object):
 
     #--------------INITIALIZATION-------------
 
-    def create_source_location( self, minimum=0, maximum=-1 ):
+    def create_source_location( self, minimum=0, maximum=None ):
         #Creates source location
         if os.path.exists( self.sim_dir + "source_location.npy" ): #If continuing simulation, reloads
             self.source_loc = np.load( self.sim_dir+"source_location.npy" )
@@ -71,7 +71,7 @@ class Model(object):
                                 num_holes -= 1
         return 0
 
-    def create_flow_location( self, minimum=0, maximum=-1 ):
+    def create_flow_location( self, minimum=0, maximum=None ):
         #Location of where there is flow out of the vessel, an array with 1 just outside of teh vessel and 0 where elsewhere
         if os.path.exists( self.sim_dir + "flow_location.npy" ): #If continuing simulation, reloads
             self.flow_loc = np.load( self.sim_dir + "flow_location.npy" )
@@ -98,7 +98,7 @@ class Model(object):
         del vessel_location
         return 0
 
-    def create_diffusion_location( self, minimum=0, maximum=-1 ):
+    def create_diffusion_location( self, minimum=0, maximum=None ):
         if os.path.exists( self.sim_dir + "diffusion_location.npy" ): #If continuing simulation, reloads
             self.diffusion_loc = np.load( self.sim_dir+"flow_location.npy" )
         else:
@@ -116,14 +116,14 @@ class Model(object):
 
         return 0
 
-    def create_mphage_location( self, minimum=0, maximum=-1 ):
+    def create_mphage_location( self, minimum=0, maximum=None ):
         if os.path.exists( self.sim_dir + "marcophage_location.npy" ): #If continuing simulation, reloads
             self.mphage_loc = np.load( self.sim_dir + "macrophage_location.npy" )
         else:
             self.mphage_loc = 0.
         return 0
 
-    def create_nucl_location( self, minimum=0, maximum=-1 ):
+    def create_nucl_location( self, minimum=0, maximum=None ):
         if os.path.exists( self.sim_dir + "nucleus_location.npy" ): #If continuing simulation, reloads
             self.nucl_loc = np.load( self.sim_dir + "nucleus_location.npy" )
         else:
@@ -140,7 +140,7 @@ class Model(object):
         self.ijk = ( np.linspace(1, self.diffusion_loc.shape[0]-2, self.diffusion_loc.shape[0]-2) ).astype(int)
         return 0
 
-    def initialize( self, minimum=0, maximum=-1 ):
+    def initialize( self, minimum=0, maximum=None ):
         #Should be the only
         self.create_flow_location( minimum, maximum )
         self.create_source_location( minimum, maximum )

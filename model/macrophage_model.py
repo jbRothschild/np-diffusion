@@ -20,13 +20,13 @@ class Model(hm.Model):
     def concentration_time( self ):
         return super(Model, self).concentration_time()
 
-    def create_source_location( self, minimum=0, maximum=-1 ):
+    def create_source_location( self, minimum=0, maximum=None ):
         super(Model, self).create_source_location( minimum, maximum )
 
-    def create_flow_location( self, minimum=0, maximum=-1 ):
+    def create_flow_location( self, minimum=0, maximum=None ):
         super(Model, self).create_flow_location( minimum, maximum )
 
-    def create_mphage_location( self, minimum=0, maximum=-1 ):
+    def create_mphage_location( self, minimum=0, maximum=None ):
         self.mphage_loc = io.imread(self.mphage).astype(float)[ minimum:maximum, minimum:maximum, minimum:maximum ]; self.mphage_loc /= np.max(self.mphage_loc)
         self.mphage_flow_loc = np.zeros((self.mphage_loc.shape[0], self.mphage_loc.shape[1], self.mphage_loc.shape[2]))
         for i in range( 1, self.mphage_flow_loc.shape[0] - 1 ):
@@ -47,10 +47,10 @@ class Model(hm.Model):
                             self.mphage_flow_loc[i,j,k+1] = 1.0
         return 0
 
-    def create_nucl_location( self, minimum=0, maximum=-1 ):
+    def create_nucl_location( self, minimum=0, maximum=None ):
         super(Model, self).create_nucl_location( minimum, maximum )
 
-    def create_diffusion_location( self, minimum=0, maximum=-1 ):
+    def create_diffusion_location( self, minimum=0, maximum=None ):
         super(Model, self).create_diffusion_location( minimum, maximum )
         self.diffusion_loc -= self.mphage_loc #macrophage location not part of diffusion
         self.diffusion_loc[ self.diffusion_loc >= 1.0 ] = 1.0
@@ -64,7 +64,7 @@ class Model(hm.Model):
         self.particles_in_macrophage = self.particles_in_macrophage[ minimum:maximum, minimum:maximum, minimum:maximum ]
         return 0
 
-    def initialize( self, minimum=0, maximum=-1 ):
+    def initialize( self, minimum=0, maximum=None ):
         self.create_source_location( minimum, maximum )
         self.create_flow_location( minimum, maximum )
         self.create_mphage_location( minimum, maximum )
