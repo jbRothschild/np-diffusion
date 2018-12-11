@@ -1,6 +1,7 @@
 import sys, os, time
 import numpy as np
 import skimage.io as io
+import write_data as wd
 
 import parent_model as pm
 
@@ -79,3 +80,8 @@ class Model(pm.Model):
         self.diffusion()
         self.dirichlet_condition()
         return 0
+
+    #--------------SAVING-------------
+
+    def save_sim( self ):
+        super(Model, self).save_sim()

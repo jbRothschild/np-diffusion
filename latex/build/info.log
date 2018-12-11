@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840) (preloaded format=pdflatex 2018.12.9)  10 DEC 2018 12:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840) (preloaded format=pdflatex 2018.12.9)  10 DEC 2018 16:36
 entering extended mode
 **./info.tex
 (info.tex
@@ -661,7 +661,11 @@ Class revtex4-1 Info: cite was not loaded (OK!) on input line 27.
 Class revtex4-1 Info: mcite was not loaded (OK!) on input line 27.
 Class revtex4-1 Info: multicol was not loaded (OK!) on input line 27.
 
-(/home/jrothschild/Research/np-diffusion/latex/build/info.aux)
+(/home/jrothschild/Research/np-diffusion/latex/build/info.aux
+
+LaTeX Warning: Label `conc_time' multiply defined.
+
+)
 \openout1 = `info.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
@@ -676,8 +680,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
 LaTeX Font Info:    ... okay on input line 27.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
 LaTeX Font Info:    ... okay on input line 27.
-
-(/home/jrothschild/.miktex/texmfs/install/tex/context/base/supp-pdf.mkii
+ (/home/jrothschild/.miktex/texmfs/install/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count131
 \scratchdimen=\dimen169
@@ -807,21 +810,26 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 3.
 
 (/home/jrothschild/.miktex/texmfs/install/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-))
+)
+Underfull \hbox (badness 1052) in paragraph at lines 10--11
+[]\OT1/cmr/m/n/10 The d-if-fu-sion co-ef-fi-cien-t was cal-cu-lat-ed us-ing the
+
+ []
+
+)
 No file info.bbl.
 
 Package natbib Warning: There were undefined citations.
 
 [2] (/home/jrothschild/Research/np-diffusion/latex/build/info.aux)
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right .
-
+LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
  17872 strings out of 494871
  364020 string characters out of 3177920
- 440135 words of memory out of 3000000
+ 443174 words of memory out of 3000000
  21152 multiletter control sequences out of 15000+200000
  10199 words of font info for 38 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -829,16 +837,18 @@ Here is how much of TeX's memory you used:
 </home/jrothschild/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx
 10.pfb></home/jrothschild/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm
 /cmmi10.pfb></home/jrothschild/.miktex/texmfs/install/fonts/type1/public/amsfon
-ts/cm/cmr10.pfb></home/jrothschild/.miktex/texmfs/install/fonts/type1/public/am
-sfonts/cm/cmr7.pfb></home/jrothschild/.miktex/texmfs/install/fonts/type1/public
-/amsfonts/cm/cmr9.pfb></home/jrothschild/.miktex/texmfs/install/fonts/type1/pub
-lic/amsfonts/cm/cmss10.pfb></home/jrothschild/.miktex/texmfs/install/fonts/type
-1/public/amsfonts/cm/cmssbx10.pfb></home/jrothschild/.miktex/texmfs/install/fon
-ts/type1/public/amsfonts/cm/cmsy10.pfb>
+ts/cm/cmmi7.pfb></home/jrothschild/.miktex/texmfs/install/fonts/type1/public/am
+sfonts/cm/cmr10.pfb></home/jrothschild/.miktex/texmfs/install/fonts/type1/publi
+c/amsfonts/cm/cmr7.pfb></home/jrothschild/.miktex/texmfs/install/fonts/type1/pu
+blic/amsfonts/cm/cmr9.pfb></home/jrothschild/.miktex/texmfs/install/fonts/type1
+/public/amsfonts/cm/cmss10.pfb></home/jrothschild/.miktex/texmfs/install/fonts/
+type1/public/amsfonts/cm/cmssbx10.pfb></home/jrothschild/.miktex/texmfs/install
+/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/jrothschild/.miktex/texmfs/in
+stall/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
 Output written on /home/jrothschild/Research/np-diffusion/latex/build/info.pdf 
-(2 pages, 99788 bytes).
+(2 pages, 122967 bytes).
 PDF statistics:
- 44 PDF objects out of 1000 (max. 8388607)
+ 52 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -38,14 +38,12 @@ def main(model, **data):
 
         #--------------------Saving Data-------------------
         if sim_model.time in np.arange(0 , sim_model.total_time + 1, sim_model.save_data_time):
-            wd.save_run(sim_model.time, sim_model.solution, sim_model.sim_dir, "timepoint.npy")
-            wd.save_run_2D(sim_model.time, sim_model.solution[sim_model.solution.shape[0]/2,:,:], sim_model.sim_dir)
+            sim_model.save_sim()
 
         #saving the sum at each time step.
         if sim_model.timeSum[0,sim_model.timeSum.shape[1]-1] < sim_model.time:
-            sim_model.timeSum = np.append(sim_model.timeSum,[[sim_model.time],[np.sum( sim_model.solution )]], axis=1)
-            np.save(sim_model.sim_dir + "time_sum.npy", sim_model.timeSum)
-            print "         >> Sum this step", np.sum( sim_model.timeSum[1,-1] )
+            sim_model.save_time_sum()
+            
         #-------------------------------------------
 
         #CHange to a for loop, for any updates that might happen and their time

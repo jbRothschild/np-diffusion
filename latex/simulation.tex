@@ -1,21 +1,32 @@
-Numerical simulations
+The dynamics of nanoparticles in the tumor can be described using the diffusion equation
 
 \begin{equation}\label{diffusion}
-		\frac{\partial n(\vec{x},t)}{\partial t} + {\nabla \cdot (\vec{v}n(\vec{x},t))} = \nabla^2n(\vec{x},t) + R
+		\frac{\partial n(\vec{x},t)}{\partial t} + {\nabla \cdot (\vec{v}n(\vec{x},t)) }= D \nabla^2n(\vec{x},t) + R(n(\vec{x},t),\vec{x},t)
 \end{equation}
 
-Boundaries CLARITY: boundary conditions (periodic and neumann).
+where $n(\vec{x},t)$ is the concentration of nanoparticles, $D$ is the diffusion coefficient of thse particles, $\vec{v}(\vec{x,t)}$ is a velocity field and $R(n(\vec{x},t),\vec{x},t)$ is a sink/source term.
+Short of being able to solve this analytically, we numerically simulated this PDE using an Euler method.
 
-Concentrations of the nanoparticles in the vessel (at the hole surface) were fixed to follow the observed concentrations
+The diffusion coefficient was calculated using the Stokes-Einstein equation
 
 \begin{equation}\label{conc_time}
-		n_0(t) = 
+		D = \frac{ k_B T }{ 6 \pi \eta r},
 \end{equation}
 
-Diffusion coefficient.
+where $k_B$ is the Boltzman constant, $T$ is absolute temperature, $\eta$ is the dynamic viscosity and $r$ is the radius of the spherical particle. Using the dynamic viscosity of blood $\eta = 2.87 mPa.s$ and room temperature, we estimated the diffusion coefficient to be $D \approx 1.5 \mu m^2/s$.
+
+Given observations, we assumumed that the contribution of a velocity field to the dynamics of the nanoparticles was negligeable. 
+Effectively, we set $\vec{v}(\vec{x},t)=0$.
+Vasculature images obtained through the CLARITY technique were manipulated to get us vasculature data that we could use in our simulations.
+Neumann boundary conditions were set along the vasculature so that particles did not enter or exit through the endothelial cells, $\nabla n = 0$.
+
+Locations along the vaculature were randomly selected for the fenestrae.
+The source terms in our equation are these holes that provide the diffusive flow of particles from inside the vessels to the tumor microenvironment.
+The concentration at these hole locations were set to be equal to the observed concentrations inside the vessels as a function of time, that is
 
 \begin{equation}\label{conc_time}
-		n_0(t) = 
+		n_0(t) = 54.07 e^{-0.3465 t} + 45.93e^{-5.122 t}.
 \end{equation}
 
-Simulations were run to obtain concentration profiles at 30 minutes post-injection.
+Simulations were run to obtain concentration profiles at 30 minutes post-injection, with time steps of $0.25s$.
+All code for these simulations can be found at https://github.com/jbRothschild/np-diffusion.

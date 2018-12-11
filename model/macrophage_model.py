@@ -1,6 +1,7 @@
 import sys, os, time
 import numpy as np
 import skimage.io as io
+import write_data as wd
 
 import hopping_model as hm
 
@@ -13,6 +14,12 @@ class Model(hm.Model):
 
         self.mphage_rate = mphage_rate
         self.holes_loc = io.imread(self.holes).astype(float); self.holes_loc /= np.max(self.holes_loc)
+
+        if os.path.exists( self.sim_dir + "mphage_sum.npy" ): #If continuing simulation, reloads
+            self.mphageSum = np.load( self.sim_dir + "mphage_sum.npy" )
+        else:
+            self.mphageSum = np.array( [[0],[0.0]] )
+            np.save( self.sim_dir + "mphage_sum.npy", self.mphageSum )
 
     #--------------INITIALIZATION-------------
     #Same as Parent
@@ -99,3 +106,15 @@ class Model(hm.Model):
         super(Model, self).simulation_step()
         self.mphage_dynamics()
         return 0
+
+    #--------------SAVING-------------
+
+    def save_sim( self ):
+        super(Model, self).save_sim()
+
+    def save_time_sum( self ):
+        super(Model, self).save_time_sum()
+
+        self.mphageSum = np.append(self.mphageSum,[[self.time],[np.sum( self.particles_in_macrophage )]], axis=1)
+        np.save(self.sim_dir + "mphage_sum.npy", self.mphageSum)
+        print "         >> Sum this step", np.sum( self.mphageSum[1,-1] )

@@ -1,6 +1,7 @@
 import sys, os, time
 import numpy as np
 from skimage import io
+import write_data as wd
 
 import matplotlib.pyplot as plt
 
@@ -206,5 +207,11 @@ class Model(object):
     #--------------SAVING-------------
 
     def save_sim( self ):
-
+        wd.save_run(self.time, self.solution, self.sim_dir, "timepoint.npy")
+        wd.save_run_2D(self.time, self.solution[sim_model.solution.shape[0]/2,:,:], self.sim_dir)
         return 0
+
+    def save_time_sum( self ):
+        self.timeSum = np.append(self.timeSum,[[self.time],[np.sum( self.solution )]], axis=1)
+        np.save(self.sim_dir + "time_sum.npy", self.timeSum)
+        print "         >> Sum this step", np.sum( self.timeSum[1,-1] )
