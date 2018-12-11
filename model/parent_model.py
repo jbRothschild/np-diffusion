@@ -37,10 +37,10 @@ class Model(object):
             np.save(self.sim_dir + "timepoint.npy", np.asarray(self.time))
 
         if os.path.exists( self.sim_dir + "time_sum.npy" ): #If continuing simulation, reloads
+        np.save( self.sim_dir + "time_sum.npy", self.timeSum )
             self.timeSum = np.load( self.sim_dir + "time_sum.npy" )
         else:
             self.timeSum = np.array( [[0],[0.0]] )
-            np.save( self.sim_dir + "time_sum.npy", self.timeSum )
 
     def unpack( self ):
         return self.d, self.d_co, self.time, self.dt, self.dx, self.dy, self.dz

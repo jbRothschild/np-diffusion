@@ -43,7 +43,7 @@ def main(model, **data):
         #saving the sum at each time step.
         if sim_model.timeSum[0,sim_model.timeSum.shape[1]-1] < sim_model.time:
             sim_model.save_time_sum()
-            
+
         #-------------------------------------------
 
         #CHange to a for loop, for any updates that might happen and their time
@@ -61,6 +61,8 @@ if __name__ == "__main__":
     if vars(args)['m'] == 'hopping_model':
         data = {'sim_dir':parameter[0], 'load_num':parameter[1], 'load_datafile':parameter[2], 'domain':parameter[6], 'vessel':parameter[5], 'holes':parameter[4], 'gen_holes':parameter[3], 'update_time':int(parameter[7]), 'dx':float(parameter[8]), 'dy':float(parameter[8]), 'dz':float(parameter[8])}
     elif vars(args)['m'] == 'macrophage_model':
+        data = {'sim_dir':parameter[0], 'update_time':int(parameter[1]), 'tot_time':int(parameter[2]), 'save_data_time':int(parameter[3])}
+    elif vars(args)['m'] == 'hopping_model':
         data = {'sim_dir':parameter[0], 'update_time':int(parameter[1]), 'tot_time':int(parameter[2]), 'save_data_time':int(parameter[3])}
 
     main(model=vars(args)['m'], **data)
