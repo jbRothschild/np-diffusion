@@ -15,7 +15,7 @@ module load intel/2018.2
 module load anaconda2/5.1.0
 
 # Turn off implicit threading in Python, R
-export OMP_NUM_THREADS=8
+export OMP_NUM_THREADS=3
 
 # Commands to be run now
 
