@@ -64,5 +64,7 @@ if __name__ == "__main__":
         data = {'sim_dir':parameter[0], 'update_time':int(parameter[1]), 'tot_time':int(parameter[2]), 'save_data_time':int(parameter[3])}
     elif vars(args)['m'] == 'hopping_model':
         data = {'sim_dir':parameter[0], 'update_time':int(parameter[1]), 'tot_time':int(parameter[2]), 'save_data_time':int(parameter[3])}
+    elif vars(args)['m'] == 'custom_model':
+        data = {'sim_dir':vars(args)['m']}
 
     main(model=vars(args)['m'], **data)

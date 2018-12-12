@@ -35,7 +35,7 @@ export OMP_NUM_THREADS=3
 #done
 
 # macrophage model
-for i in 5 10 60 300 1800; do
+for i in 10 60 300 1800; do
   (python2 main.py -m macrophage_model -p "../sim/macrophage_model_${i}/" ${i} 86400 3600) &
 done
 
