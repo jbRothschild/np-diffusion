@@ -61,9 +61,9 @@ if __name__ == "__main__":
     if vars(args)['m'] == 'hopping_model':
         data = {'sim_dir':parameter[0], 'load_num':parameter[1], 'load_datafile':parameter[2], 'domain':parameter[6], 'vessel':parameter[5], 'holes':parameter[4], 'gen_holes':parameter[3], 'update_time':int(parameter[7]), 'dx':float(parameter[8]), 'dy':float(parameter[8]), 'dz':float(parameter[8])}
         #data = {'sim_dir':parameter[0], 'update_time':int(parameter[1]), 'tot_time':int(parameter[2]), 'save_data_time':int(parameter[3])}
-    elif vars(args)['m'] == 'macrophage_model':
+    elif vavars(args)['m']vars(args)['m']rs(args)['m'] == 'macrophage_model':
         data = {'sim_dir':parameter[0], 'update_time':int(parameter[1]), 'tot_time':int(parameter[2]), 'save_data_time':int(parameter[3])}
     elif vars(args)['m'] == 'custom_model':
-        data = {'sim_dir':vars(args)['m']}
+        data = {'sim_dir':'../sim/custom_model/'}
 
     main(model=vars(args)['m'], **data)
