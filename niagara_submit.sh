@@ -15,7 +15,7 @@ module load intel/2018.2
 module load anaconda2/5.1.0
 
 # Turn off implicit threading in Python, R
-export OMP_NUM_THREADS=3
+export OMP_NUM_THREADS=40
 
 # Commands to be run now
 
@@ -35,9 +35,11 @@ export OMP_NUM_THREADS=3
 #done
 
 # macrophage model
-for i in 10 60 300 1800; do
-  (python2 main.py -m macrophage_model -p "../sim/macrophage_model_${i}/" ${i} 86400 3600) &
-done
+#for i in 10 60 300 1800; do
+#  (python2 main.py -m macrophage_model -p "../sim/macrophage_model_${i}/" ${i} 86400 3600) &
+#done
 
+# custom model
+python2 main.py -m custom_model
 
 wait
