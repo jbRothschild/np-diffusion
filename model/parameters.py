@@ -1,12 +1,12 @@
-import numpy as np
+import numpy as  np
 """
 Units: seconds, micrometers
 """
-DIF_COEF = 1.5
+DIF_COEF = 0.15
 VISC = 0.0
 TOT_TIME = 3600. * .5 #30 minutes
 TIME_STEP = .25
-SAVE_TIME = 300.
+SAVE_TIME = 1800.
 GLOB_DX = 2.
 GLOB_DY = 2.
 GLOB_DZ = 2.

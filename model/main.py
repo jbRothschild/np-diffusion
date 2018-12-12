@@ -28,13 +28,14 @@ def main(model, **data):
     sim_model.solution = np.copy( sim_model.source_loc )
 
     #================Euleur's method============================
-
+    init_time = sim_model.time
+    print(init_time)
     tic = time.time()
-    for i in np.arange( sim_model.time/sim_model.dt + 1/sim_model.dt, sim_model.total_time/sim_model.dt + 1/sim_model.dt ): #run from time saved previously
+    for t in np.arange( init_time, sim_model.total_time + 1., sim_model.dt ): #run from time saved previously
         tic1 = time.time()
         sim_model.simulation_step()
 
-        sim_model.time = i*sim_model.dt
+        sim_model.time = t
 
         #--------------------Saving Data-------------------
         if sim_model.time in np.arange(0 , sim_model.total_time + 1, sim_model.save_data_time):
@@ -61,9 +62,9 @@ if __name__ == "__main__":
     if vars(args)['m'] == 'hopping_model':
         data = {'sim_dir':parameter[0], 'load_num':parameter[1], 'load_datafile':parameter[2], 'domain':parameter[6], 'vessel':parameter[5], 'holes':parameter[4], 'gen_holes':parameter[3], 'update_time':int(parameter[7]), 'dx':float(parameter[8]), 'dy':float(parameter[8]), 'dz':float(parameter[8])}
         #data = {'sim_dir':parameter[0], 'update_time':int(parameter[1]), 'tot_time':int(parameter[2]), 'save_data_time':int(parameter[3])}
-    elif vavars(args)['m']vars(args)['m']rs(args)['m'] == 'macrophage_model':
+    elif vars(args)['m'] == 'macrophage_model':
         data = {'sim_dir':parameter[0], 'update_time':int(parameter[1]), 'tot_time':int(parameter[2]), 'save_data_time':int(parameter[3])}
     elif vars(args)['m'] == 'custom_model':
-        data = {'sim_dir':'../sim/custom_model/'}
+        data = {'sim_dir':'../sim/custom_model/', 'tot_time':41., 'save_data_time':10.}
 
     main(model=vars(args)['m'], **data)

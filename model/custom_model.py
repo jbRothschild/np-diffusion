@@ -38,7 +38,7 @@ class Model(pm.Model):
         return 0
 
     def create_diffusion_location( self, minimum=0, maximum=None ):
-        self.diffusion_loc = np.zeros((maximum,maximum,maximum))
+        self.diffusion_loc = np.ones((maximum,maximum,maximum))
         self.ijk = ( np.linspace(1, self.diffusion_loc.shape[0]-2, self.diffusion_loc.shape[0]-2) ).astype(int)
 
     def reduce_simulation( self, minimum=0, maximum=None ):

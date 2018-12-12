@@ -46,8 +46,8 @@ class Model(object):
         return self.d, self.d_co, self.time, self.dt, self.dx, self.dy, self.dz
 
     def concentration_time( self ):
-        return 0.7521 * np.exp( -1.877*self.time/3600. ) + 0.2479 * np.exp( -0.1353*self.time/3600. )
-        #return 0.5407 * np.exp( -0.3465*self.time/3600. ) + 0.4593 * np.exp( -5.122*self.time/3600. ) (in hours or minutes or sec????)
+        #return 0.7521 * np.exp( -1.877*self.time/3600. ) + 0.2479 * np.exp( -0.1353*self.time/3600. )
+        return 0.5407 * np.exp( -0.3465*self.time/3600. ) + 0.4593 * np.exp( -5.122*self.time/3600. ) #(in hours or minutes or sec????)
 
     #--------------INITIALIZATION-------------
 
@@ -208,7 +208,7 @@ class Model(object):
 
     def save_sim( self ):
         wd.save_run(self.time, self.solution, self.sim_dir, "timepoint.npy")
-        wd.save_run_2D(self.time, self.solution[sim_model.solution.shape[0]/2,:,:], self.sim_dir)
+        wd.save_run_2D(self.time, self.solution[self.solution.shape[0]/2,:,:], self.sim_dir)
         return 0
 
     def save_time_sum( self ):
