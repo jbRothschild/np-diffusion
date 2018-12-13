@@ -16,7 +16,7 @@ def main():
     #colors_techniques = plt.cm.viridis(np.linspace(0.,1.,len(techniques))) #BuPu
     lines = [':', '--', '-']
     n = 10
-    color_gradient = plt.cm.inferno(np.linspace(0,1,3))
+    color_gradient = plt.cm.inferno(np.linspace(0,1,4))
 
     fig, ax  = lp.newfig(0.6)
     """
@@ -41,14 +41,23 @@ def main():
     plt.plot(simrun8[0],simrun8[1], color = color_gradient[1], linestyle = lines[2], label = '5 mins')
     plt.plot(simrun9[0],simrun9[1], color = color_gradient[2], linestyle = lines[2], label = '30 mins')
     """
-    simrun1 = np.load('../sim/CM/time_sum_mphage60.npy')
-    simrun2 = np.load('../sim/CM/time_sum_mphage300.npy')
-    simrun3 = np.load('../sim/CM/time_sum_mphage1800.npy')
+    m_simrun1 = np.load('../sim/mphage_sum_10.npy')
+    m_simrun2 = np.load('../sim/mphage_sum_60.npy')
+    m_simrun3 = np.load('../sim/mphage_sum_300.npy')
+    m_simrun4 = np.load('../sim/mphage_sum_1800.npy')
+    simrun1 = np.load('../sim/time_sum_10.npy')
+    simrun2 = np.load('../sim/time_sum_60.npy')
+    simrun3 = np.load('../sim/time_sum_300.npy')
+    simrun4 = np.load('../sim/time_sum_1800.npy')
 
-    plt.plot(simrun1[0],simrun1[1], color=color_gradient[0], linestyle = lines[0], label = '1 min')
-    plt.plot(simrun2[0],simrun2[1], color=color_gradient[0], linestyle = lines[1], label = '5 min')
-    plt.plot(simrun3[0],simrun3[1], color=color_gradient[0], linestyle = lines[2], label = '30 min')
-
+    plt.plot(simrun1[0],simrun1[1], color=color_gradient[0], linestyle = lines[0], label = '10 sec')
+    plt.plot(simrun2[0],simrun2[1], color=color_gradient[1], linestyle = lines[0], label = '1 min')
+    plt.plot(simrun3[0],simrun3[1], color=color_gradient[2], linestyle = lines[0], label = '5 min')
+    plt.plot(simrun4[0],simrun4[1], color=color_gradient[3], linestyle = lines[0], label = '30 min')
+    plt.plot(m_simrun1[0],m_simrun1[1], color=color_gradient[0], linestyle = lines[2])
+    plt.plot(m_simrun2[0],m_simrun2[1], color=color_gradient[1], linestyle = lines[2])
+    plt.plot(m_simrun3[0],m_simrun3[1], color=color_gradient[2], linestyle = lines[2])
+    plt.plot(m_simrun4[0],m_simrun4[1], color=color_gradient[3], linestyle = lines[2])
 
     plt.legend()
     plt.title("Total gold nanoparticles")
