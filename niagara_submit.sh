@@ -15,21 +15,21 @@ module load intel/2018.2
 module load anaconda2/5.1.0
 
 # Turn off implicit threading in Python, R
-export OMP_NUM_THREADS=5
+export OMP_NUM_THREADS=3
 
 # Commands to be run now
 
 for i in 158 159 160; do
   for j in 1 2 3 4; do
-    for k in 2000; do
+    for k in 5; do
       if ([ ${i} -eq 158 ] && [ ${j} -eq 2 ]) || ([ ${i} -eq 159 ] && [ ${j} -eq 1 ]) || ([ ${i} -eq 159 ] && [ ${j} -eq 2 ]) || ([ ${i} -eq 160 ] && [ ${j} -eq 1 ]); then
-        data=("../sim/hopping_model_${i}_${j}_${k}_0150/" "MSC${i}-T-stack${j}-Nov29-2018_iso" "particles_trimmed.tif" "gaps_actual.tif" "gaps_50x.tif" "thresh_vessels.tif" "tissue_boundary.tif" ${k} 2.234)
+        data=("../sim/parent_model_${i}_${j}_gaps${k}_0050/" "MSC${i}-T-stack${j}-Nov29-2018_iso" "particles_trimmed.tif" "gaps_actual.tif" "gaps_50x.tif" "thresh_vessels.tif" "tissue_boundary.tif" ${k} 2.234)
       else
-        data=("../sim/hopping_model_${i}_${j}_${k}_0150/" "MSC${i}-T-stack${j}-Nov29-2018_iso" "particles_trimmed.tif" "gaps_actual.tif" "gaps_50x.tif" "thresh_vessels.tif" "tissue_boundary.tif" ${k} 2.0)
+        data=("../sim/parent_model_${i}_${j}_gaps${k}_0050/" "MSC${i}-T-stack${j}-Nov29-2018_iso" "particles_trimmed.tif" "gaps_actual.tif" "gaps_50x.tif" "thresh_vessels.tif" "tissue_boundary.tif" ${k} 2.0)
       fi
-      (python2 main.py -m hopping_model -p ${data[@]}) &
-      #(make sim model="parent_model" param=("../sim/hopping_model_${i}_${j}/" "MSC${i}-T-stack${j}-Nov29-2018_iso" "particles_trimmed.tif gaps_actual.tif" "gaps_50x.tif" "thresh_vessels.tif" "tissue_boundary.tif")) &
-      #(make sim model=parent_model param=( ../sim/parent_model_'$i'_'$j'/ MSC'$i'-T-stack'$j'-Nov29-2018_iso particles_trimmed.tif gaps_actual.tif gaps_50x.tif thresh_vessels.tif tissue_boundary.tif) ) &
+      (python2 main.py -m parent_model -p ${data[@]}) &
+    #(make sim model="parent_model" param=("../sim/hopping_model_${i}_${j}/" "MSC${i}-T-stack${j}-Nov29-2018_iso" "particles_trimmed.tif gaps_actual.tif" "gaps_50x.tif" "thresh_vessels.tif" "tissue_boundary.tif")) &
+    #(make sim model=parent_model param=( ../sim/parent_model_'$i'_'$j'/ MSC'$i'-T-stack'$j'-Nov29-2018_iso particles_trimmed.tif gaps_actual.tif gaps_50x.tif thresh_vessels.tif tissue_boundary.tif) ) &
     done
   done
 done

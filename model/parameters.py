@@ -2,7 +2,7 @@ import numpy as  np
 """
 Units: seconds, micrometers
 """
-DIF_COEF = 0.15
+DIF_COEF = 0.05
 VISC = 0.0
 TOT_TIME = 3600. * .5 #30 minutes
 TIME_STEP = .25

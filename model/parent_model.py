@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from parameters import DIF_COEF, VISC, TOT_TIME, TIME_STEP, GLOB_DX, GLOB_DY, GLOB_DZ, LOAD_DIR, DOMAIN, VESSEL, HOLES, MPHAGE, NUCL, GEN_HOLES, SAVE_TIME
 
 class Model(object):
-    def __init__( self,  sim_dir='../sim/parent_model/', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=5000, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL , gen_holes=GEN_HOLES, update_time=9999999, save_data_time=SAVE_TIME, *args):
+    def __init__( self,  sim_dir='../sim/parent_model/', load_dir=LOAD_DIR, load_num="UT16-T-stack3-Sept10_iso_", load_datafile="particles-cropped.tif", d_co=DIF_COEF, vis=VISC, tot_time=TOT_TIME, dt=TIME_STEP, dx=GLOB_DX, dy=GLOB_DY, dz=GLOB_DZ, number_holes=5000, domain=DOMAIN, vessel=VESSEL, holes=HOLES, mphage=MPHAGE, nucl=NUCL , gen_holes=GEN_HOLES, update_time=9999999, save_data_time=SAVE_TIME, gap_mult=1, *args):
         self.d_co = d_co; self.vis = vis #Diffusion coefficient and viscosity
         self.total_time = tot_time #total time for simulation
         self.dt = dt; self.dx = dx; self.dy = dy; self.dz = dz #metric
@@ -23,10 +23,10 @@ class Model(object):
 
         if gen_holes != "":
             sim_num_holes = io.imread( self.load_dir + gen_holes ).astype(float) ; sim_num_holes /= np.max(sim_num_holes)
-            self.number_holes = np.sum(sim_num_holes)
+            self.number_holes = gap_mult*np.sum(sim_num_holes)
             del sim_num_holes
         else:
-            self.number_holes = number_holes
+            self.number_holes = gap_mult*number_holes
 
         self.update_time = update_time
 
