@@ -24,6 +24,7 @@ class Model(object):
         if gen_holes != "":
             sim_num_holes = io.imread( self.load_dir + gen_holes ).astype(float) ; sim_num_holes /= np.max(sim_num_holes)
             self.number_holes = gap_mult*np.sum(sim_num_holes)
+            print(self.number_holes)
             del sim_num_holes
         else:
             self.number_holes = gap_mult*number_holes
