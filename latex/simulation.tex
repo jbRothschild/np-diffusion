@@ -7,15 +7,15 @@ The dynamics of nanoparticles in the tumor can be described using the diffusion 
 where $n(\vec{x},t)$ is the concentration of nanoparticles, $D$ is the diffusion coefficient of thse particles, $\vec{v}(\vec{x,t)}$ is a velocity field and $R(n(\vec{x},t),\vec{x},t)$ is a sink/source term.
 Short of being able to solve this analytically, we numerically simulated this PDE using an Euler method.
 
-The diffusion coefficient was calculated using the Stokes-Einstein equation
+The upper limit of the diffusion coefficient was calculated using the Stokes-Einstein equation
 
 \begin{equation}\label{conc_time}
 		D = \frac{ k_B T }{ 6 \pi \eta r},
 \end{equation}
 
-where $k_B$ is the Boltzman constant, $T$ is absolute temperature, $\eta$ is the dynamic viscosity and $r$ is the radius of the spherical particle. Using the dynamic viscosity of blood $\eta = 2.87 mPa.s$ and room temperature, we estimated the diffusion coefficient to be $D \approx 1.5 \mu m^2/s$.
+where $k_B$ is the Boltzman constant, $T$ is absolute temperature, $\eta$ is the dynamic viscosity and $r$ is the radius of the spherical particle. Using the dynamic viscosity of blood $\eta = 2.87 mPa.s$ and room temperature, we estimated the diffusion coefficient in blood to be $D \approx 1.5 \mu m^2/s$. In the tumor microenvironment, the diffusion coefficient is further limited by the collagen concentration. Previous experimental measurements of the diffusion coefficient estimated it to be around 0.05 $\mu^2/s$, which is what we used.
 
-Given observations, we assumumed that the contribution of a velocity field to the dynamics of the nanoparticles was negligeable. 
+Given observations, we assumumed that the contribution of a velocity field to the dynamics of the nanoparticles was negligeable.
 Effectively, we set $\vec{v}(\vec{x},t)=0$.
 Vasculature images obtained through the CLARITY technique were manipulated to get us vasculature data that we could use in our simulations.
 Neumann boundary conditions were set along the vasculature so that particles did not enter or exit through the endothelial cells, $\nabla n = 0$.
