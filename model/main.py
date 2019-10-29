@@ -18,9 +18,7 @@ def main(model, **data):
     if not os.path.exists('../sim/'):
         os.makedirs('../sim/')
 
-    mod = __import__(model)
-
-    sim_model = mod.Model(**data)
+    mod = __import__(model); sim_model = mod.Model(**data)
 
     #=================Model + Parameter Creation=====================
     #This is where we create our models from the different functions in either data_model.py or custom_model.py
@@ -35,7 +33,7 @@ def main(model, **data):
         tic1 = time.time()
         sim_model.simulation_step()
 
-        sim_model.time = t
+        sim_model.time = t #total time in simulation
 
         #--------------------Saving Data-------------------
         if sim_model.time in np.arange(0 , sim_model.total_time + 1, sim_model.save_data_time):
@@ -58,14 +56,17 @@ def main(model, **data):
 
 if __name__ == "__main__":
     parameter=vars(args)['p']
-    #hopping model
+    # hopping model
     if vars(args)['m'] == 'hopping_model':
         data = {'sim_dir':parameter[0], 'load_num':parameter[1], 'load_datafile':parameter[2], 'domain':parameter[6], 'vessel':parameter[5], 'holes':parameter[4], 'gen_holes':parameter[3], 'update_time':int(parameter[7]), 'dx':float(parameter[8]), 'dy':float(parameter[8]), 'dz':float(parameter[8])}
         #data = {'sim_dir':parameter[0], 'update_time':int(parameter[1]), 'tot_time':int(parameter[2]), 'save_data_time':int(parameter[3])}
+    # parent model
     elif vars(args)['m'] == 'parent_model':
         data = {'sim_dir':parameter[0], 'load_num':parameter[1], 'load_datafile':parameter[2], 'domain':parameter[6], 'vessel':parameter[5], 'holes':parameter[4], 'gen_holes':parameter[3], 'gap_mult':int(parameter[7]), 'dx':float(parameter[8]), 'dy':float(parameter[8]), 'dz':float(parameter[8])}
+    # Adding macrophages (Not sure if complete)
     elif vars(args)['m'] == 'macrophage_model':
         data = {'sim_dir':parameter[0], 'update_time':int(parameter[1]), 'tot_time':int(parameter[2]), 'save_data_time':int(parameter[3])}
+    # Custom vascular structures
     elif vars(args)['m'] == 'custom_model':
         data = {'sim_dir':'../sim/custom_model/', 'tot_time':41., 'save_data_time':10.}
 
