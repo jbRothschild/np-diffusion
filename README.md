@@ -4,7 +4,6 @@ Solving differential equations numerically is possible using many open source pr
 ## Prerequisites
 You will need a version of python 2.7.15 (although most of the code runs on other versions of python very well. You will also need the following modules
   - numpy
-  - TBC
 ## Running
 ### Structure
 
@@ -12,9 +11,6 @@ You will need a version of python 2.7.15 (although most of the code runs on othe
 A couple of scripts (makefiles) are available to help run everything smoothly from the home directory. Running from command line, you can simply type (from the home directory)
 ```python
 make 
-```
-```bash
-example code
 ```
 ## Authors
 *  *Jeremy Rothschild* -[jbRothschild](https://github.come/jbRothschild)
